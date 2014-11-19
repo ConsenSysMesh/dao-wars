@@ -20,8 +20,8 @@ class TestBody:
         location.call(SQUARE_REWRITE_STATE, [neighbor.contract, 0, 0, 0, 0, 0, t.a0])
         self.contract.call(REWRITE_STATE, [location.contract, 0, 0, 0, 0, t.a0])
 
-        assert_equal(address(self.contract.call(GET_LOCATION, [])[0]), location.contract)
+        assert_equal(address(self.contract.call(GET_LOCATION)[0]), location.contract)
 
-        self.contract.call(MOVE_LEFT, [])
+        self.contract.call(MOVE_LEFT)
 
-        assert_equal(address(self.contract.call(GET_LOCATION, [])[0]), neighbor.contract)
+        assert_equal(address(self.contract.call(GET_LOCATION)[0]), neighbor.contract)

@@ -8,5 +8,5 @@ class Contract(object):
         self.state = state
         self.contract = self.state.contract(filepath)
 
-    def call(self, function, arguments, ether=0, sender=t.k0):
+    def call(self, function, arguments=[], ether=0, sender=t.k0):
         return self.state.send(sender, self.contract, ether, funid=function, abi=arguments)
