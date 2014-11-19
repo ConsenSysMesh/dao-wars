@@ -1,8 +1,14 @@
-extern square = [get_left, set_left, get_right, set_right, get_up, set_up, get_down, set_down, get_ether, set_ether, get_creature, set_creature, get_admin, claim_admin]
+extern square = [rewrite_state, get_left, get_right, get_up, get_down, get_ether, get_creature, get_admin]
 
-def claim_admin():
-    if self.storage["admin"] == 0:
-        self.storage["admin"] = msg.sender
+def rewrite_state(location, ether, hp, brain, species, admin):
+    admin = self.storage["admin"]
+    if (admin == 0) or (admin == msg.sender):
+        self.storage["location"] = location
+        self.storage["ether"] = ether
+        self.storage["hp"] = hp
+        self.storage["brain"] = brain
+        self.storage["species"] = species
+        self.storage["admin"] = admin
 
 def move_left():
     neighbor = self.storage["location"].get_left(as=square)
@@ -23,37 +29,17 @@ def move_down():
 def get_location():
     return(self.storage["location"])
 
-def set_location(address):
-    if self.storage["admin"] == msg.sender:
-        self.storage["location"] = address
-
 def get_ether():
     return(self.storage["ether"])
-
-def set_ether(amount):
-    if self.storage["admin"] == msg.sender:
-        self.storage["ether"] = amount
 
 def get_hp():
     return(self.storage["hp"])
 
-def set_hp(amount):
-    if self.storage["admin"] == msg.sender:
-        self.storage["hp"] = amount
-
 def get_brain():
     return(self.storage["brain"])
 
-def set_brain(address):
-    if self.storage["admin"] == msg.sender:
-        self.storage["brain"] = address
-
 def get_species():
     return(self.storage["species"])
-
-def set_species(code):
-    if self.storage["admin"] == msg.sender:
-        self.storage["species"] = code
 
 def get_admin():
     return(self.storage["admin"])
