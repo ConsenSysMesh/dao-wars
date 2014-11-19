@@ -1,0 +1,35 @@
+def get_left():
+    return(self.storage["left"])
+
+def set_left(address):
+    self.storage["left"] = address
+
+def get_right():
+    return(self.storage["right"])
+
+def set_right(address):
+    self.storage["right"] = address
+
+def get_up():
+    return(self.storage["up"])
+
+def set_up(address):
+    self.storage["up"] = address
+
+def get_down():
+    return(self.storage["down"])
+
+def set_down(address):
+    self.storage["down"] = address
+
+def get_ether():
+    return(self.storage["ether"])
+
+def set_ether(amount):
+    self.storage["ether"] = amount
+
+def get_creature():
+    return(self.storage["creature"])
+
+def set_creature(address):
+    self.storage["creature"] = address
