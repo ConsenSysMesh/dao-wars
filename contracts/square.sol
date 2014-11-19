@@ -1,4 +1,11 @@
 contract Mul2 {
+  address current_left;
+  address current_right;
+  address current_up;
+  address current_down;
+  address current_inhabitant;
+  uint current_ether;
+
   function get_down() returns (address down) {
     down = current_down;
   }
@@ -46,11 +53,4 @@ contract Mul2 {
   function set_up(address new_up) {
     current_up = new_up;
   }
-
-  address current_left;
-  address current_right;
-  address current_up;
-  address current_down;
-  address current_inhabitant;
-  uint current_ether;
 }
