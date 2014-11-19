@@ -1,56 +1,56 @@
-contract Mul2 {
-  address current_left;
-  address current_right;
-  address current_up;
-  address current_down;
-  address current_inhabitant;
-  uint current_ether;
+contract Square {
+  address left;
+  address right;
+  address up;
+  address down;
+  address inhabitant;
+  uint ether;
 
-  function get_down() returns (address down) {
-    down = current_down;
+  function get_down() returns (address _down) {
+    _down = down;
   }
 
-  function get_ether() returns (uint ether) {
-    ether = current_ether;
+  function get_ether() returns (uint _ether) {
+    _ether = ether;
   }
 
-  function get_inhabitant() returns (address inhabitant) {
-    inhabitant = current_inhabitant;
+  function get_inhabitant() returns (address _inhabitant) {
+    _inhabitant = inhabitant;
   }
 
-  function get_left() returns (address left) {
-    left = current_left;
+  function get_left() returns (address _left) {
+    _left = left;
   }
 
-  function get_right() returns (address right) {
-    right = current_right;
+  function get_right() returns (address _right) {
+    _right = right;
   }
 
-  function get_up() returns (address up) {
-    up = current_up;
+  function get_up() returns (address _up) {
+    _up = up;
   }
 
-  function set_down(address new_down) {
-    current_down = new_down;
+  function set_down(address _down) {
+    down = _down;
   }
 
-  function set_ether(uint new_ether) {
-    current_ether = new_ether;
+  function set_ether(uint _ether) {
+    ether = _ether;
   }
 
-  function set_inhabitant(address new_inhabitant) {
-    current_inhabitant = new_inhabitant;
+  function set_inhabitant(address _inhabitant) {
+    inhabitant = _inhabitant;
   }
 
-  function set_left(address new_left) {
-    current_left = new_left;
+  function set_left(address _left) {
+    left = _left;
   }
 
-  function set_right(address new_right) {
-    current_right = new_right;
+  function set_right(address _right) {
+    right = _right;
   }
 
-  function set_up(address new_up) {
-    current_up = new_up;
+  function set_up(address _up) {
+    up = _up;
   }
 }
