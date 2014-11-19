@@ -4,10 +4,11 @@ from pyethereum import tester as t
 
 class TestSquare:
     def setup(self):
-        self.contract = Contract("contracts/square.se")
+        self.state = t.state()
+        self.contract = Contract("contracts/square.se", self.state)
         self.contract.call(13, [])
 
-    def test_down(self):
+    def test_left(self):
         self.contract.call(1, [t.a0])
         assert_equal(address(self.contract.call(0, [])[0]), t.a0)
 

@@ -4,8 +4,8 @@ def address(returned_value):
     return hex(returned_value).lstrip("0x").rstrip("L")
 
 class Contract(object):
-    def __init__(self, filepath):
-        self.state = t.state()
+    def __init__(self, filepath, state):
+        self.state = state
         self.contract = self.state.contract(filepath)
 
     def call(self, function, arguments, ether=0, sender=t.k0):
