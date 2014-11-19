@@ -1,4 +1,4 @@
-extern square = [rewrite_state, get_left, get_right, get_up, get_down, get_ether, get_creature, get_admin]
+extern square = [rewrite_state, get_left, get_right, get_up, get_down, get_ether, get_creature, get_admin, leave, enter]
 
 def rewrite_state(location, ether, hp, brain, species, admin):
     admin = self.storage["admin"]
@@ -11,20 +11,24 @@ def rewrite_state(location, ether, hp, brain, species, admin):
         self.storage["admin"] = admin
 
 def move_left():
-    neighbor = self.storage["location"].get_left(as=square)
-    self.storage["location"] = neighbor
+    current_location = self.storage["location"]
+    neighbor = current_location.get_left(as=square)
+    self._move(current_location, neighbor)
 
 def move_right():
     neighbor = self.storage["location"].get_right(as=square)
     self.storage["location"] = neighbor
+    self._move(current_location, neighbor)
 
 def move_up():
     neighbor = self.storage["location"].get_up(as=square)
     self.storage["location"] = neighbor
+    self._move(current_location, neighbor)
 
 def move_down():
     neighbor = self.storage["location"].get_down(as=square)
     self.storage["location"] = neighbor
+    self._move(current_location, neighbor)
 
 def get_location():
     return(self.storage["location"])
@@ -43,3 +47,10 @@ def get_species():
 
 def get_admin():
     return(self.storage["admin"])
+
+def _move(current_location, destination):
+    if msg.sender == self:
+        if destination.get_creature(as=square) == 0:
+            self.storage["location"] = destination
+            current_location.leave(as=square)
+            destination.enter(as=square)

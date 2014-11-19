@@ -7,6 +7,7 @@ MOVE_LEFT = 1
 GET_LOCATION = 5
 
 SQUARE_REWRITE_STATE = 0
+SQUARE_GET_CREATURE = 6
 
 class TestBody:
     def setup(self):
@@ -17,11 +18,14 @@ class TestBody:
         location = Contract("contracts/square.se", self.state)
         neighbor = Contract("contracts/square.se", self.state)
 
-        location.call(SQUARE_REWRITE_STATE, [neighbor.contract, 0, 0, 0, 0, 0, t.a0])
-        self.contract.call(REWRITE_STATE, [location.contract, 0, 0, 0, 0, t.a0])
+        location.call(SQUARE_REWRITE_STATE, [neighbor.contract, 0, 0, 0, 0, self.contract.contract, t.a0])
+        assert_equal(address(location.call(SQUARE_GET_CREATURE)[0]), self.contract.contract)
 
+        self.contract.call(REWRITE_STATE, [location.contract, 0, 0, 0, 0, t.a0])
         assert_equal(address(self.contract.call(GET_LOCATION)[0]), location.contract)
 
         self.contract.call(MOVE_LEFT)
 
         assert_equal(address(self.contract.call(GET_LOCATION)[0]), neighbor.contract)
+        assert_equal(location.call(SQUARE_GET_CREATURE), [0])
+        assert_equal(address(neighbor.call(SQUARE_GET_CREATURE)[0]), self.contract.contract)

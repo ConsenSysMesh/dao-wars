@@ -29,3 +29,11 @@ def get_creature():
 
 def get_admin():
     return(self.storage["admin"])
+
+def leave():
+    if self.storage["creature"] == msg.sender:
+        self.storage["creature"] = 0
+
+def enter():
+    if self.storage["creature"] == 0:
+        self.storage["creature"] = msg.sender
