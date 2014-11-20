@@ -1,3 +1,4 @@
+# 0
 def rewrite_state(left, right, up, down, ether, creature, admin):
     current_admin = self.storage["admin"]
     if (current_admin == 0) or (current_admin == msg.sender):
@@ -9,31 +10,51 @@ def rewrite_state(left, right, up, down, ether, creature, admin):
         self.storage["creature"] = creature
         self.storage["admin"] = admin
 
+# 1
 def get_left():
     return(self.storage["left"])
 
+# 2
 def get_right():
     return(self.storage["right"])
 
+# 3
 def get_up():
     return(self.storage["up"])
 
+# 4
 def get_down():
     return(self.storage["down"])
 
+# 5
 def get_ether():
     return(self.storage["ether"])
 
+# 6
 def get_creature():
     return(self.storage["creature"])
 
+# 7
 def get_admin():
     return(self.storage["admin"])
 
+# 8
 def leave():
     if self.storage["creature"] == msg.sender:
         self.storage["creature"] = 0
 
+# 9
 def enter():
     if self.storage["creature"] == 0:
         self.storage["creature"] = msg.sender
+
+# 10
+def harvest():
+    if self.storage["creature"] == msg.sender:
+        current_ether = self.storage["ether"]
+        if current_ether > 100:
+            self.storage["ether"] = current_ether - 100
+            return(100)
+        else:
+            self.storage["ether"] = 0
+            return(current_ether)
