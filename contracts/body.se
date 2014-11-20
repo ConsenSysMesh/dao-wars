@@ -1,4 +1,5 @@
 extern square = [rewrite_state, get_left, get_right, get_up, get_down, get_ether, get_creature, get_admin, leave, enter, harvest]
+extern body = [rewrite_state, move_left, move_right, move_up, move_down, get_location, get_ether, get_hp, get_brain, get_species, get_admin, harvest, damage, attack_left, attack_right, attack_up, attack_down, _move]
 
 # 0
 def rewrite_state(location, ether, hp, brain, species, admin):
@@ -67,6 +68,33 @@ def harvest():
     return(gain)
 
 # 12
+def damage():
+  self.storage["hp"] = self.storage["hp"] - 1
+
+# 13
+def attack_left():
+  enemy_square = self.storage["location"].get_left(as=square)
+  enemy = enemy_square.get_creature(as=square)
+  enemy.damage(as=body)
+
+# 14
+def attack_right():
+  enemy_square = self.storage["location"].get_right(as=square)
+  enemy = enemy_square.get_creature(as=square)
+  enemy.damage(as=body)
+
+# 15
+def attack_up():
+  enemy_square = self.storage["location"].get_up(as=square)
+  enemy = enemy_square.get_creature(as=square)
+  enemy.damage(as=body)
+
+# 16
+def attack_down():
+  enemy_square = self.storage["location"].get_down(as=square)
+  enemy = enemy_square.get_creature(as=square)
+  enemy.damage(as=body)
+
 def _move(current_location, destination):
     if msg.sender == self:
         if destination.get_creature(as=square) == 0:

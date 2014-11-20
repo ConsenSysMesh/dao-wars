@@ -6,7 +6,9 @@ REWRITE_STATE = 0
 MOVE_LEFT = 1
 GET_LOCATION = 5
 GET_ETHER = 6
+GET_HP = 7
 HARVEST = 11
+ATTACK_LEFT = 13
 
 SQUARE_REWRITE_STATE = 0
 SQUARE_GET_ETHER = 5
@@ -48,3 +50,18 @@ class TestBody:
         self.contract.call(HARVEST)
         assert_equal(location.call(SQUARE_GET_ETHER), [0])
         assert_equal(self.contract.call(GET_ETHER), [150])
+
+    def test_attack_left(self):
+        location = Contract("contracts/square.se", self.state)
+        neighbor = Contract("contracts/square.se", self.state)
+        enemy = Contract("contracts/body.se", self.state)
+
+        location.call(SQUARE_REWRITE_STATE, [neighbor.contract, 0, 0, 0, 0, self.contract.contract, t.a0])
+        neighbor.call(SQUARE_REWRITE_STATE, [0, location.contract, 0, 0, 0, enemy.contract, t.a0])
+        enemy.call(REWRITE_STATE, [neighbor.contract, 0, 3, 0, 0, t.a0])
+        self.contract.call(REWRITE_STATE, [location.contract, 0, 0, 0, 0, t.a0])
+        assert_equal(enemy.call(GET_HP), [3])
+
+        self.contract.call(ATTACK_LEFT)
+
+        assert_equal(enemy.call(GET_HP), [2])
