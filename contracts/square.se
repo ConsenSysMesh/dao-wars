@@ -58,3 +58,8 @@ def harvest():
         else:
             self.storage["ether"] = 0
             return(current_ether)
+
+#11
+def spawn(creature):
+    self.storage["creature"] = creature
+    return(123)

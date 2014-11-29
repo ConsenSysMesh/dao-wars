@@ -1,8 +1,9 @@
-extern square = [rewrite_state, get_left, get_right, get_up, get_down, get_ether, get_creature, get_admin, leave, enter, harvest]
+extern square = [rewrite_state, get_left, get_right, get_up, get_down, get_ether, get_creature, get_admin, leave, enter, harvest, spawn]
 extern body = [rewrite_state, move_left, move_right, move_up, move_down, get_location, get_ether, get_hp, get_brain, get_species, get_admin, harvest, damage, attack_left, attack_right, attack_up, attack_down, _move]
+extern creature_builder = [build_creature]
 
 # 0
-def rewrite_state(location, ether, hp, brain, species, admin):
+def rewrite_state(location, ether, hp, brain, species, admin, creature_builder):
     admin = self.storage["admin"]
     if (admin == 0) or (admin == msg.sender):
         self.storage["location"] = location
@@ -11,6 +12,7 @@ def rewrite_state(location, ether, hp, brain, species, admin):
         self.storage["brain"] = brain
         self.storage["species"] = species
         self.storage["admin"] = admin
+        self.storage["creature_builder"] = creature_builder
 
 # 1
 def move_left():
@@ -94,6 +96,35 @@ def attack_down():
   enemy_square = self.storage["location"].get_down(as=square)
   enemy = enemy_square.get_creature(as=square)
   enemy.damage(as=body)
+
+# 17
+def reproduce_left(new_brain, endowment):
+  location = self.storage["location"].get_left(as=square)
+  return(self._reproduce(new_brain, location, endowment))
+
+# 18
+def reproduce_right(new_brain, endowment):
+  location = self.storage["location"].get_right(as=square)
+  return(self._reproduce(new_brain, location, endowment))
+
+# 19
+def reproduce_up(new_brain, endowment):
+  location = self.storage["location"].get_up(as=square)
+  return(self._reproduce(new_brain, location, endowment))
+
+# 20
+def reproduce_down(new_brain, endowment):
+  location = self.storage["location"].get_down(as=square)
+  return(self._reproduce(new_brain, location, endowment))
+
+def _reproduce(new_brain, location, endowment)
+  ether = self.storage["ether"]
+  if endowment > ether:
+    return(1)
+  else:
+    self.storage["ether"] = ether - endowment
+    species = self.storage["species"]
+    return(self.storage["creature_builder"].build_creature(new_brain, location, endowment, species, as=creature_builder))
 
 def _move(current_location, destination):
     if msg.sender == self:
