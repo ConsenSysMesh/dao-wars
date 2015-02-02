@@ -1,11 +1,10 @@
-extern square = [rewrite_state, get_left, get_right, get_up, get_down, get_ether, get_creature, get_admin, leave, enter, harvest, spawn]
-extern body = [rewrite_state, move_left, move_right, move_up, move_down, get_location, get_ether, get_hp, get_brain, get_species, get_admin, harvest, damage, attack_left, attack_right, attack_up, attack_down, _move]
-extern creature_builder = [build_creature]
+extern square: [rewrite_state, get_left, get_right, get_up, get_down, get_ether, get_creature, get_admin, leave, enter, harvest, spawn]
+extern body: [rewrite_state, move_left, move_right, move_up, move_down, get_location, get_ether, get_hp, get_brain, get_species, get_admin, harvest, damage, attack_left, attack_right, attack_up, attack_down, _move]
+extern creature_builder: [build_creature]
 
-# 0
 def rewrite_state(location, ether, hp, brain, species, admin, creature_builder):
     admin = self.storage["admin"]
-    if (admin == 0) or (admin == msg.sender):
+    if admin == 0 or admin == msg.sender:
         self.storage["location"] = location
         self.storage["ether"] = ether
         self.storage["hp"] = hp
@@ -14,110 +13,90 @@ def rewrite_state(location, ether, hp, brain, species, admin, creature_builder):
         self.storage["admin"] = admin
         self.storage["creature_builder"] = creature_builder
 
-# 1
 def move_left():
     current_location = self.storage["location"]
     neighbor = current_location.get_left(as=square)
     self._move(current_location, neighbor)
 
-# 2
 def move_right():
     neighbor = self.storage["location"].get_right(as=square)
     self.storage["location"] = neighbor
     self._move(current_location, neighbor)
 
-# 3
 def move_up():
     neighbor = self.storage["location"].get_up(as=square)
     self.storage["location"] = neighbor
     self._move(current_location, neighbor)
 
-# 4
 def move_down():
     neighbor = self.storage["location"].get_down(as=square)
     self.storage["location"] = neighbor
     self._move(current_location, neighbor)
 
-# 5
 def get_location():
     return(self.storage["location"])
 
-# 6
 def get_ether():
     return(self.storage["ether"])
 
-# 7
 def get_hp():
     return(self.storage["hp"])
 
-# 8
 def get_brain():
     return(self.storage["brain"])
 
-# 9
 def get_species():
     return(self.storage["species"])
 
-# 10
 def get_admin():
     return(self.storage["admin"])
 
-# 11
 def harvest():
     location = self.storage["location"]
     gain = location.harvest(as=square)
     self.storage["ether"] = self.storage["ether"] + gain
     return(gain)
 
-# 12
 def damage():
   self.storage["hp"] = self.storage["hp"] - 1
 
-# 13
 def attack_left():
   enemy_square = self.storage["location"].get_left(as=square)
   enemy = enemy_square.get_creature(as=square)
   enemy.damage(as=body)
 
-# 14
 def attack_right():
   enemy_square = self.storage["location"].get_right(as=square)
   enemy = enemy_square.get_creature(as=square)
   enemy.damage(as=body)
 
-# 15
 def attack_up():
   enemy_square = self.storage["location"].get_up(as=square)
   enemy = enemy_square.get_creature(as=square)
   enemy.damage(as=body)
 
-# 16
 def attack_down():
   enemy_square = self.storage["location"].get_down(as=square)
   enemy = enemy_square.get_creature(as=square)
   enemy.damage(as=body)
 
-# 17
 def reproduce_left(new_brain, endowment):
   location = self.storage["location"].get_left(as=square)
   return(self._reproduce(new_brain, location, endowment))
 
-# 18
 def reproduce_right(new_brain, endowment):
   location = self.storage["location"].get_right(as=square)
   return(self._reproduce(new_brain, location, endowment))
 
-# 19
 def reproduce_up(new_brain, endowment):
   location = self.storage["location"].get_up(as=square)
   return(self._reproduce(new_brain, location, endowment))
 
-# 20
 def reproduce_down(new_brain, endowment):
   location = self.storage["location"].get_down(as=square)
   return(self._reproduce(new_brain, location, endowment))
 
-def _reproduce(new_brain, location, endowment)
+def _reproduce(new_brain, location, endowment):
   ether = self.storage["ether"]
   if endowment > ether:
     return(1)

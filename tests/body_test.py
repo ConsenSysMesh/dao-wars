@@ -1,86 +1,72 @@
-from eth_tools import Contract, address
+from eth_tools import address
 from nose.tools import assert_equal
 from pyethereum import tester as t
-
-REWRITE_STATE = 0
-MOVE_LEFT = 1
-GET_LOCATION = 5
-GET_ETHER = 6
-GET_HP = 7
-GET_BRAIN = 8
-HARVEST = 11
-ATTACK_LEFT = 13
-REPRODUCE_LEFT = 17
-
-SQUARE_REWRITE_STATE = 0
-SQUARE_GET_ETHER = 5
-SQUARE_GET_CREATURE = 6
 
 class TestBody:
     def setup(self):
         self.state = t.state()
-        self.contract = Contract("contracts/body.se", self.state)
+        self.contract = self.state.abi_contract("contracts/body.se")
 
     def test_move_left(self):
-        location = Contract("contracts/square.se", self.state)
-        neighbor = Contract("contracts/square.se", self.state)
+        location = self.state.abi_contract("contracts/square.se")
+        neighbor = self.state.abi_contract("contracts/square.se")
 
-        location.call(SQUARE_REWRITE_STATE, [neighbor.contract, 0, 0, 0, 0, self.contract.contract, t.a0])
-        assert_equal(address(location.call(SQUARE_GET_CREATURE)[0]), self.contract.contract)
+        location.rewrite_state(neighbor.address, 0, 0, 0, 0, self.contract.address, t.a0)
+        assert_equal(address(location.get_creature()[0]), self.contract.address)
 
-        self.contract.call(REWRITE_STATE, [location.contract, 0, 0, 0, 0, t.a0])
-        assert_equal(address(self.contract.call(GET_LOCATION)[0]), location.contract)
+        self.contract.rewrite_state(location.address, 0, 0, 0, 0, t.a0, 0)
+        assert_equal(address(self.contract.get_location()[0]), location.address)
 
-        self.contract.call(MOVE_LEFT)
+        self.contract.move_left()
 
-        assert_equal(address(self.contract.call(GET_LOCATION)[0]), neighbor.contract)
-        assert_equal(location.call(SQUARE_GET_CREATURE), [0])
-        assert_equal(address(neighbor.call(SQUARE_GET_CREATURE)[0]), self.contract.contract)
+        assert_equal(address(self.contract.get_location()[0]), neighbor.address)
+        assert_equal(location.get_creature(), [0])
+        assert_equal(address(neighbor.get_creature()[0]), self.contract.address)
 
     def test_harvest(self):
-        location = Contract("contracts/square.se", self.state)
-        location.call(SQUARE_REWRITE_STATE, [0, 0, 0, 0, 150, self.contract.contract, t.a0])
-        self.contract.call(REWRITE_STATE, [location.contract, 0, 0, 0, 0, t.a0])
+        location = self.state.abi_contract("contracts/square.se")
+        location.rewrite_state(0, 0, 0, 0, 150, self.contract.address, t.a0)
+        self.contract.rewrite_state(location.address, 0, 0, 0, 0, t.a0, 0)
 
-        assert_equal(location.call(SQUARE_GET_ETHER), [150])
-        assert_equal(self.contract.call(GET_ETHER), [0])
+        assert_equal(location.get_ether(), [150])
+        assert_equal(self.contract.get_ether(), [0])
 
-        assert_equal(self.contract.call(HARVEST), [100])
-        assert_equal(location.call(SQUARE_GET_ETHER), [50])
-        assert_equal(self.contract.call(GET_ETHER), [100])
+        assert_equal(self.contract.harvest(), [100])
+        assert_equal(location.get_ether(), [50])
+        assert_equal(self.contract.get_ether(), [100])
 
-        self.contract.call(HARVEST)
-        assert_equal(location.call(SQUARE_GET_ETHER), [0])
-        assert_equal(self.contract.call(GET_ETHER), [150])
+        self.contract.harvest()
+        assert_equal(location.get_ether(), [0])
+        assert_equal(self.contract.get_ether(), [150])
 
     def test_attack_left(self):
-        location = Contract("contracts/square.se", self.state)
-        neighbor = Contract("contracts/square.se", self.state)
-        enemy = Contract("contracts/body.se", self.state)
+        location = self.state.abi_contract("contracts/square.se")
+        neighbor = self.state.abi_contract("contracts/square.se")
+        enemy = self.state.abi_contract("contracts/body.se")
 
-        location.call(SQUARE_REWRITE_STATE, [neighbor.contract, 0, 0, 0, 0, self.contract.contract, t.a0])
-        neighbor.call(SQUARE_REWRITE_STATE, [0, location.contract, 0, 0, 0, enemy.contract, t.a0])
-        enemy.call(REWRITE_STATE, [neighbor.contract, 0, 3, 0, 0, t.a0])
-        self.contract.call(REWRITE_STATE, [location.contract, 0, 0, 0, 0, t.a0])
-        assert_equal(enemy.call(GET_HP), [3])
+        location.rewrite_state(neighbor.address, 0, 0, 0, 0, self.contract.address, t.a0)
+        neighbor.rewrite_state(0, location.address, 0, 0, 0, enemy.address, t.a0)
+        enemy.rewrite_state(neighbor.address, 0, 3, 0, 0, t.a0, 0)
+        self.contract.rewrite_state(location.address, 0, 0, 0, 0, t.a0, 0)
+        assert_equal(enemy.get_hp(), [3])
 
-        self.contract.call(ATTACK_LEFT)
+        self.contract.attack_left()
 
-        assert_equal(enemy.call(GET_HP), [2])
+        assert_equal(enemy.get_hp(), [2])
 
     def test_reproduce_left(self):
-        location = Contract("contracts/square.se", self.state)
-        neighbor = Contract("contracts/square.se", self.state)
-        creature_builder = Contract("contracts/creature_builder.se", self.state)
+        location = self.state.abi_contract("contracts/square.se")
+        neighbor = self.state.abi_contract("contracts/square.se")
+        creature_builder = self.state.abi_contract("contracts/creature_builder.se")
 
-        location.call(SQUARE_REWRITE_STATE, [neighbor.contract, 0, 0, 0, 0, self.contract.contract, t.a0])
-        self.contract.call(REWRITE_STATE, [location.contract, 0, 0, 0, 0, t.a0, creature_builder.contract])
+        location.rewrite_state(neighbor.address, 0, 0, 0, 0, self.contract.address, t.a0)
+        self.contract.rewrite_state(location.address, 0, 0, 0, 0, t.a0, creature_builder.address)
 
-        assert_equal(neighbor.call(SQUARE_GET_CREATURE), [0])
+        assert_equal(neighbor.get_creature(), [0])
 
-        new_body_address = address(self.contract.call(REPRODUCE_LEFT, [t.a1, 0])[0])
+        new_body_address = address(self.contract.reproduce_left(t.a1, 0)[0])
 
-        assert_equal(address(neighbor.call(SQUARE_GET_CREATURE)[0]), new_body_address)
+        assert_equal(address(neighbor.get_creature()[0]), new_body_address)
 
-        new_body = Contract.from_address(new_body_address, self.state)
-        assert_equal(address(new_body.call(GET_BRAIN)[0]), t.a1)
+        brain = address(self.state.send(t.k0, new_body_address, 0, funid=8, abi=[])[0])
+        assert_equal(brain, t.a1)
