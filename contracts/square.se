@@ -1,53 +1,61 @@
+data left
+data right
+data up
+data down
+data ether
+data creature
+data admin
+
 def rewrite_state(left, right, up, down, ether, creature, admin):
-    current_admin = self.storage["admin"]
+    current_admin = self.admin
     if current_admin == 0 or current_admin == msg.sender:
-        self.storage["left"] = left
-        self.storage["right"] = right
-        self.storage["up"] = up
-        self.storage["down"] = down
-        self.storage["ether"] = ether
-        self.storage["creature"] = creature
-        self.storage["admin"] = admin
+        self.left = left
+        self.right = right
+        self.up = up
+        self.down = down
+        self.ether = ether
+        self.creature = creature
+        self.admin = admin
 
 def get_left():
-    return(self.storage["left"])
+    return(self.left)
 
 def get_right():
-    return(self.storage["right"])
+    return(self.right)
 
 def get_up():
-    return(self.storage["up"])
+    return(self.up)
 
 def get_down():
-    return(self.storage["down"])
+    return(self.down)
 
 def get_ether():
-    return(self.storage["ether"])
+    return(self.ether)
 
 def get_creature():
-    return(self.storage["creature"])
+    return(self.creature)
 
 def get_admin():
-    return(self.storage["admin"])
+    return(self.admin)
 
 def leave():
-    if self.storage["creature"] == msg.sender:
-        self.storage["creature"] = 0
+    if self.creature == msg.sender:
+        self.creature = 0
 
 def enter():
-    if self.storage["creature"] == 0:
-        self.storage["creature"] = msg.sender
+    if self.creature == 0:
+        self.creature = msg.sender
 
 def harvest():
-    if self.storage["creature"] == msg.sender:
-        current_ether = self.storage["ether"]
+    if self.creature == msg.sender:
+        current_ether = self.ether
         if current_ether > 100:
-            self.storage["ether"] = current_ether - 100
+            self.ether = current_ether - 100
             return(100)
         else:
-            self.storage["ether"] = 0
+            self.ether = 0
             return(current_ether)
 
 def spawn(creature):
-    self.storage["creature"] = creature
-    return(123)
+    self.creature = creature
+    return(1)
