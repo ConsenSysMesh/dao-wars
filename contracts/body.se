@@ -3,123 +3,132 @@ extern body: [rewrite_state, move_left, move_right, move_up, move_down, get_loca
 extern creature_builder: [build_creature]
 
 macro requires_turn():
-  if self.storage["my_turn"] != 1:
+  if self.my_turn != 1:
     return(-1)
 
-  self.storage["my_turn"] = 0
+  self.my_turn = 0
+
+data location
+data ether
+data hp
+data brain
+data species
+data admin
+data creature_builder
+data my_turn
 
 def rewrite_state(location, ether, hp, brain, species, admin, creature_builder):
-    admin = self.storage["admin"]
+    admin = self.admin
     if admin == 0 or admin == msg.sender:
-        self.storage["location"] = location
-        self.storage["ether"] = ether
-        self.storage["hp"] = hp
-        self.storage["brain"] = brain
-        self.storage["species"] = species
-        self.storage["admin"] = admin
-        self.storage["creature_builder"] = creature_builder
+        self.location = location
+        self.ether = ether
+        self.hp = hp
+        self.brain = brain
+        self.species = species
+        self.admin = admin
+        self.creature_builder = creature_builder
 
 def move_left():
-    current_location = self.storage["location"]
+    current_location = self.location
     neighbor = current_location.get_left(as=square)
     self._move(current_location, neighbor)
 
 def move_right():
-    neighbor = self.storage["location"].get_right(as=square)
-    self.storage["location"] = neighbor
+    neighbor = self.location.get_right(as=square)
+    self.location = neighbor
     self._move(current_location, neighbor)
 
 def move_up():
-    neighbor = self.storage["location"].get_up(as=square)
-    self.storage["location"] = neighbor
+    neighbor = self.location.get_up(as=square)
+    self.location = neighbor
     self._move(current_location, neighbor)
 
 def move_down():
-    neighbor = self.storage["location"].get_down(as=square)
-    self.storage["location"] = neighbor
+    neighbor = self.location.get_down(as=square)
+    self.location = neighbor
     self._move(current_location, neighbor)
 
 def get_location():
-    return(self.storage["location"])
+    return(self.location)
 
 def get_ether():
-    return(self.storage["ether"])
+    return(self.ether)
 
 def get_hp():
-    return(self.storage["hp"])
+    return(self.hp)
 
 def get_brain():
-    return(self.storage["brain"])
+    return(self.brain)
 
 def get_species():
-    return(self.storage["species"])
+    return(self.species)
 
 def get_admin():
-    return(self.storage["admin"])
+    return(self.admin)
 
 def harvest():
     requires_turn()
 
-    location = self.storage["location"]
+    location = self.location
     gain = location.harvest(as=square)
-    self.storage["ether"] = self.storage["ether"] + gain
+    self.ether = self.ether + gain
     return(gain)
 
 def damage():
-  self.storage["hp"] = self.storage["hp"] - 1
+  self.hp = self.hp - 1
 
 def attack_left():
-  enemy_square = self.storage["location"].get_left(as=square)
+  enemy_square = self.location.get_left(as=square)
   self._attack(enemy_square)
 
 def attack_right():
-  enemy_square = self.storage["location"].get_right(as=square)
+  enemy_square = self.location.get_right(as=square)
   self._attack(enemy_square)
 
 def attack_up():
-  enemy_square = self.storage["location"].get_up(as=square)
+  enemy_square = self.location.get_up(as=square)
   self._attack(enemy_square)
 
 def attack_down():
-  enemy_square = self.storage["location"].get_down(as=square)
+  enemy_square = self.location.get_down(as=square)
   self._attack(enemy_square)
 
 def reproduce_left(new_brain, endowment):
-  location = self.storage["location"].get_left(as=square)
+  location = self.location.get_left(as=square)
   return(self._reproduce(new_brain, location, endowment))
 
 def reproduce_right(new_brain, endowment):
-  location = self.storage["location"].get_right(as=square)
+  location = self.location.get_right(as=square)
   return(self._reproduce(new_brain, location, endowment))
 
 def reproduce_up(new_brain, endowment):
-  location = self.storage["location"].get_up(as=square)
+  location = self.location.get_up(as=square)
   return(self._reproduce(new_brain, location, endowment))
 
 def reproduce_down(new_brain, endowment):
-  location = self.storage["location"].get_down(as=square)
+  location = self.location.get_down(as=square)
   return(self._reproduce(new_brain, location, endowment))
 
 def notify_of_turn():
-  self.storage["my_turn"] = 1
+  self.my_turn = 1
 
 def _reproduce(new_brain, location, endowment):
   requires_turn()
 
-  ether = self.storage["ether"]
+  ether = self.ether
   if endowment > ether:
     return(1)
   else:
-    self.storage["ether"] = ether - endowment
-    species = self.storage["species"]
-    return(self.storage["creature_builder"].build_creature(new_brain, location, endowment, species, as=creature_builder))
+    self.ether = ether - endowment
+    species = self.species
+    return(self.creature_builder.build_creature(new_brain, location, endowment, species, as=creature_builder))
 
 def _move(current_location, destination):
     requires_turn()
 
     if msg.sender == self:
         if destination.get_creature(as=square) == 0:
-            self.storage["location"] = destination
+            self.location = destination
             current_location.leave(as=square)
             destination.enter(as=square)
             return(1)
