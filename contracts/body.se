@@ -2,6 +2,12 @@ extern square: [rewrite_state, get_left, get_right, get_up, get_down, get_ether,
 extern body: [rewrite_state, move_left, move_right, move_up, move_down, get_location, get_ether, get_hp, get_brain, get_species, get_admin, harvest, damage, attack_left, attack_right, attack_up, attack_down, _move]
 extern creature_builder: [build_creature]
 
+macro requires_turn():
+  if self.storage["my_turn"] != 1:
+    return(-1)
+
+  self.storage["my_turn"] = 0
+
 def rewrite_state(location, ether, hp, brain, species, admin, creature_builder):
     admin = self.storage["admin"]
     if admin == 0 or admin == msg.sender:
@@ -52,6 +58,8 @@ def get_admin():
     return(self.storage["admin"])
 
 def harvest():
+    requires_turn()
+
     location = self.storage["location"]
     gain = location.harvest(as=square)
     self.storage["ether"] = self.storage["ether"] + gain
@@ -62,23 +70,19 @@ def damage():
 
 def attack_left():
   enemy_square = self.storage["location"].get_left(as=square)
-  enemy = enemy_square.get_creature(as=square)
-  enemy.damage(as=body)
+  self._attack(enemy_square)
 
 def attack_right():
   enemy_square = self.storage["location"].get_right(as=square)
-  enemy = enemy_square.get_creature(as=square)
-  enemy.damage(as=body)
+  self._attack(enemy_square)
 
 def attack_up():
   enemy_square = self.storage["location"].get_up(as=square)
-  enemy = enemy_square.get_creature(as=square)
-  enemy.damage(as=body)
+  self._attack(enemy_square)
 
 def attack_down():
   enemy_square = self.storage["location"].get_down(as=square)
-  enemy = enemy_square.get_creature(as=square)
-  enemy.damage(as=body)
+  self._attack(enemy_square)
 
 def reproduce_left(new_brain, endowment):
   location = self.storage["location"].get_left(as=square)
@@ -96,7 +100,12 @@ def reproduce_down(new_brain, endowment):
   location = self.storage["location"].get_down(as=square)
   return(self._reproduce(new_brain, location, endowment))
 
+def notify_of_turn():
+  self.storage["my_turn"] = 1
+
 def _reproduce(new_brain, location, endowment):
+  requires_turn()
+
   ether = self.storage["ether"]
   if endowment > ether:
     return(1)
@@ -106,8 +115,17 @@ def _reproduce(new_brain, location, endowment):
     return(self.storage["creature_builder"].build_creature(new_brain, location, endowment, species, as=creature_builder))
 
 def _move(current_location, destination):
+    requires_turn()
+
     if msg.sender == self:
         if destination.get_creature(as=square) == 0:
             self.storage["location"] = destination
             current_location.leave(as=square)
             destination.enter(as=square)
+            return(1)
+
+def _attack(enemy_square):
+  requires_turn()
+
+  enemy = enemy_square.get_creature(as=square)
+  enemy.damage(as=body)

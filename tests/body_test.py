@@ -13,6 +13,7 @@ class TestBody:
 
         location.rewrite_state(neighbor.address, 0, 0, 0, 0, self.contract.address, t.a0)
         assert_equal(address(location.get_creature()[0]), self.contract.address)
+        self.contract.notify_of_turn()
 
         self.contract.rewrite_state(location.address, 0, 0, 0, 0, t.a0, 0)
         assert_equal(address(self.contract.get_location()[0]), location.address)
@@ -27,6 +28,7 @@ class TestBody:
         location = self.state.abi_contract("contracts/square.se")
         location.rewrite_state(0, 0, 0, 0, 150, self.contract.address, t.a0)
         self.contract.rewrite_state(location.address, 0, 0, 0, 0, t.a0, 0)
+        self.contract.notify_of_turn()
 
         assert_equal(location.get_ether(), [150])
         assert_equal(self.contract.get_ether(), [0])
@@ -35,6 +37,7 @@ class TestBody:
         assert_equal(location.get_ether(), [50])
         assert_equal(self.contract.get_ether(), [100])
 
+        self.contract.notify_of_turn()
         self.contract.harvest()
         assert_equal(location.get_ether(), [0])
         assert_equal(self.contract.get_ether(), [150])
@@ -49,6 +52,7 @@ class TestBody:
         enemy.rewrite_state(neighbor.address, 0, 3, 0, 0, t.a0, 0)
         self.contract.rewrite_state(location.address, 0, 0, 0, 0, t.a0, 0)
         assert_equal(enemy.get_hp(), [3])
+        self.contract.notify_of_turn()
 
         self.contract.attack_left()
 
@@ -61,6 +65,7 @@ class TestBody:
 
         location.rewrite_state(neighbor.address, 0, 0, 0, 0, self.contract.address, t.a0)
         self.contract.rewrite_state(location.address, 0, 0, 0, 0, t.a0, creature_builder.address)
+        self.contract.notify_of_turn()
 
         assert_equal(neighbor.get_creature(), [0])
 
@@ -68,5 +73,25 @@ class TestBody:
 
         assert_equal(address(neighbor.get_creature()[0]), new_body_address)
 
-        brain = address(self.state.send(t.k0, new_body_address, 0, funid=8, abi=[])[0])
-        assert_equal(brain, t.a1)
+        # TODO: Figure out how to call a function with just an address.
+        #brain = self.state.call(t.k0, new_body_address, 0, "get_brain", "", [])[0]
+        #assert_equal(address(brain), t.a1)
+
+    def test_can_only_move_on_turn(self):
+        location = self.state.abi_contract("contracts/square.se")
+        neighbor = self.state.abi_contract("contracts/square.se")
+
+        location.rewrite_state(neighbor.address, 0, 0, 0, 0, self.contract.address, t.a0)
+        self.contract.rewrite_state(location.address, 0, 0, 0, 0, t.a0, 0)
+
+        self.contract.move_left()
+
+        assert_equal(address(location.get_creature()[0]), self.contract.address)
+        assert_equal(address(self.contract.get_location()[0]), location.address)
+
+        self.contract.notify_of_turn()
+        self.contract.move_left()
+
+        assert_equal(address(self.contract.get_location()[0]), neighbor.address)
+        assert_equal(location.get_creature(), [0])
+        assert_equal(address(neighbor.get_creature()[0]), self.contract.address)
