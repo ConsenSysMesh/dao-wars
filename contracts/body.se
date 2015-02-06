@@ -8,6 +8,10 @@ macro requires_turn():
 
   self.my_turn = 0
 
+macro private():
+  if msg.sender != self:
+    return(-1)
+
 data location
 data ether
 data hp
@@ -114,6 +118,7 @@ def notify_of_turn():
 
 def _reproduce(new_brain, location, endowment):
   requires_turn()
+  private()
 
   ether = self.ether
   if endowment > ether:
@@ -125,16 +130,17 @@ def _reproduce(new_brain, location, endowment):
 
 def _move(current_location, destination):
     requires_turn()
+    private()
 
-    if msg.sender == self:
-        if destination.get_creature(as=square) == 0:
-            self.location = destination
-            current_location.leave(as=square)
-            destination.enter(as=square)
-            return(1)
+    if destination.get_creature(as=square) == 0:
+        self.location = destination
+        current_location.leave(as=square)
+        destination.enter(as=square)
+        return(1)
 
 def _attack(enemy_square):
   requires_turn()
+  private()
 
   enemy = enemy_square.get_creature(as=square)
   enemy.damage(as=body)
