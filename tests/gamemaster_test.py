@@ -15,3 +15,9 @@ class TestGamemaster:
         assert_equal(self.contract.get_num_players(), [2])
         assert_equal(self.contract.get_move_limit(), [100])
 
+    def test_only_creator_can_rewrite_state(self):
+        player_list = [3, 4]
+        self.contract.rewrite_state(player_list, 100)
+
+        assert_equal(self.contract.rewrite_state(player_list, 50, sender=t.k1), [-1])
+        assert_equal(self.contract.get_move_limit(), [100])
