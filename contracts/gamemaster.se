@@ -1,4 +1,4 @@
-extern brain: [notify_of_move]
+extern body: [notify_of_turn]
 
 inset("basic_macros.se")
 
@@ -33,7 +33,7 @@ def run_game():
     while move < self.move_limit:
         player = 0
         while player < self.num_players:
-            self.player_list[player].notify_of_move(as=brain)
+            self.player_list[player].notify_of_turn(as=body)
 
             player += 1
 

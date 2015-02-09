@@ -1,6 +1,7 @@
 extern square: [rewrite_state, get_left, get_right, get_up, get_down, get_ether, get_creature, get_admin, leave, enter, harvest, spawn]
 extern body: [rewrite_state, move_left, move_right, move_up, move_down, get_location, get_ether, get_hp, get_brain, get_species, get_admin, harvest, damage, attack_left, attack_right, attack_up, attack_down, _move]
 extern creature_builder: [build_creature]
+extern brain: [notify_of_turn]
 
 macro requires_turn():
   if self.my_turn != 1:
@@ -115,6 +116,7 @@ def reproduce_down(new_brain, endowment):
 
 def notify_of_turn():
   self.my_turn = 1
+  self.brain.notify_of_turn(as=brain)
 
 def _reproduce(new_brain, location, endowment):
   requires_turn()

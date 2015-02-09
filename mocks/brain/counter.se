@@ -1,6 +1,6 @@
 data num_moves
 
-def notify_of_move():
+def notify_of_turn():
     self.num_moves += 1
 
 def get_num_moves():
