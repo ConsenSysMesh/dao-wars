@@ -1,3 +1,5 @@
+extern brain: [notify_of_move]
+
 inset("basic_macros.se")
 
 data creator
@@ -25,3 +27,14 @@ def get_num_players():
 
 def get_move_limit():
     return(self.move_limit)
+
+def run_game():
+    move = 0
+    while move < self.move_limit:
+        player = 0
+        while player < self.num_players:
+            self.player_list[player].notify_of_move(as=brain)
+
+            player += 1
+
+        move += 1

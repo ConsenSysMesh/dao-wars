@@ -21,3 +21,13 @@ class TestGamemaster:
 
         assert_equal(self.contract.rewrite_state(player_list, 50, sender=t.k1), [-1])
         assert_equal(self.contract.get_move_limit(), [100])
+
+    def test_run_game_calls_down_to_brain(self):
+        player_1 = self.state.abi_contract("mocks/brain/counter.se")
+        player_2 = self.state.abi_contract("mocks/brain/counter.se")
+
+        self.contract.rewrite_state([player_1.address, player_2.address], 5)
+        self.contract.run_game()
+
+        assert_equal(player_1.get_num_moves(), [5])
+        assert_equal(player_2.get_num_moves(), [5])

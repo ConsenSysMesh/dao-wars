@@ -1,0 +1,7 @@
+data num_moves
+
+def notify_of_move():
+    self.num_moves += 1
+
+def get_num_moves():
+    return(self.num_moves)
