@@ -5,16 +5,16 @@ inset("basic_macros.se")
 data creator
 data num_creatures
 data creature_list[]
-data move_limit
+data turn_limit
 data current_creature
 
 def init():
     self.creator = msg.sender
 
-def rewrite_state(creature_list:arr, move_limit):
+def rewrite_state(creature_list:arr, turn_limit):
     authenticate(self.creator)
 
-    self.move_limit = move_limit
+    self.turn_limit = turn_limit
     self.num_creatures = len(creature_list)
     save_array(creature_list, self.creature_list)
 
@@ -26,8 +26,8 @@ def get_creature_list():
 def get_num_creatures():
     return(self.num_creatures)
 
-def get_move_limit():
-    return(self.move_limit)
+def get_turn_limit():
+    return(self.turn_limit)
 
 def notify_of_spawn(new_creature):
     authenticate(self.current_creature)
@@ -36,14 +36,16 @@ def notify_of_spawn(new_creature):
     self.num_creatures += 1
 
 def run_game():
-    move = 0
-    while move < self.move_limit:
-        creature = 0
-        while creature < self.num_creatures:
-            current_creature = self.creature_list[creature]
-            self.current_creature = current_creature
-            current_creature.notify_of_turn(as=body)
+    turn = 0
+    while turn < self.turn_limit:
+        self.run_turn()
+        turn += 1
 
-            creature += 1
+def run_turn():
+    creature = 0
+    while creature < self.num_creatures:
+        current_creature = self.creature_list[creature]
+        self.current_creature = current_creature
+        current_creature.notify_of_turn(as=body)
 
-        move += 1
+        creature += 1

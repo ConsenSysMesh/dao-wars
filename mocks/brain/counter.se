@@ -1,7 +1,7 @@
-data num_moves
+data num_turns
 
 def notify_of_turn():
-    self.num_moves += 1
+    self.num_turns += 1
 
-def get_num_moves():
-    return(self.num_moves)
+def get_num_turns():
+    return(self.num_turns)
