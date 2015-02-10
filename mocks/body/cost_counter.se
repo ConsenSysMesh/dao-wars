@@ -1,0 +1,7 @@
+data amount
+
+def deduct_ether(amount):
+    self.amount = amount
+
+def get_amount():
+    return(self.amount)

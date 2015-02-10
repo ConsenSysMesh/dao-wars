@@ -54,3 +54,11 @@ class TestGamemaster:
 
         assert_equal(self.contract.notify_of_spawn(t.a0), [-1])
         assert_equal(self.contract.get_num_creatures(), [1])
+
+    def test_running_turn_charges_gas(self):
+        body = self.state.abi_contract("mocks/body/cost_counter.se")
+        self.contract.rewrite_state([body.address], 1)
+
+        self.contract.run_turn()
+
+        assert(body.get_amount()[0] > 100)

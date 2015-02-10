@@ -1,4 +1,4 @@
-extern body: [notify_of_turn]
+extern body: [notify_of_turn, deduct_ether:i]
 
 inset("basic_macros.se")
 
@@ -46,6 +46,12 @@ def run_turn():
     while creature < self.num_creatures:
         current_creature = self.creature_list[creature]
         self.current_creature = current_creature
+
+        starting_gas = tx.gas
         current_creature.notify_of_turn(as=body)
+        ending_gas = tx.gas
+
+        used_gas = starting_gas - ending_gas
+        current_creature.deduct_ether(used_gas, as=body)
 
         creature += 1
