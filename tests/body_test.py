@@ -57,6 +57,18 @@ class TestBody:
 
         assert_equal(enemy.get_hp(), [2])
 
+    def test_death(self):
+        location = self.state.abi_contract("contracts/square.se")
+        location.rewrite_state(0, 0, 0, 0, 0, self.contract.address, t.a0)
+        self.contract.rewrite_state(location.address, 100, 1, 0, 0, t.a0, 0)
+
+        self.contract.damage()
+
+        assert_equal(self.contract.get_hp(), [0])
+        assert_equal(self.contract.get_dead(), [1])
+        assert_equal(self.contract.get_ether(), [0])
+        assert_equal(location.get_ether(), [100])
+
     def test_reproduce_left(self):
         brain = self.state.abi_contract("mocks/brain/reproducer.se")
         location = self.state.abi_contract("contracts/square.se")

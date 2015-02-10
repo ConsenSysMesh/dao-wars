@@ -56,6 +56,9 @@ def harvest():
             self.ether = 0
             return(current_ether)
 
+def drop_ether(amount):
+    self.ether += amount
+
 def spawn(creature):
     self.creature = creature
     return(1)
