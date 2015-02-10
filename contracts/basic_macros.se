@@ -31,3 +31,13 @@ macro authenticate($user):
 macro authenticate_from_array($array:$size):
     if not in_array($array:$size, msg.sender):
         return(-1)
+
+macro requires_turn():
+  if self.my_turn != 1:
+    return(-1)
+
+  self.my_turn = 0
+
+macro private():
+  if msg.sender != self:
+    return(-1)

@@ -1,5 +1,5 @@
 from eth_tools import address
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_not_equal
 from pyethereum import tester as t
 
 class TestBody:
@@ -76,6 +76,22 @@ class TestBody:
         # TODO: Figure out how to call a function with just an address.
         #brain = self.state.call(t.k0, new_body_address, 0, "get_brain", "", [])[0]
         #assert_equal(address(brain), t.a1)
+
+    def test_reproduction_notifies_gamemaster(self):
+        location = self.state.abi_contract("contracts/square.se")
+        neighbor = self.state.abi_contract("contracts/square.se")
+        creature_builder = self.state.abi_contract("contracts/creature_builder.se")
+
+        gamemaster = self.state.abi_contract("mocks/gamemaster/spawn_counter.se")
+
+        location.rewrite_state(neighbor.address, 0, 0, 0, 0, self.contract.address, t.a0)
+        self.contract.rewrite_state(location.address, 0, 0, 0, 0, gamemaster.address, creature_builder.address)
+
+        gamemaster.send_turn_notification_to(self.contract.address)
+
+        assert_not_equal(self.contract.reproduce_left(t.a1, 0), [0])
+
+        assert_equal(gamemaster.get_spawn_count(), [1])
 
     def test_can_only_move_on_turn(self):
         location = self.state.abi_contract("contracts/square.se")

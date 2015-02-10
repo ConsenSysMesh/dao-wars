@@ -1,4 +1,4 @@
-extern square: [rewrite_state, get_left, get_right, get_up, get_down, get_ether, get_creature, get_admin, leave, enter, harvest, spawn]
+extern square: [rewrite_state, get_left, get_right, get_up, get_down, get_ether, get_creature, get_admin, leave, enter, harvest, spawn:i]
 extern body: [rewrite_state, move_left, move_right, move_up, move_down, get_location, get_ether, get_hp, get_brain, get_species, get_admin, harvest, damage, attack_left, attack_right, attack_up, attack_down, _move]
 
 def build_creature(brain, location, endowment, species):

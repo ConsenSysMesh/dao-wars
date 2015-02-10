@@ -1,36 +1,28 @@
-extern square: [rewrite_state, get_left, get_right, get_up, get_down, get_ether, get_creature, get_admin, leave, enter, harvest, spawn]
-extern body: [rewrite_state, move_left, move_right, move_up, move_down, get_location, get_ether, get_hp, get_brain, get_species, get_admin, harvest, damage, attack_left, attack_right, attack_up, attack_down, _move]
-extern creature_builder: [build_creature]
+extern square: [rewrite_state, get_left, get_right, get_up, get_down, get_ether, get_creature, get_gamemaster, leave, enter, harvest, spawn]
+extern body: [rewrite_state, move_left, move_right, move_up, move_down, get_location, get_ether, get_hp, get_brain, get_species, get_gamemaster, harvest, damage, attack_left, attack_right, attack_up, attack_down, _move]
+extern creature_builder: [build_creature:iiii]
 extern brain: [notify_of_turn]
+extern gamemaster: [notify_of_spawn:i]
 
-macro requires_turn():
-  if self.my_turn != 1:
-    return(-1)
-
-  self.my_turn = 0
-
-macro private():
-  if msg.sender != self:
-    return(-1)
+inset('basic_macros.se')
 
 data location
 data ether
 data hp
 data brain
 data species
-data admin
+data gamemaster
 data creature_builder
 data my_turn
 
-def rewrite_state(location, ether, hp, brain, species, admin, creature_builder):
-    admin = self.admin
-    if admin == 0 or admin == msg.sender:
+def rewrite_state(location, ether, hp, brain, species, gamemaster, creature_builder):
+    if self.gamemaster == 0 or self.gamemaster == msg.sender:
         self.location = location
         self.ether = ether
         self.hp = hp
         self.brain = brain
         self.species = species
-        self.admin = admin
+        self.gamemaster = gamemaster
         self.creature_builder = creature_builder
 
 def move_left():
@@ -68,8 +60,8 @@ def get_brain():
 def get_species():
     return(self.species)
 
-def get_admin():
-    return(self.admin)
+def get_gamemaster():
+    return(self.gamemaster)
 
 def harvest():
     requires_turn()
@@ -128,7 +120,9 @@ def _reproduce(new_brain, location, endowment):
   else:
     self.ether = ether - endowment
     species = self.species
-    return(self.creature_builder.build_creature(new_brain, location, endowment, species, as=creature_builder))
+    child = self.creature_builder.build_creature(new_brain, location, endowment, species, as=creature_builder)
+    self.gamemaster.notify_of_spawn(child, as=gamemaster)
+    return(child)
 
 def _move(current_location, destination):
     requires_turn()
