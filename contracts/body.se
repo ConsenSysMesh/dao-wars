@@ -23,6 +23,7 @@ data species
 data gamemaster
 data creature_builder
 data my_turn
+data dead
 
 def rewrite_state(location, ether, hp, brain, species, gamemaster, creature_builder):
     if self.gamemaster == 0 or self.gamemaster == msg.sender:
@@ -81,60 +82,60 @@ def harvest():
     return(gain)
 
 def damage():
-  self.hp = self.hp - 1
+    self.hp = self.hp - 1
 
 def attack_left():
-  enemy_square = self.location.get_left(as=square)
-  self._attack(enemy_square)
+    enemy_square = self.location.get_left(as=square)
+    self._attack(enemy_square)
 
 def attack_right():
-  enemy_square = self.location.get_right(as=square)
-  self._attack(enemy_square)
+    enemy_square = self.location.get_right(as=square)
+    self._attack(enemy_square)
 
 def attack_up():
-  enemy_square = self.location.get_up(as=square)
-  self._attack(enemy_square)
+    enemy_square = self.location.get_up(as=square)
+    self._attack(enemy_square)
 
 def attack_down():
-  enemy_square = self.location.get_down(as=square)
-  self._attack(enemy_square)
+    enemy_square = self.location.get_down(as=square)
+    self._attack(enemy_square)
 
 def reproduce_left(new_brain, endowment):
-  location = self.location.get_left(as=square)
-  return(self._reproduce(new_brain, location, endowment))
+    location = self.location.get_left(as=square)
+    return(self._reproduce(new_brain, location, endowment))
 
 def reproduce_right(new_brain, endowment):
-  location = self.location.get_right(as=square)
-  return(self._reproduce(new_brain, location, endowment))
+    location = self.location.get_right(as=square)
+    return(self._reproduce(new_brain, location, endowment))
 
 def reproduce_up(new_brain, endowment):
-  location = self.location.get_up(as=square)
-  return(self._reproduce(new_brain, location, endowment))
+    location = self.location.get_up(as=square)
+    return(self._reproduce(new_brain, location, endowment))
 
 def reproduce_down(new_brain, endowment):
-  location = self.location.get_down(as=square)
-  return(self._reproduce(new_brain, location, endowment))
+    location = self.location.get_down(as=square)
+    return(self._reproduce(new_brain, location, endowment))
 
 def notify_of_turn():
-  authenticate(self.gamemaster)
+    authenticate(self.gamemaster)
 
-  self.my_turn = 1
-  self.brain.notify_of_turn(as=brain)
-  self.my_turn = 0
+    self.my_turn = 1
+    self.brain.notify_of_turn(as=brain)
+    self.my_turn = 0
 
 def _reproduce(new_brain, location, endowment):
-  requires_turn()
-  private()
+    requires_turn()
+    private()
 
-  ether = self.ether
-  if endowment > ether:
-    return(1)
-  else:
-    self.ether = ether - endowment
-    species = self.species
-    child = self.creature_builder.build_creature(new_brain, location, endowment, species, as=creature_builder)
-    self.gamemaster.notify_of_spawn(child, as=gamemaster)
-    return(child)
+    ether = self.ether
+    if endowment > ether:
+        return(1)
+    else:
+        self.ether = ether - endowment
+        species = self.species
+        child = self.creature_builder.build_creature(new_brain, location, endowment, species, as=creature_builder)
+        self.gamemaster.notify_of_spawn(child, as=gamemaster)
+        return(child)
 
 def _move(current_location, destination):
     requires_turn()
@@ -147,8 +148,8 @@ def _move(current_location, destination):
         return(1)
 
 def _attack(enemy_square):
-  requires_turn()
-  private()
+    requires_turn()
+    private()
 
-  enemy = enemy_square.get_creature(as=square)
-  enemy.damage(as=body)
+    enemy = enemy_square.get_creature(as=square)
+    enemy.damage(as=body)
