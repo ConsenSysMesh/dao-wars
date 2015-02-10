@@ -3,47 +3,47 @@ extern body: [notify_of_turn]
 inset("basic_macros.se")
 
 data creator
-data num_players
-data player_list[]
+data num_creatures
+data creature_list[]
 data move_limit
-data current_player
+data current_creature
 
 def init():
     self.creator = msg.sender
 
-def rewrite_state(player_list:arr, move_limit):
+def rewrite_state(creature_list:arr, move_limit):
     authenticate(self.creator)
 
     self.move_limit = move_limit
-    self.num_players = len(player_list)
-    save_array(player_list, self.player_list)
+    self.num_creatures = len(creature_list)
+    save_array(creature_list, self.creature_list)
 
     return(1)
 
-def get_player_list():
-    return_array(self.player_list:self.num_players)
+def get_creature_list():
+    return_array(self.creature_list:self.num_creatures)
 
-def get_num_players():
-    return(self.num_players)
+def get_num_creatures():
+    return(self.num_creatures)
 
 def get_move_limit():
     return(self.move_limit)
 
 def notify_of_spawn(new_creature):
-    authenticate(self.current_player)
+    authenticate(self.current_creature)
 
-    self.player_list[self.num_players] = new_creature
-    self.num_players += 1
+    self.creature_list[self.num_creatures] = new_creature
+    self.num_creatures += 1
 
 def run_game():
     move = 0
     while move < self.move_limit:
-        player = 0
-        while player < self.num_players:
-            current_player = self.player_list[player]
-            self.current_player = current_player
-            current_player.notify_of_turn(as=body)
+        creature = 0
+        while creature < self.num_creatures:
+            current_creature = self.creature_list[creature]
+            self.current_creature = current_creature
+            current_creature.notify_of_turn(as=body)
 
-            player += 1
+            creature += 1
 
         move += 1
