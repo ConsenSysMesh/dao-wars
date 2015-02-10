@@ -116,6 +116,8 @@ def reproduce_down(new_brain, endowment):
   return(self._reproduce(new_brain, location, endowment))
 
 def notify_of_turn():
+  authenticate(self.gamemaster)
+
   self.my_turn = 1
   self.brain.notify_of_turn(as=brain)
   self.my_turn = 0

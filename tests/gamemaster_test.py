@@ -27,10 +27,10 @@ class TestGamemaster:
         brain_2 = self.state.abi_contract("mocks/brain/counter.se")
 
         creature_1 = self.state.abi_contract("contracts/body.se")
-        creature_1.rewrite_state(0, 0, 0, brain_1.address, 0, 0, 0)
+        creature_1.rewrite_state(0, 0, 0, brain_1.address, 0, self.contract.address, 0)
 
         creature_2 = self.state.abi_contract("contracts/body.se")
-        creature_2.rewrite_state(0, 0, 0, brain_2.address, 0, 0, 0)
+        creature_2.rewrite_state(0, 0, 0, brain_2.address, 0, self.contract.address, 0)
 
         self.contract.rewrite_state([creature_1.address, creature_2.address], 5)
         self.contract.run_game()
