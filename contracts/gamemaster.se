@@ -6,6 +6,7 @@ data creator
 data num_players
 data player_list[]
 data move_limit
+data current_player
 
 def init():
     self.creator = msg.sender
@@ -29,6 +30,8 @@ def get_move_limit():
     return(self.move_limit)
 
 def notify_of_spawn(new_creature):
+    authenticate(self.current_player)
+
     self.player_list[self.num_players] = new_creature
     self.num_players += 1
 

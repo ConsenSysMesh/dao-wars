@@ -48,3 +48,9 @@ class TestGamemaster:
 
         assert_equal(self.contract.get_num_players(), [2])
         assert_equal(child.get_num_moves(), [1])
+
+    def test_only_acting_player_can_spawn(self):
+        self.contract.rewrite_state([t.a1], 5)
+
+        assert_equal(self.contract.notify_of_spawn(t.a0), [-1])
+        assert_equal(self.contract.get_num_players(), [1])
