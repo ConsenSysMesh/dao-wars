@@ -1,0 +1,9 @@
+extern gamemaster: [notify_of_spawn:i]
+
+data child
+
+def notify_of_turn():
+    msg.sender.notify_of_spawn(self.child, as=gamemaster)
+
+def set_child_address(address):
+    self.child = address

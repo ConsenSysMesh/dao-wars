@@ -37,3 +37,14 @@ class TestGamemaster:
 
         assert_equal(brain_1.get_num_moves(), [5])
         assert_equal(brain_2.get_num_moves(), [5])
+
+    def test_acting_player_can_spawn_new_creatures(self):
+        child = self.state.abi_contract("mocks/brain/counter.se")
+        body = self.state.abi_contract("mocks/body/spawner.se")
+        body.set_child_address(child.address)
+        self.contract.rewrite_state([body.address], 1)
+
+        self.contract.run_game()
+
+        assert_equal(self.contract.get_num_players(), [2])
+        assert_equal(child.get_num_moves(), [1])

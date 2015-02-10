@@ -28,12 +28,18 @@ def get_num_players():
 def get_move_limit():
     return(self.move_limit)
 
+def notify_of_spawn(new_creature):
+    self.player_list[self.num_players] = new_creature
+    self.num_players += 1
+
 def run_game():
     move = 0
     while move < self.move_limit:
         player = 0
         while player < self.num_players:
-            self.player_list[player].notify_of_turn(as=body)
+            current_player = self.player_list[player]
+            self.current_player = current_player
+            current_player.notify_of_turn(as=body)
 
             player += 1
 
