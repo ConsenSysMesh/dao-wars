@@ -6,6 +6,15 @@ extern gamemaster: [notify_of_spawn:i]
 
 inset('basic_macros.se')
 
+macro requires_turn():
+    if msg.sender != self.brain:
+        return(-1)
+
+    if self.my_turn != 1:
+        return(-1)
+
+    self.my_turn = 0
+
 data location
 data ether
 data hp
@@ -109,6 +118,7 @@ def reproduce_down(new_brain, endowment):
 def notify_of_turn():
   self.my_turn = 1
   self.brain.notify_of_turn(as=brain)
+  self.my_turn = 0
 
 def _reproduce(new_brain, location, endowment):
   requires_turn()

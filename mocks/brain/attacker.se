@@ -1,0 +1,4 @@
+extern body: [attack_left]
+
+def notify_of_turn():
+    msg.sender.attack_left(as=body)

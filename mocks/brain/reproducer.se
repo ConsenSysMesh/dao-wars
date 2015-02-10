@@ -1,0 +1,4 @@
+extern body: [reproduce_left:ii]
+
+def notify_of_turn():
+    msg.sender.reproduce_left(123, 0, as=body)

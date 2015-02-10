@@ -1,0 +1,4 @@
+extern body: [harvest]
+
+def notify_of_turn():
+    msg.sender.harvest(as=body)

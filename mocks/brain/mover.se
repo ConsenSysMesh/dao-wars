@@ -1,0 +1,4 @@
+extern body: [move_left]
+
+def notify_of_turn():
+    msg.sender.move_left(as=body)
