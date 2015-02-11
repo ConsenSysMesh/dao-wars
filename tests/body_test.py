@@ -110,3 +110,10 @@ class TestBody:
 
         assert_equal(address(location.get_creature()[0]), self.contract.address)
         assert_equal(address(self.contract.get_location()[0]), location.address)
+
+    def test_gamemaster_can_deduct_ether(self):
+        self.contract.rewrite_state(0, 1000, 0, 0, 0, t.a0, 0)
+        self.contract.deduct_ether(400)
+        self.contract.deduct_ether(300, sender=t.k1)
+
+        assert_equal(self.contract.get_ether(), [600])

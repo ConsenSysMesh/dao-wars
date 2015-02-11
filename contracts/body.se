@@ -91,6 +91,11 @@ def damage():
         self.location.drop_ether(self.ether, as=square)
         self.ether = 0
 
+def deduct_ether(amount):
+    authenticate(self.gamemaster)
+
+    self.ether -= amount
+
 def attack_left():
     enemy_square = self.location.get_left(as=square)
     self._attack(enemy_square)
