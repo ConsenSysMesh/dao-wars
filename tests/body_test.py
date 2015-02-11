@@ -68,6 +68,7 @@ class TestBody:
         assert_equal(self.contract.get_dead(), [1])
         assert_equal(self.contract.get_ether(), [0])
         assert_equal(location.get_ether(), [100])
+        assert_equal(location.get_creature(), [0])
 
     def test_reproduce_left(self):
         brain = self.state.abi_contract("mocks/brain/reproducer.se")

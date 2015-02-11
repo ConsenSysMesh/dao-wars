@@ -89,6 +89,7 @@ def damage():
     if self.hp == 0:
         self.dead = 1
         self.location.drop_ether(self.ether, as=square)
+        self.location.leave(as=square)
         self.ether = 0
 
 def deduct_ether(amount):
