@@ -1,0 +1,17 @@
+data num_turns
+data ether
+
+def init():
+    self.ether = 500
+
+def notify_of_turn():
+    self.num_turns += 1
+
+def get_num_turns():
+    return(self.num_turns)
+
+def deduct_ether(amount):
+    self.ether -= amount
+
+def get_ether():
+    return(self.ether)

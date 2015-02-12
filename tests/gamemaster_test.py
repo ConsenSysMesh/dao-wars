@@ -1,5 +1,5 @@
 from eth_tools import address
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_raises
 from pyethereum import tester as t
 
 class TestGamemaster:
@@ -27,10 +27,10 @@ class TestGamemaster:
         brain_2 = self.state.abi_contract("mocks/brain/counter.se")
 
         creature_1 = self.state.abi_contract("contracts/body.se")
-        creature_1.rewrite_state(0, 0, 0, brain_1.address, 0, self.contract.address, 0)
+        creature_1.rewrite_state(0, 10000, 0, brain_1.address, 0, self.contract.address, 0)
 
         creature_2 = self.state.abi_contract("contracts/body.se")
-        creature_2.rewrite_state(0, 0, 0, brain_2.address, 0, self.contract.address, 0)
+        creature_2.rewrite_state(0, 10000, 0, brain_2.address, 0, self.contract.address, 0)
 
         self.contract.rewrite_state([creature_1.address, creature_2.address], 5)
         self.contract.run_game()
@@ -62,3 +62,9 @@ class TestGamemaster:
         self.contract.run_turn()
 
         assert(body.get_amount()[0] > 100)
+
+    def test_turn_only_takes_given_bodys_remaining_gas(self):
+        body = self.state.abi_contract("mocks/body/bankrupt.se")
+        self.contract.rewrite_state([body.address], 3)
+
+        assert_raises(Exception, self.contract.run_game)
