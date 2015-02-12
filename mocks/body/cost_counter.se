@@ -1,9 +1,9 @@
 data amount
 
-def get_ether():
+def get_gas():
     return(10000)
 
-def deduct_ether(amount):
+def deduct_gas(amount):
     self.amount = amount
 
 def get_amount():

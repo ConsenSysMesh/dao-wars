@@ -1,8 +1,8 @@
 data num_turns
-data ether
+data gas
 
 def init():
-    self.ether = 500
+    self.gas = 500
 
 def notify_of_turn():
     self.num_turns += 1
@@ -10,8 +10,8 @@ def notify_of_turn():
 def get_num_turns():
     return(self.num_turns)
 
-def deduct_ether(amount):
-    self.ether -= amount
+def deduct_gas(amount):
+    self.gas -= amount
 
-def get_ether():
-    return(self.ether)
+def get_gas():
+    return(self.gas)

@@ -1,5 +1,5 @@
-extern square: [drop_ether:i, enter, get_admin, get_creature, get_down, get_ether, get_left, get_right, get_up, harvest, leave, rewrite_state:iiiiiii, spawn:i]
-extern body: [rewrite_state, move_left, move_right, move_up, move_down, get_location, get_ether, get_hp, get_brain, get_species, get_gamemaster, harvest, damage, attack_left, attack_right, attack_up, attack_down, _move]
+extern square: [drop_gas:i, enter, get_admin, get_creature, get_down, get_gas, get_left, get_right, get_up, harvest, leave, rewrite_state:iiiiiii, spawn:i]
+extern body: [rewrite_state, move_left, move_right, move_up, move_down, get_location, get_gas, get_hp, get_brain, get_species, get_gamemaster, harvest, damage, attack_left, attack_right, attack_up, attack_down, _move]
 extern creature_builder: [build_creature:iiii]
 extern brain: [notify_of_turn]
 extern gamemaster: [notify_of_spawn:i]
@@ -16,7 +16,7 @@ macro requires_turn():
     self.my_turn = 0
 
 data location
-data ether
+data gas
 data hp
 data brain
 data species
@@ -25,10 +25,10 @@ data creature_builder
 data my_turn
 data dead
 
-def rewrite_state(location, ether, hp, brain, species, gamemaster, creature_builder):
+def rewrite_state(location, gas, hp, brain, species, gamemaster, creature_builder):
     if self.gamemaster == 0 or self.gamemaster == msg.sender:
         self.location = location
-        self.ether = ether
+        self.gas = gas
         self.hp = hp
         self.brain = brain
         self.species = species
@@ -58,8 +58,8 @@ def move_down():
 def get_location():
     return(self.location)
 
-def get_ether():
-    return(self.ether)
+def get_gas():
+    return(self.gas)
 
 def get_hp():
     return(self.hp)
@@ -81,21 +81,21 @@ def harvest():
 
     location = self.location
     gain = location.harvest(as=square)
-    self.ether = self.ether + gain
+    self.gas = self.gas + gain
     return(gain)
 
 def damage():
     self.hp = self.hp - 1
     if self.hp == 0:
         self.dead = 1
-        self.location.drop_ether(self.ether, as=square)
+        self.location.drop_gas(self.gas, as=square)
         self.location.leave(as=square)
-        self.ether = 0
+        self.gas = 0
 
-def deduct_ether(amount):
+def deduct_gas(amount):
     authenticate(self.gamemaster)
 
-    self.ether -= amount
+    self.gas -= amount
 
 def attack_left():
     enemy_square = self.location.get_left(as=square)
@@ -143,11 +143,11 @@ def _reproduce(new_brain, location, endowment):
     requires_turn()
     private()
 
-    ether = self.ether
-    if endowment > ether:
+    gas = self.gas
+    if endowment > gas:
         return(1)
     else:
-        self.ether = ether - endowment
+        self.gas = gas - endowment
         species = self.species
         child = self.creature_builder.build_creature(new_brain, location, endowment, species, as=creature_builder)
         self.gamemaster.notify_of_spawn(child, as=gamemaster)

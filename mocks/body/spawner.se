@@ -2,7 +2,7 @@ extern gamemaster: [notify_of_spawn:i]
 
 data child
 
-def get_ether():
+def get_gas():
     return(10000)
 
 def notify_of_turn():

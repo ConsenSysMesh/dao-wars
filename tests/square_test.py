@@ -11,9 +11,9 @@ class TestSquare:
         self.contract.rewrite_state(t.a1, 0, 0, 0, 0, 0, 0)
         assert_equal(address(self.contract.get_left()[0]), t.a1)
 
-    def test_ether(self):
+    def test_gas(self):
         self.contract.rewrite_state(0, 0, 0, 0, 1000, 0, 0)
-        assert_equal(self.contract.get_ether(), [1000])
+        assert_equal(self.contract.get_gas(), [1000])
 
     def test_locks_changes_to_non_admins(self):
         self.contract.rewrite_state(0, 0, 0, 0, 1000, 0, t.a0)
@@ -21,4 +21,4 @@ class TestSquare:
 
         self.contract.rewrite_state(0, 0, 0, 0, 1001, 0, t.a0)
         self.contract.rewrite_state(0, 0, 0, 0, 1002, 0, 0, sender=t.k1)
-        assert_equal(self.contract.get_ether(), [1001])
+        assert_equal(self.contract.get_gas(), [1001])

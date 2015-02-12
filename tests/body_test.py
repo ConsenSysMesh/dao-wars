@@ -30,16 +30,16 @@ class TestBody:
         location.rewrite_state(0, 0, 0, 0, 150, self.contract.address, t.a0)
         self.contract.rewrite_state(location.address, 0, 0, brain.address, 0, t.a0, 0)
 
-        assert_equal(location.get_ether(), [150])
-        assert_equal(self.contract.get_ether(), [0])
+        assert_equal(location.get_gas(), [150])
+        assert_equal(self.contract.get_gas(), [0])
 
         self.contract.notify_of_turn()
-        assert_equal(location.get_ether(), [50])
-        assert_equal(self.contract.get_ether(), [100])
+        assert_equal(location.get_gas(), [50])
+        assert_equal(self.contract.get_gas(), [100])
 
         self.contract.notify_of_turn()
-        assert_equal(location.get_ether(), [0])
-        assert_equal(self.contract.get_ether(), [150])
+        assert_equal(location.get_gas(), [0])
+        assert_equal(self.contract.get_gas(), [150])
 
     def test_attack_left(self):
         brain = self.state.abi_contract("mocks/brain/attacker.se")
@@ -66,8 +66,8 @@ class TestBody:
 
         assert_equal(self.contract.get_hp(), [0])
         assert_equal(self.contract.get_dead(), [1])
-        assert_equal(self.contract.get_ether(), [0])
-        assert_equal(location.get_ether(), [100])
+        assert_equal(self.contract.get_gas(), [0])
+        assert_equal(location.get_gas(), [100])
         assert_equal(location.get_creature(), [0])
 
     def test_reproduce_left(self):
@@ -112,9 +112,9 @@ class TestBody:
         assert_equal(address(location.get_creature()[0]), self.contract.address)
         assert_equal(address(self.contract.get_location()[0]), location.address)
 
-    def test_gamemaster_can_deduct_ether(self):
+    def test_gamemaster_can_deduct_gas(self):
         self.contract.rewrite_state(0, 1000, 0, 0, 0, t.a0, 0)
-        self.contract.deduct_ether(400)
-        self.contract.deduct_ether(300, sender=t.k1)
+        self.contract.deduct_gas(400)
+        self.contract.deduct_gas(300, sender=t.k1)
 
-        assert_equal(self.contract.get_ether(), [600])
+        assert_equal(self.contract.get_gas(), [600])

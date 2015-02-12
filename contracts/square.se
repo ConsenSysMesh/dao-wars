@@ -2,18 +2,18 @@ data left
 data right
 data up
 data down
-data ether
+data gas
 data creature
 data admin
 
-def rewrite_state(left, right, up, down, ether, creature, admin):
+def rewrite_state(left, right, up, down, gas, creature, admin):
     current_admin = self.admin
     if current_admin == 0 or current_admin == msg.sender:
         self.left = left
         self.right = right
         self.up = up
         self.down = down
-        self.ether = ether
+        self.gas = gas
         self.creature = creature
         self.admin = admin
 
@@ -29,8 +29,8 @@ def get_up():
 def get_down():
     return(self.down)
 
-def get_ether():
-    return(self.ether)
+def get_gas():
+    return(self.gas)
 
 def get_creature():
     return(self.creature)
@@ -48,16 +48,16 @@ def enter():
 
 def harvest():
     if self.creature == msg.sender:
-        current_ether = self.ether
-        if current_ether > 100:
-            self.ether = current_ether - 100
+        current_gas = self.gas
+        if current_gas > 100:
+            self.gas = current_gas - 100
             return(100)
         else:
-            self.ether = 0
-            return(current_ether)
+            self.gas = 0
+            return(current_gas)
 
-def drop_ether(amount):
-    self.ether += amount
+def drop_gas(amount):
+    self.gas += amount
 
 def spawn(creature):
     self.creature = creature
