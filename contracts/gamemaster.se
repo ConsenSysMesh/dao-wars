@@ -1,27 +1,30 @@
-extern body: [notify_of_turn, deduct_gas:i, get_gas]
+extern body: [notify_of_turn, deduct_gas:i, get_gas, get_dead, get_species]
 
 inset("basic_macros.se")
 
 data creator
 data num_creatures
-data creature_list[]
+data creatures[]
+data num_species
+data species_creature_counts[]
 data turn_limit
 data current_creature
 
 def init():
     self.creator = msg.sender
 
-def rewrite_state(creature_list:arr, turn_limit):
+def rewrite_state(creatures:arr, turn_limit):
     authenticate(self.creator)
 
     self.turn_limit = turn_limit
-    self.num_creatures = len(creature_list)
-    save_array(creature_list, self.creature_list)
+    self.num_creatures = len(creatures)
+    self.num_species = len(creatures)
+    save_array(creatures, self.creatures)
 
     return(1)
 
-def get_creature_list():
-    return_array(self.creature_list:self.num_creatures)
+def get_creatures():
+    return_array(self.creatures:self.num_creatures)
 
 def get_num_creatures():
     return(self.num_creatures)
@@ -32,7 +35,7 @@ def get_turn_limit():
 def notify_of_spawn(new_creature):
     authenticate(self.current_creature)
 
-    self.creature_list[self.num_creatures] = new_creature
+    self.creatures[self.num_creatures] = new_creature
     self.num_creatures += 1
 
 def run_game():
@@ -40,11 +43,15 @@ def run_game():
     while turn < self.turn_limit:
         self.run_turn()
         turn += 1
+        if self._num_surviving_species() == 1:
+            return(1)
+
+    return(1)
 
 def run_turn():
     creature = 0
     while creature < self.num_creatures:
-        current_creature = self.creature_list[creature]
+        current_creature = self.creatures[creature]
         self.current_creature = current_creature
         available_gas = current_creature.get_gas(as=body)
 
@@ -56,3 +63,31 @@ def run_turn():
         current_creature.deduct_gas(used_gas, as=body)
 
         creature += 1
+
+    self._update_species_counts()
+
+def _update_species_counts():
+    private()
+
+    i = 0
+    while i < self.num_creatures:
+        creature = self.creatures[i]
+
+        if creature.get_dead() == 0 and creature.get_gas() > 0:
+            self.species_creature_counts[creature.get_species()] += 1
+
+        i += 1
+
+def _num_surviving_species():
+    private()
+
+    result = 0
+
+    i = 0
+    while i < self.num_species:
+        if self.species_creature_counts[i] != 0:
+            result += 0
+
+        i += 1
+
+    return result

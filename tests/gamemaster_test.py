@@ -11,7 +11,7 @@ class TestGamemaster:
         creature_list = [3, 4]
         self.contract.rewrite_state(creature_list, 100)
 
-        assert_equal(self.contract.get_creature_list(outsz=2), creature_list)
+        assert_equal(self.contract.get_creatures(outsz=2), creature_list)
         assert_equal(self.contract.get_num_creatures(), [2])
         assert_equal(self.contract.get_turn_limit(), [100])
 
