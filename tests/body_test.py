@@ -15,7 +15,8 @@ class TestBody:
         location.rewrite_state(neighbor.address, 0, 0, 0, 0, self.contract.address, t.a0)
         assert_equal(address(location.get_creature()[0]), self.contract.address)
 
-        self.contract.rewrite_state(location.address, 0, 0, brain.address, 0, t.a0, 0)
+        self.contract.set_location(location.address)
+        self.contract.set_brain(brain.address)
         assert_equal(address(self.contract.get_location()[0]), location.address)
 
         self.contract.notify_of_turn()
@@ -28,7 +29,8 @@ class TestBody:
         brain = self.state.abi_contract("mocks/brain/harvester.se")
         location = self.state.abi_contract("contracts/square.se")
         location.rewrite_state(0, 0, 0, 0, 150, self.contract.address, t.a0)
-        self.contract.rewrite_state(location.address, 0, 0, brain.address, 0, t.a0, 0)
+        self.contract.set_location(location.address)
+        self.contract.set_brain(brain.address)
 
         assert_equal(location.get_gas(), [150])
         assert_equal(self.contract.get_gas(), [0])
@@ -49,8 +51,10 @@ class TestBody:
 
         location.rewrite_state(neighbor.address, 0, 0, 0, 0, self.contract.address, t.a0)
         neighbor.rewrite_state(0, location.address, 0, 0, 0, enemy.address, t.a0)
-        enemy.rewrite_state(neighbor.address, 0, 3, 0, 0, t.a0, 0)
-        self.contract.rewrite_state(location.address, 0, 0, brain.address, 0, t.a0, 0)
+        enemy.set_location(neighbor.address)
+        enemy.set_hp(3)
+        self.contract.set_location(location.address)
+        self.contract.set_brain(brain.address)
         assert_equal(enemy.get_hp(), [3])
 
         self.contract.notify_of_turn()
@@ -60,7 +64,9 @@ class TestBody:
     def test_death(self):
         location = self.state.abi_contract("contracts/square.se")
         location.rewrite_state(0, 0, 0, 0, 0, self.contract.address, t.a0)
-        self.contract.rewrite_state(location.address, 100, 1, 0, 0, t.a0, 0)
+        self.contract.set_location(location.address)
+        self.contract.set_gas(100)
+        self.contract.set_hp(1)
 
         self.contract.damage()
 
@@ -77,7 +83,9 @@ class TestBody:
         creature_builder = self.state.abi_contract("contracts/creature_builder.se")
 
         location.rewrite_state(neighbor.address, 0, 0, 0, 0, self.contract.address, t.a0)
-        self.contract.rewrite_state(location.address, 0, 0, brain.address, 0, t.a0, creature_builder.address)
+        self.contract.set_location(location.address)
+        self.contract.set_brain(brain.address)
+        self.contract.set_creature_builder(creature_builder.address)
 
         assert_equal(neighbor.get_creature(), [0])
 
@@ -94,7 +102,10 @@ class TestBody:
         gamemaster = self.state.abi_contract("mocks/gamemaster/spawn_counter.se")
 
         location.rewrite_state(neighbor.address, 0, 0, 0, 0, self.contract.address, t.a0)
-        self.contract.rewrite_state(location.address, 0, 0, brain.address, 0, gamemaster.address, creature_builder.address)
+        self.contract.set_location(location.address)
+        self.contract.set_brain(brain.address)
+        self.contract.set_creature_builder(creature_builder.address)
+        self.contract.set_gamemaster(gamemaster.address)
 
         gamemaster.send_turn_notification_to(self.contract.address)
 
@@ -105,7 +116,8 @@ class TestBody:
         neighbor = self.state.abi_contract("contracts/square.se")
 
         location.rewrite_state(neighbor.address, 0, 0, 0, 0, self.contract.address, t.a0)
-        self.contract.rewrite_state(location.address, 0, 0, t.a0, 0, t.a0, 0)
+        self.contract.set_location(location.address)
+        self.contract.set_brain(t.a0)
 
         self.contract.move_left()
 
@@ -113,7 +125,8 @@ class TestBody:
         assert_equal(address(self.contract.get_location()[0]), location.address)
 
     def test_gamemaster_can_deduct_gas(self):
-        self.contract.rewrite_state(0, 1000, 0, 0, 0, t.a0, 0)
+        self.contract.set_gas(1000)
+
         self.contract.deduct_gas(400)
         self.contract.deduct_gas(300, sender=t.k1)
 

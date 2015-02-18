@@ -25,15 +25,43 @@ data creature_builder
 data my_turn
 data dead
 
-def rewrite_state(location, gas, hp, brain, species, gamemaster, creature_builder):
-    if self.gamemaster == 0 or self.gamemaster == msg.sender:
-        self.location = location
-        self.gas = gas
-        self.hp = hp
-        self.brain = brain
-        self.species = species
-        self.gamemaster = gamemaster
-        self.creature_builder = creature_builder
+def init():
+    self.gamemaster = msg.sender
+
+def set_gamemaster(_gamemaster):
+    authenticate(self.gamemaster)
+
+    self.gamemaster = _gamemaster
+
+def set_location(_location):
+    authenticate(self.gamemaster)
+
+    self.location = _location
+
+def set_gas(_gas):
+    authenticate(self.gamemaster)
+
+    self.gas = _gas
+
+def set_hp(_hp):
+    authenticate(self.gamemaster)
+
+    self.hp = _hp
+
+def set_brain(_brain):
+    authenticate(self.gamemaster)
+
+    self.brain = _brain
+
+def set_species(_species):
+    authenticate(self.gamemaster)
+
+    self.species = _species
+
+def set_creature_builder(_creature_builder):
+    authenticate(self.gamemaster)
+
+    self.creature_builder = _creature_builder
 
 def move_left():
     current_location = self.location
