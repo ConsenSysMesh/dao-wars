@@ -2,7 +2,7 @@ extern body: [notify_of_turn, deduct_gas:i, get_gas, get_dead, get_species]
 
 inset("basic_macros.se")
 
-data creator
+data admin
 data num_creatures
 data creatures[]
 data num_species
@@ -11,17 +11,24 @@ data turn_limit
 data current_creature
 
 def init():
-    self.creator = msg.sender
+    self.admin = msg.sender
 
-def rewrite_state(creatures:arr, turn_limit):
-    authenticate(self.creator)
+def set_creatures(_creatures:arr):
+    authenticate(self.admin)
 
-    self.turn_limit = turn_limit
-    self.num_creatures = len(creatures)
-    self.num_species = len(creatures)
-    save_array(creatures, self.creatures)
+    self.num_creatures = len(_creatures)
+    self.num_species = len(_creatures)
+    save_array(_creatures, self.creatures)
 
-    return(1)
+def set_turn_limit(_turn_limit):
+    authenticate(self.admin)
+
+    self.turn_limit = _turn_limit
+
+def set_admin(_admin):
+    authenticate(self.admin)
+
+    self.admin = _admin
 
 def get_creatures():
     return_array(self.creatures:self.num_creatures)
