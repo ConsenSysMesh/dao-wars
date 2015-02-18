@@ -4,18 +4,47 @@ data up
 data down
 data gas
 data creature
-data admin
+data gamemaster
 
-def rewrite_state(left, right, up, down, gas, creature, admin):
-    current_admin = self.admin
-    if current_admin == 0 or current_admin == msg.sender:
-        self.left = left
-        self.right = right
-        self.up = up
-        self.down = down
-        self.gas = gas
-        self.creature = creature
-        self.admin = admin
+inset("basic_macros.se")
+
+def init():
+    self.gamemaster = msg.sender
+
+def set_gamemaster(_gamemaster):
+    authenticate(self.gamemaster)
+
+    self.gamemaster = _gamemaster
+
+def set_left(_left):
+    authenticate(self.gamemaster)
+
+    self.left = _left
+
+def set_right(_right):
+    authenticate(self.gamemaster)
+
+    self.right = _right
+
+def set_up(_up):
+    authenticate(self.gamemaster)
+
+    self.up = _up
+
+def set_down(_down):
+    authenticate(self.gamemaster)
+
+    self.down = _down
+
+def set_gas(_gas):
+    authenticate(self.gamemaster)
+
+    self.gas = _gas
+
+def set_creature(_creature):
+    authenticate(self.gamemaster)
+
+    self.creature = _creature
 
 def get_left():
     return(self.left)
@@ -35,8 +64,8 @@ def get_gas():
 def get_creature():
     return(self.creature)
 
-def get_admin():
-    return(self.admin)
+def get_gamemaster():
+    return(self.gamemaster)
 
 def leave():
     if self.creature == msg.sender:
