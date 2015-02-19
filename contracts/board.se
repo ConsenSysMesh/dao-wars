@@ -1,0 +1,58 @@
+extern square: [set_gas:i, set_neighbors:iiii]
+
+data x
+data y
+data board[][]
+
+inset("basic_macros.se")
+
+def create_board(x, y):
+    self.x = x
+    self.y = y
+
+    i = 0
+    while i < x:
+        j = 0
+        while j < y:
+            self.board[i][j] = create('square.se')
+
+            j += 1
+        i += 1
+
+    self._assign_neighbors()
+    self._assign_gas()
+
+def _assign_neighbors():
+    private()
+
+    i = 0
+    while i < self.x:
+        j = 0
+        while j < self.y:
+            square = self.board[i][j]
+
+            if i > 0:
+                left = self.board[i - 1][j]
+            if i < self.x:
+                right = self.board[i + 1][j]
+            if j > 0:
+                up = self.board[i][j - 1]
+            if j < self.y:
+                down = self.board[i][j + 1]
+
+            square.set_neighbors(left, right, up, down, as=square)
+            j += 1
+        i += 1
+
+def _assign_gas():
+    private()
+
+    i = 0
+    while i < self.x:
+        j = 0
+        while j < self.y:
+            square = self.board[i][j]
+            square.set_gas(10000, as=square)
+
+            j += 1
+        i += 1

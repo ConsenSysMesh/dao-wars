@@ -12,7 +12,7 @@ class TestBody:
         location = self.state.abi_contract("contracts/square.se")
         neighbor = self.state.abi_contract("contracts/square.se")
 
-        location.set_neighbors([neighbor.address, 0, 0, 0])
+        location.set_neighbors(neighbor.address, 0, 0, 0)
         location.set_creature(self.contract.address)
 
         assert_equal(address(location.get_creature()[0]), self.contract.address)
@@ -54,10 +54,10 @@ class TestBody:
         neighbor = self.state.abi_contract("contracts/square.se")
         enemy = self.state.abi_contract("contracts/body.se")
 
-        location.set_neighbors([neighbor.address, 0, 0, 0])
+        location.set_neighbors(neighbor.address, 0, 0, 0)
         location.set_creature(self.contract.address)
 
-        neighbor.set_neighbors([0, location.address, 0, 0])
+        neighbor.set_neighbors(0, location.address, 0, 0)
         neighbor.set_creature(enemy.address)
 
         enemy.set_location(neighbor.address)
@@ -94,7 +94,7 @@ class TestBody:
         neighbor = self.state.abi_contract("contracts/square.se")
         creature_builder = self.state.abi_contract("contracts/creature_builder.se")
 
-        location.set_neighbors([neighbor.address, 0, 0, 0])
+        location.set_neighbors(neighbor.address, 0, 0, 0)
         location.set_creature(self.contract.address)
 
         self.contract.set_location(location.address)
@@ -115,7 +115,7 @@ class TestBody:
 
         gamemaster = self.state.abi_contract("mocks/gamemaster/spawn_counter.se")
 
-        location.set_neighbors([neighbor.address, 0, 0, 0])
+        location.set_neighbors(neighbor.address, 0, 0, 0)
         location.set_creature(self.contract.address)
 
         self.contract.set_location(location.address)
@@ -131,7 +131,7 @@ class TestBody:
         location = self.state.abi_contract("contracts/square.se")
         neighbor = self.state.abi_contract("contracts/square.se")
 
-        location.set_neighbors([neighbor.address, 0, 0, 0])
+        location.set_neighbors(neighbor.address, 0, 0, 0)
         location.set_creature(self.contract.address)
 
         self.contract.set_location(location.address)

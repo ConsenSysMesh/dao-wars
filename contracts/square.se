@@ -1,4 +1,4 @@
-data neighbors[]
+data neighbors[4]
 data gas
 data creature
 data gamemaster
@@ -13,10 +13,13 @@ def set_gamemaster(_gamemaster):
 
     self.gamemaster = _gamemaster
 
-def set_neighbors(_neighbors:arr):
+def set_neighbors(left,right,up,down):
     authenticate(self.gamemaster)
 
-    save_array(_neighbors, self.neighbors)
+    self.neighbors[0] = left
+    self.neighbors[1] = right
+    self.neighbors[2] = up
+    self.neighbors[3] = down
 
 def set_gas(_gas):
     authenticate(self.gamemaster)
