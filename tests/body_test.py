@@ -12,7 +12,7 @@ class TestBody:
         location = self.state.abi_contract("contracts/square.se")
         neighbor = self.state.abi_contract("contracts/square.se")
 
-        location.set_left(neighbor.address)
+        location.set_neighbors([neighbor.address, 0, 0, 0])
         location.set_creature(self.contract.address)
 
         assert_equal(address(location.get_creature()[0]), self.contract.address)
@@ -54,10 +54,10 @@ class TestBody:
         neighbor = self.state.abi_contract("contracts/square.se")
         enemy = self.state.abi_contract("contracts/body.se")
 
-        location.set_left(neighbor.address)
+        location.set_neighbors([neighbor.address, 0, 0, 0])
         location.set_creature(self.contract.address)
 
-        neighbor.set_right(location.address)
+        neighbor.set_neighbors([0, location.address, 0, 0])
         neighbor.set_creature(enemy.address)
 
         enemy.set_location(neighbor.address)
@@ -94,7 +94,7 @@ class TestBody:
         neighbor = self.state.abi_contract("contracts/square.se")
         creature_builder = self.state.abi_contract("contracts/creature_builder.se")
 
-        location.set_left(neighbor.address)
+        location.set_neighbors([neighbor.address, 0, 0, 0])
         location.set_creature(self.contract.address)
 
         self.contract.set_location(location.address)
@@ -115,7 +115,7 @@ class TestBody:
 
         gamemaster = self.state.abi_contract("mocks/gamemaster/spawn_counter.se")
 
-        location.set_left(neighbor.address)
+        location.set_neighbors([neighbor.address, 0, 0, 0])
         location.set_creature(self.contract.address)
 
         self.contract.set_location(location.address)
@@ -125,19 +125,19 @@ class TestBody:
 
         gamemaster.send_turn_notification_to(self.contract.address)
 
-        assert_equal(gamemaster.get_spawn_count(), [1])
+        assert_not_equal(gamemaster.get_spawn(), [0])
 
     def test_can_only_move_on_turn(self):
         location = self.state.abi_contract("contracts/square.se")
         neighbor = self.state.abi_contract("contracts/square.se")
 
-        location.set_left(neighbor.address)
+        location.set_neighbors([neighbor.address, 0, 0, 0])
         location.set_creature(self.contract.address)
 
         self.contract.set_location(location.address)
         self.contract.set_brain(t.a0)
 
-        self.contract.move_left()
+        self.contract.move("left")
 
         assert_equal(address(location.get_creature()[0]), self.contract.address)
         assert_equal(address(self.contract.get_location()[0]), location.address)

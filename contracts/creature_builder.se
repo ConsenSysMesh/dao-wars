@@ -1,8 +1,17 @@
-extern square: [rewrite_state, get_left, get_right, get_up, get_down, get_gas, get_creature, get_admin, leave, enter, harvest, spawn:i]
-extern body: [rewrite_state, move_left, move_right, move_up, move_down, get_location, get_gas, get_hp, get_brain, get_species, get_admin, harvest, damage, attack_left, attack_right, attack_up, attack_down, _move]
+extern square: [spawn:i]
+extern creature: [set_location:i, set_gas:i, set_brain:i, set_species:i, set_hp:i, set_creature_builder:i, set_gamemaster:i]
 
-def build_creature(brain, location, endowment, species):
+def build_creature(brain, location, endowment, species, gamemaster):
     creature = create('body.se')
-    creature.rewrite_state(location, endowment, 3, brain, species, 0, self, as=body)
+
+    creature.set_location(location)
+    creature.set_gas(endowment)
+    creature.set_brain(brain)
+    creature.set_species(species)
+    creature.set_hp(3)
+    creature.set_creature_builder(self)
+
+    creature.set_gamemaster(gamemaster)
+
     location.spawn(creature, as=square)
     return(creature)

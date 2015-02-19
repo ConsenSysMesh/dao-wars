@@ -1,12 +1,12 @@
 extern body: [notify_of_turn]
 
-data spawn_count
+data spawn
 
 def send_turn_notification_to(address):
     address.notify_of_turn(as=body)
 
 def notify_of_spawn(spawn):
-    self.spawn_count += 1
+    self.spawn = spawn
 
-def get_spawn_count():
-    return(self.spawn_count)
+def get_spawn():
+    return(self.spawn)

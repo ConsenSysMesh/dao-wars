@@ -8,8 +8,8 @@ class TestSquare:
         self.contract = self.state.abi_contract("contracts/square.se")
 
     def test_left(self):
-        self.contract.set_left(t.a1)
-        assert_equal(address(self.contract.get_left()[0]), t.a1)
+        self.contract.set_neighbors([t.a1, 0, 0, 0])
+        assert_equal(address(self.contract.get_neighbor("left")[0]), t.a1)
 
     def test_gas(self):
         self.contract.set_gas(1000)

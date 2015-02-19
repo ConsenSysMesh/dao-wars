@@ -1,7 +1,4 @@
-data left
-data right
-data up
-data down
+data neighbors[]
 data gas
 data creature
 data gamemaster
@@ -16,25 +13,10 @@ def set_gamemaster(_gamemaster):
 
     self.gamemaster = _gamemaster
 
-def set_left(_left):
+def set_neighbors(_neighbors:arr):
     authenticate(self.gamemaster)
 
-    self.left = _left
-
-def set_right(_right):
-    authenticate(self.gamemaster)
-
-    self.right = _right
-
-def set_up(_up):
-    authenticate(self.gamemaster)
-
-    self.up = _up
-
-def set_down(_down):
-    authenticate(self.gamemaster)
-
-    self.down = _down
+    save_array(_neighbors, self.neighbors)
 
 def set_gas(_gas):
     authenticate(self.gamemaster)
@@ -46,17 +28,18 @@ def set_creature(_creature):
 
     self.creature = _creature
 
-def get_left():
-    return(self.left)
+def get_neighbors():
+    return_array(self.neighbors:4)
 
-def get_right():
-    return(self.right)
-
-def get_up():
-    return(self.up)
-
-def get_down():
-    return(self.down)
+def get_neighbor(direction):
+    if direction == "left":
+        return(self.neighbors[0])
+    if direction == "right":
+        return(self.neighbors[1])
+    if direction == "up":
+        return(self.neighbors[2])
+    if direction == "down":
+        return(self.neighbors[3])
 
 def get_gas():
     return(self.gas)
@@ -75,6 +58,10 @@ def enter():
     if self.creature == 0:
         self.creature = msg.sender
 
+def spawn(creature):
+    self.creature = creature
+    return(1)
+
 def harvest():
     if self.creature == msg.sender:
         current_gas = self.gas
@@ -87,7 +74,3 @@ def harvest():
 
 def drop_gas(amount):
     self.gas += amount
-
-def spawn(creature):
-    self.creature = creature
-    return(1)

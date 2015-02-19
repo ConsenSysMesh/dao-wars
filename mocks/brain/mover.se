@@ -1,4 +1,4 @@
-extern body: [move_left]
+extern body: [move:i]
 
 def notify_of_turn():
-    msg.sender.move_left(as=body)
+    msg.sender.move("left", as=body)
