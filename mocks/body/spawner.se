@@ -1,12 +1,12 @@
-extern gamemaster: [notify_of_spawn:i]
+extern gamemaster.se: [_num_surviving_species:_:i, _update_species_counts:_:_, get_creatures:_:_, get_num_creatures:_:i, get_turn_limit:_:i, notify_of_spawn:i:_, run_game:_:i, run_turn:_:_, set_admin:i:_, set_creatures:a:_, set_turn_limit:i:_]
 
 data child
 
 def get_gas():
     return(10000)
 
-def notify_of_turn():
-    msg.sender.notify_of_spawn(self.child, as=gamemaster)
+def notify_body_of_turn():
+    msg.sender.notify_of_spawn(self.child)
 
 def set_child_address(address):
     self.child = address

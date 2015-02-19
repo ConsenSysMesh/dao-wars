@@ -1,6 +1,6 @@
 data num_turns
 
-def notify_brain_of_turn():
+def notify_body_of_turn():
     self.num_turns += 1
 
 def get_num_turns():

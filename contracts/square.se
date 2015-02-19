@@ -20,29 +20,25 @@ def set_neighbors(left,right,up,down):
     self.neighbors[1] = right
     self.neighbors[2] = up
     self.neighbors[3] = down
+    return(1)
 
 def set_gas(_gas):
     authenticate(self.gamemaster)
 
     self.gas = _gas
+    return(1)
 
 def set_creature(_creature):
     authenticate(self.gamemaster)
 
     self.creature = _creature
+    return(1)
 
 def get_neighbors():
     return_array(self.neighbors:4)
 
 def get_neighbor(direction):
-    if direction == "left":
-        return(self.neighbors[0])
-    if direction == "right":
-        return(self.neighbors[1])
-    if direction == "up":
-        return(self.neighbors[2])
-    if direction == "down":
-        return(self.neighbors[3])
+    return(self.neighbors[direction])
 
 def get_gas():
     return(self.gas)
@@ -65,15 +61,16 @@ def spawn(creature):
     self.creature = creature
     return(1)
 
-def harvest():
-    if self.creature == msg.sender:
-        current_gas = self.gas
-        if current_gas > 100:
-            self.gas = current_gas - 100
-            return(100)
-        else:
-            self.gas = 0
-            return(current_gas)
+def claim_harvest():
+    authenticate(self.creature)
+
+    current_gas = self.gas
+    if current_gas > 100:
+        self.gas = current_gas - 100
+        return(100)
+    else:
+        self.gas = 0
+        return(current_gas)
 
 def drop_gas(amount):
     self.gas += amount

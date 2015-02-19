@@ -4,7 +4,7 @@ data gas
 def init():
     self.gas = 500
 
-def notify_of_turn():
+def notify_body_of_turn():
     self.num_turns += 1
 
 def get_num_turns():

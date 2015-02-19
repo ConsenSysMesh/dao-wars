@@ -1,4 +1,4 @@
-extern body: [notify_of_turn, deduct_gas:i, get_gas, get_dead, get_species]
+extern body.se: [attack:i:_, damage:_:_, deduct_gas:i:_, get_brain:_:i, get_dead:_:i, get_gamemaster:_:i, get_gas:_:i, get_hp:_:i, get_location:_:i, get_species:_:i, harvest:_:i, move:i:i, notify_body_of_turn:_:i, reproduce:iii:i, set_brain:i:_, set_creature_builder:i:_, set_gamemaster:i:_, set_gas:i:_, set_hp:i:_, set_location:i:_, set_species:i:_]
 
 inset("basic_macros.se")
 
@@ -14,24 +14,40 @@ def init():
     self.admin = msg.sender
 
 def set_creatures(_creatures:arr):
-    authenticate(self.admin)
+    if msg.sender != self.admin:
+        return(-1)
 
-    self.num_creatures = len(_creatures)
-    self.num_species = len(_creatures)
-    save_array(_creatures, self.creatures)
+    num_creatures = len(_creatures)
+    self.num_creatures = num_creatures
+    self.num_species = num_creatures
+
+    i = 0
+    while i < num_creatures:
+        self.creatures[i] = _creatures[i]
+        i += 1
 
 def set_turn_limit(_turn_limit):
-    authenticate(self.admin)
+    if msg.sender != self.admin:
+        return(-1)
 
     self.turn_limit = _turn_limit
 
 def set_admin(_admin):
-    authenticate(self.admin)
+    if msg.sender != self.admin:
+        return(-1)
 
     self.admin = _admin
 
 def get_creatures():
-    return_array(self.creatures:self.num_creatures)
+    size = self.num_creatures
+    result = array(size)
+
+    i = 0
+    while i < size:
+        result[i] = self.creatures[i]
+        i += 1
+
+    return(result:arr)
 
 def get_num_creatures():
     return(self.num_creatures)
@@ -40,7 +56,8 @@ def get_turn_limit():
     return(self.turn_limit)
 
 def notify_of_spawn(new_creature):
-    authenticate(self.current_creature)
+    if msg.sender != self.current_creature:
+        return(-1)
 
     self.creatures[self.num_creatures] = new_creature
     self.num_creatures += 1
@@ -60,14 +77,14 @@ def run_turn():
     while creature < self.num_creatures:
         current_creature = self.creatures[creature]
         self.current_creature = current_creature
-        available_gas = current_creature.get_gas(as=body)
+        available_gas = current_creature.get_gas()
 
         starting_gas = tx.gas
-        current_creature.notify_of_turn(as=body, gas=available_gas)
+        current_creature.notify_body_of_turn(gas=available_gas)
         ending_gas = tx.gas
 
         used_gas = starting_gas - ending_gas
-        current_creature.deduct_gas(used_gas, as=body)
+        current_creature.deduct_gas(used_gas)
 
         creature += 1
 

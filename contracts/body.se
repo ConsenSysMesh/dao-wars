@@ -1,8 +1,8 @@
-extern square: [drop_gas:i, enter, get_admin, get_creature, get_down, get_gas, get_left, get_right, get_up, harvest, leave, rewrite_state:iiiiiii, spawn:i, get_neighbor:i]
-extern body: [rewrite_state, move_left, move_right, move_up, move_down, get_location, get_gas, get_hp, get_brain, get_species, get_gamemaster, harvest, damage, attack_left, attack_right, attack_up, attack_down, _move]
-extern creature_builder: [build_creature:iiiii]
-extern brain: [notify_of_turn]
-extern gamemaster: [notify_of_spawn:i]
+extern square.se: [drop_gas:i:_, enter:_:_, get_creature:_:i, get_gamemaster:_:i, get_gas:_:i, get_neighbor:i:i, get_neighbors:_:_, claim_harvest:_:i, leave:_:_, set_creature:i:_, set_gamemaster:i:_, set_gas:i:_, set_neighbors:iiii:_, spawn:i:i]
+extern body.se: [attack:i:_, damage:_:_, deduct_gas:i:_, get_brain:_:i, get_dead:_:i, get_gamemaster:_:i, get_gas:_:i, get_hp:_:i, get_location:_:i, get_species:_:i, harvest:_:i, move:i:i, notify_of_turn:_:i, reproduce:iii:i, set_brain:i:_, set_creature_builder:i:_, set_gamemaster:i:_, set_gas:i:_, set_hp:i:_, set_location:i:_, set_species:i:_]
+extern creature_builder.se: [build_creature:iiiii:_]
+extern brain.se: [notify_brain_of_turn:_:_]
+extern gamemaster.se: [_num_surviving_species:_:i, _update_species_counts:_:_, get_creatures:_:_, get_num_creatures:_:i, get_turn_limit:_:i, notify_of_spawn:i:_, run_game:_:i, run_turn:_:_, set_admin:i:_, set_creatures:a:_, set_turn_limit:i:_]
 
 inset('basic_macros.se')
 
@@ -32,36 +32,43 @@ def set_gamemaster(_gamemaster):
     authenticate(self.gamemaster)
 
     self.gamemaster = _gamemaster
+    return(1)
 
 def set_location(_location):
     authenticate(self.gamemaster)
 
     self.location = _location
+    return(1)
 
 def set_gas(_gas):
     authenticate(self.gamemaster)
 
     self.gas = _gas
+    return(1)
 
 def set_hp(_hp):
     authenticate(self.gamemaster)
 
     self.hp = _hp
+    return(1)
 
 def set_brain(_brain):
     authenticate(self.gamemaster)
 
     self.brain = _brain
+    return(1)
 
 def set_species(_species):
     authenticate(self.gamemaster)
 
     self.species = _species
+    return(1)
 
 def set_creature_builder(_creature_builder):
     authenticate(self.gamemaster)
 
     self.creature_builder = _creature_builder
+    return(1)
 
 def get_location():
     return(self.location)
@@ -88,42 +95,46 @@ def damage():
     self.hp = self.hp - 1
     if self.hp == 0:
         self.dead = 1
-        self.location.drop_gas(self.gas, as=square)
-        self.location.leave(as=square)
+        self.location.drop_gas(self.gas)
+        self.location.leave()
         self.gas = 0
 
 def deduct_gas(amount):
     authenticate(self.gamemaster)
 
     self.gas -= amount
+    return(1)
 
-def notify_of_turn():
+def notify_body_of_turn():
     authenticate(self.gamemaster)
 
     if self.dead == 1:
         return(-1)
 
     self.my_turn = 1
-    self.brain.notify_of_turn(as=brain)
+    self.brain.notify_brain_of_turn()
     self.my_turn = 0
+    return(1)
 
 def move(direction):
     requires_turn()
 
     current_location = self.location
-    destination = current_location.get_neighbor(direction, as=square)
+    destination = current_location.get_neighbor(direction)
 
-    if destination.get_creature(as=square) == 0:
+    if destination.get_creature() == 0:
         self.location = destination
-        current_location.leave(as=square)
-        destination.enter(as=square)
+        current_location.leave()
+        destination.enter()
         return(1)
+    else:
+        return(-1)
 
 def harvest():
     requires_turn()
 
     location = self.location
-    gain = location.harvest(as=square)
+    gain = location.claim_harvest()
     self.gas = self.gas + gain
     return(gain)
 
@@ -131,16 +142,17 @@ def attack(direction):
     requires_turn()
 
     current_location = self.location
-    enemy_square = current_location.get_neighbor(direction, as=square)
+    enemy_square = current_location.get_neighbor(direction)
 
-    enemy = enemy_square.get_creature(as=square)
-    enemy.damage(as=body)
+    enemy = enemy_square.get_creature()
+    enemy.damage()
+    return(1)
 
 def reproduce(direction, new_brain, endowment):
     requires_turn()
 
     current_location = self.location
-    new_location = current_location.get_neighbor(direction, as=square)
+    new_location = current_location.get_neighbor(direction)
 
     gas = self.gas
     if endowment > gas:
@@ -149,6 +161,6 @@ def reproduce(direction, new_brain, endowment):
         self.gas = gas - endowment
         species = self.species
         gamemaster = self.gamemaster
-        child = self.creature_builder.build_creature(new_brain, new_location, endowment, species, gamemaster as=creature_builder)
-        self.gamemaster.notify_of_spawn(child, as=gamemaster)
+        child = self.creature_builder.build_creature(new_brain, new_location, endowment, species, gamemaster)
+        self.gamemaster.notify_of_spawn(child)
         return(child)

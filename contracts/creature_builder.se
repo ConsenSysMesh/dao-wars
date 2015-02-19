@@ -1,5 +1,5 @@
-extern square: [spawn:i]
-extern creature: [set_location:i, set_gas:i, set_brain:i, set_species:i, set_hp:i, set_creature_builder:i, set_gamemaster:i]
+extern square.se: [drop_gas:i:_, enter:_:_, get_creature:_:i, get_gamemaster:_:i, get_gas:_:i, get_neighbor:i:i, get_neighbors:_:_, harvest:_:i, leave:_:_, set_creature:i:_, set_neighbors:iiii:_, spawn:i:i]
+extern body.se: [attack:i:_, damage:_:_, deduct_gas:i:_, get_brain:_:i, get_dead:_:i, get_gamemaster:_:i, get_gas:_:i, get_hp:_:i, get_location:_:i, get_species:_:i, harvest:_:i, move:i:i, notify_of_turn:_:i, reproduce:iii:i, set_brain:i:_, set_creature_builder:i:_, set_gamemaster:i:_, set_gas:i:_, set_hp:i:_, set_location:i:_, set_species:i:_]
 
 def build_creature(brain, location, endowment, species, gamemaster):
     creature = create('body.se')
@@ -13,5 +13,5 @@ def build_creature(brain, location, endowment, species, gamemaster):
 
     creature.set_gamemaster(gamemaster)
 
-    location.spawn(creature, as=square)
+    location.spawn(creature)
     return(creature)

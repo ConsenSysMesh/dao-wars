@@ -1,4 +1,4 @@
-extern body: [reproduce:iii]
+extern body.se: [attack:i:_, damage:_:_, deduct_gas:i:_, get_brain:_:i, get_dead:_:i, get_gamemaster:_:i, get_gas:_:i, get_hp:_:i, get_location:_:i, get_species:_:i, harvest:_:i, move:i:i, notify_body_of_turn:_:i, reproduce:iii:i, set_brain:i:_, set_creature_builder:i:_, set_gamemaster:i:_, set_gas:i:_, set_hp:i:_, set_location:i:_, set_species:i:_]
 
-def notify_of_turn():
-    msg.sender.reproduce("left", 123, 0, as=body)
+def notify_brain_of_turn():
+    msg.sender.reproduce(0, 123, 0)
