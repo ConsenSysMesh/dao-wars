@@ -31,22 +31,22 @@ class TestBody:
         brain = self.state.abi_contract("mocks/brain/harvester.se")
 
         location = self.state.abi_contract("contracts/square.se")
-        location.set_gas(150)
+        location.set_gas(3000)
         location.set_creature(self.contract.address)
 
         self.contract.set_location(location.address)
         self.contract.set_brain(brain.address)
 
-        assert_equal(location.get_gas(), 150)
+        assert_equal(location.get_gas(), 3000)
         assert_equal(self.contract.get_gas(), 0)
 
         self.contract.notify_body_of_turn()
-        assert_equal(location.get_gas(), 50)
-        assert_equal(self.contract.get_gas(), 100)
+        assert_equal(location.get_gas(), 1000)
+        assert_equal(self.contract.get_gas(), 2000)
 
         self.contract.notify_body_of_turn()
         assert_equal(location.get_gas(), 0)
-        assert_equal(self.contract.get_gas(), 150)
+        assert_equal(self.contract.get_gas(), 3000)
 
     def test_attack_left(self):
         brain = self.state.abi_contract("mocks/brain/attacker.se")

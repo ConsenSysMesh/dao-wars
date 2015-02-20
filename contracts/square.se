@@ -65,9 +65,9 @@ def claim_harvest():
     authenticate(self.creature)
 
     current_gas = self.gas
-    if current_gas > 100:
-        self.gas = current_gas - 100
-        return(100)
+    if current_gas > 2000:
+        self.gas = current_gas - 2000
+        return(2000)
     else:
         self.gas = 0
         return(current_gas)
