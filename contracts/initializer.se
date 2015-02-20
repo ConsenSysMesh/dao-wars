@@ -1,0 +1,45 @@
+extern board.se: [_assign_gas:_:_, _assign_neighbors:_:_, create_board:ii:_, get_square:ii:i]
+extern body.se: [attack:i:_, damage:_:_, deduct_gas:i:_, get_brain:_:i, get_dead:_:i, get_gamemaster:_:i, get_gas:_:i, get_hp:_:i, get_location:_:i, get_species:_:i, harvest:_:i, move:i:i, notify_body_of_turn:_:i, reproduce:iii:i, set_brain:i:_, set_creature_builder:i:_, set_gamemaster:i:_, set_gas:i:_, set_hp:i:_, set_location:i:_, set_species:i:_]
+extern gamemaster.se: [_num_surviving_species:_:i, _update_species_counts:_:_, get_creatures:_:a, get_num_creatures:_:i, get_turn_limit:_:i, notify_of_spawn:i:i, run_game:_:i, run_turn:_:_, set_admin:i:i, set_creatures:a:i, set_turn_limit:i:i]
+
+data gamemasters[]
+data num_gamemasters
+
+def create_game(brain_1, brain_2):
+    board = create("board.se")
+    board.create_board(10,10)
+
+    location_1 = board.get_square(0,0)
+    location_2 = board.get_square(9,0)
+
+    creature_builder = create("creature_builder.se")
+    gamemaster = create("gamemaster.se")
+
+    body_1 = create("body.se")
+    body_2 = create("body.se")
+
+    body_1.set_brain(brain_1)
+    body_1.set_creature_builder(creature_builder)
+    body_1.set_gamemaster(gamemaster)
+    body_1.set_gas(10000)
+    body_1.set_hp(3)
+    body_1.set_location(location_1)
+    body_1.set_species(0)
+
+    body_1.set_brain(brain_2)
+    body_1.set_creature_builder(creature_builder)
+    body_1.set_gamemaster(gamemaster)
+    body_1.set_gas(10000)
+    body_1.set_hp(3)
+    body_1.set_location(location_2)
+    body_1.set_species(1)
+
+    gamemaster.set_creatures([body_1, body_2])
+
+    self.gamemasters[self.num_gamemasters] = gamemaster
+    self.num_gamemasters += 1
+
+    return(gamemaster)
+
+def get_latest_gamemaster():
+    return(self.gamemasters[self.num_gamemasters - 1])

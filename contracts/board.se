@@ -22,6 +22,9 @@ def create_board(x, y):
     self._assign_neighbors()
     self._assign_gas()
 
+def get_square(x, y):
+    return(self.board[x][y])
+
 def _assign_neighbors():
     private()
 

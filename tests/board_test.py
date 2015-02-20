@@ -1,4 +1,4 @@
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_not_equal
 from pyethereum import tester as t
 
 class TestBoard:
@@ -8,3 +8,4 @@ class TestBoard:
 
     def test_it_does_not_blow_up(self):
         self.contract.create_board(10,10)
+        assert_not_equal(self.contract.get_square(9,9), 0)
