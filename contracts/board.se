@@ -4,26 +4,53 @@ data x
 data y
 data board[][]
 
+data _current_phase
+data _current_x
+data _current_y
+
 inset("basic_macros.se")
 
-def create_board(x, y):
+def set_dimensions(x,y):
     self.x = x
     self.y = y
 
-    i = 0
-    while i < x:
-        j = 0
-        while j < y:
-            self.board[i][j] = create('square.se')
-
-            j += 1
-        i += 1
-
-    self._assign_neighbors()
-    self._assign_gas()
+def create_board():
+    if self._current_phase == 0:
+        self._create_squares()
+        self._assign_neighbors()
+        self._assign_gas()
 
 def get_square(x, y):
     return(self.board[x][y])
+
+def take_single_action():
+    if self._current_phase == 0:
+        self._create_single_square()
+    elif self._current_phase == 1:
+        self._assign_neighbors()
+        self._assign_gas()
+        self._current_phase = 2
+
+def _create_squares():
+    private()
+
+    while self._current_phase == 0:
+        self._create_single_square()
+
+def _create_single_square():
+    private()
+
+    if self._current_x >= self.x:
+        self._current_x = 0
+        self._current_y = 0
+        self._current_phase = 1
+    else:
+        if self._current_y >= self.y:
+            self._current_y = 0
+            self._current_x += 1
+
+        self.board[self._current_x][self._current_y] = create('square.se')
+        self._current_y += 1
 
 def _assign_neighbors():
     private()
