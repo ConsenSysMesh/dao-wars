@@ -47,7 +47,7 @@ def _finish_game(id):
     gamemaster = create("gamemaster.se")
 
     body_1 = creature_builder.build_creature(self.games[id].brain_1, location_1, 10000, 0, gamemaster)
-    body_1 = creature_builder.build_creature(self.games[id].brain_2, location_2, 10000, 1, gamemaster)
+    body_2 = creature_builder.build_creature(self.games[id].brain_2, location_2, 10000, 1, gamemaster)
     gamemaster.set_creatures(body_1, body_2)
 
     self.games[id].gamemaster = gamemaster

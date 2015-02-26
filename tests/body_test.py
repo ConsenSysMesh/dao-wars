@@ -88,13 +88,13 @@ class TestBody:
         assert_equal(location.get_gas(), 100)
         assert_equal(location.get_creature(), 0)
 
-    def test_reproduce_left(self):
+    def test_reproduce_down(self):
         brain = self.state.abi_contract("mocks/brain/reproducer.se")
         location = self.state.abi_contract("contracts/square.se")
         neighbor = self.state.abi_contract("contracts/square.se")
         creature_builder = self.state.abi_contract("contracts/creature_builder.se")
 
-        location.set_neighbors(neighbor.address, 0, 0, 0)
+        location.set_neighbors(0, 0, 0, neighbor.address)
         location.set_creature(self.contract.address)
 
         self.contract.set_location(location.address)
@@ -115,7 +115,7 @@ class TestBody:
 
         gamemaster = self.state.abi_contract("mocks/gamemaster/spawn_counter.se")
 
-        location.set_neighbors(neighbor.address, 0, 0, 0)
+        location.set_neighbors(0, 0, 0, neighbor.address)
         location.set_creature(self.contract.address)
 
         self.contract.set_location(location.address)
