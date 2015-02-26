@@ -2,7 +2,7 @@ extern square.se: [drop_gas:i:_, enter:_:_, get_creature:_:i, get_gamemaster:_:i
 
 data x
 data y
-data board[][]
+data board[2^80][2^80]
 
 data _current_phase
 data _current_x

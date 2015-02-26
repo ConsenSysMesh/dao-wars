@@ -1,11 +1,11 @@
 extern board.se: [_assign_gas:_:_, _assign_neighbors:_:_, _create_single_square:_:_, _create_squares:_:_, create_board:_:_, get_square:ii:i, set_dimensions:ii:_, take_single_action:_:_]
 extern body.se: [attack:i:_, damage:_:_, deduct_gas:i:_, get_brain:_:i, get_dead:_:i, get_gamemaster:_:i, get_gas:_:i, get_hp:_:i, get_location:_:i, get_species:_:i, harvest:_:i, move:i:i, notify_body_of_turn:_:i, reproduce:iii:i, set_brain:i:_, set_creature_builder:i:_, set_gamemaster:i:_, set_gas:i:_, set_hp:i:_, set_location:i:_, set_species:i:_]
-extern gamemaster.se: [_num_surviving_species:_:i, _update_species_counts:_:_, get_creatures:_:a, get_num_creatures:_:i, get_turn_limit:_:i, notify_of_spawn:i:i, run_game:_:i, run_turn:_:_, set_admin:i:i, set_creatures:a:i, set_turn_limit:i:i]
+extern gamemaster.se: [_num_surviving_species:_:i, _update_species_counts:_:_, get_creatures:_:a, get_num_creatures:_:i, get_turn_limit:_:i, notify_of_spawn:i:i, run_game:_:i, run_turn:_:_, set_admin:i:i, set_creatures:ii:i, set_turn_limit:i:i]
 extern creature_builder.se: [build_creature:iiiii:_]
 
 inset("basic_macros.se")
 
-data games[](creator, size, gamemaster, board, current_phase, brain_1, brain_2)
+data games[2^80](creator, size, gamemaster, board, current_phase, brain_1, brain_2)
 data num_games
 
 def create_game(id, brain_1, brain_2, size):
@@ -34,7 +34,7 @@ def take_single_action(id):
         return(1)
 
 def get_game(id):
-    result = [self.games[id].gamemaster, self.games[id].current_phase]
+    result = [self.games[id].gamemaster, self.games[id].current_phase, self.games[id].board]
     return(result:arr)
 
 def _finish_game(id):
@@ -48,7 +48,7 @@ def _finish_game(id):
 
     body_1 = creature_builder.build_creature(self.games[id].brain_1, location_1, 10000, 0, gamemaster)
     body_1 = creature_builder.build_creature(self.games[id].brain_2, location_2, 10000, 1, gamemaster)
-    gamemaster.set_creatures([body_1, body_2])
+    gamemaster.set_creatures(body_1, body_2)
 
     self.games[id].gamemaster = gamemaster
     self.num_games += 1
