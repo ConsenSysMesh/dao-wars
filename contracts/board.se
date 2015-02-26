@@ -31,6 +31,8 @@ def take_single_action():
         self._assign_gas()
         self._current_phase = 2
 
+    return(self._current_phase)
+
 def _create_squares():
     private()
 

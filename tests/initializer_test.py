@@ -7,6 +7,15 @@ class TestInitializer:
         self.contract = self.state.abi_contract("contracts/initializer.se")
 
     def test_it_does_not_blow_up(self):
-        gamemaster = self.contract.create_game(1,2)
-        assert_not_equal(gamemaster, 0)
-        assert_equal(gamemaster, self.contract.get_latest_gamemaster())
+        self.contract.create_game(42, 0, 0, 2)
+
+        iterations = 0
+
+        while self.contract.take_single_action(42) == 0:
+            iterations += 1
+
+        assert_equal(iterations, 7)
+
+        game = self.contract.get_game(42)
+        assert_not_equal(game[0], 0)
+        assert_equal(game[1], 1)
