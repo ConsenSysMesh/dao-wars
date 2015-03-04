@@ -2,6 +2,7 @@ extern square.se: [drop_gas:i:_, enter:_:_, get_creature:_:i, get_gamemaster:_:i
 
 data x
 data y
+data gas_amount
 data board[2^80][2^80]
 
 data _current_phase
@@ -13,6 +14,9 @@ inset("basic_macros.se")
 def set_dimensions(x,y):
     self.x = x
     self.y = y
+
+def set_gas_amount(amount):
+    self.gas_amount = amount
 
 def create_board():
     if self._current_phase == 0:
@@ -79,12 +83,14 @@ def _assign_neighbors():
 def _assign_gas():
     private()
 
+    gas_amount = self.gas_amount
+
     i = 0
     while i < self.x:
         j = 0
         while j < self.y:
             square = self.board[i][j]
-            square.set_gas(100000)
+            square.set_gas(gas_amount)
 
             j += 1
         i += 1

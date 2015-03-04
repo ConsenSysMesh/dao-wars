@@ -99,6 +99,7 @@ class TestBody:
 
         self.contract.set_location(location.address)
         self.contract.set_brain(brain.address)
+        self.contract.set_gas(100000)
         self.contract.set_creature_builder(creature_builder.address)
 
         assert_equal(neighbor.get_creature(), 0)
@@ -120,6 +121,7 @@ class TestBody:
 
         self.contract.set_location(location.address)
         self.contract.set_brain(brain.address)
+        self.contract.set_gas(100000)
         self.contract.set_creature_builder(creature_builder.address)
         self.contract.set_gamemaster(gamemaster.address)
 

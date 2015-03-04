@@ -21,6 +21,8 @@ def set_creatures(creature_1, creature_2):
     num_creatures = 2
     self.num_creatures = num_creatures
     self.num_species = num_creatures
+    self.species_creature_counts[0] = 1
+    self.species_creature_counts[1] = 1
 
     self.creatures[0] = creature_1
     self.creatures[1] = creature_2
@@ -109,6 +111,12 @@ def run_turn():
 
 def _update_species_counts():
     private()
+
+    i = 0
+    while i < self.num_species:
+        self.species_creature_counts[i] = 0
+
+        i += 1
 
     i = 0
     while i < self.num_creatures:

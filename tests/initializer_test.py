@@ -7,7 +7,7 @@ class TestInitializer:
         self.contract = self.state.abi_contract("contracts/initializer.se")
 
     def test_it_does_not_blow_up(self):
-        self.contract.create_game(42, 0, 0, 2)
+        self.contract.create_game(42, 0, 0, 2, 40000, 200000)
 
         iterations = 0
 

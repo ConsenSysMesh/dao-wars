@@ -1,23 +1,25 @@
-extern board.se: [_assign_gas:_:_, _assign_neighbors:_:_, _create_single_square:_:_, _create_squares:_:_, create_board:_:_, get_square:ii:i, set_dimensions:ii:_, take_single_action:_:_]
+extern board.se: [_assign_gas:_:_, _assign_neighbors:_:_, _create_single_square:_:_, _create_squares:_:_, create_board:_:_, get_square:ii:i, set_dimensions:ii:_, set_gas_amount:i:_, take_single_action:_:_]
 extern body.se: [attack:i:_, damage:_:_, deduct_gas:i:_, get_brain:_:i, get_dead:_:i, get_gamemaster:_:i, get_gas:_:i, get_hp:_:i, get_location:_:i, get_species:_:i, harvest:_:i, move:i:i, notify_body_of_turn:_:i, reproduce:iii:i, set_brain:i:_, set_creature_builder:i:_, set_gamemaster:i:_, set_gas:i:_, set_hp:i:_, set_location:i:_, set_species:i:_]
 extern gamemaster.se: [_num_surviving_species:_:i, _update_species_counts:_:_, get_creatures:_:a, get_num_creatures:_:i, get_turn_limit:_:i, notify_of_spawn:i:i, run_game:_:i, run_turn:_:_, set_admin:i:i, set_creatures:ii:i, set_turn_limit:i:i]
 extern creature_builder.se: [build_creature:iiiii:_]
 
 inset("basic_macros.se")
 
-data games[2^80](creator, size, gamemaster, board, current_phase, brain_1, brain_2)
+data games[2^80](creator, size, gamemaster, board, current_phase, brain_1, brain_2, starting_gas)
 data num_games
 
-def create_game(id, brain_1, brain_2, size):
+def create_game(id, brain_1, brain_2, size, starting_gas, gas_per_square):
     if self.games[id].creator == 0:
         board = create("board.se")
         board.set_dimensions(size,size)
+        board.set_gas_amount(gas_per_square)
 
         self.games[id].creator = msg.sender
         self.games[id].size = size
         self.games[id].board = board
         self.games[id].brain_1 = brain_1
         self.games[id].brain_2 = brain_2
+        self.games[id].starting_gas = starting_gas
 
 def take_single_action(id):
     authenticate(self.games[id].creator)
@@ -51,8 +53,10 @@ def _finish_game(id):
     creature_builder = create("creature_builder.se")
     gamemaster = create("gamemaster.se")
 
-    body_1 = creature_builder.build_creature(self.games[id].brain_1, location_1, 20000, 0, gamemaster)
-    body_2 = creature_builder.build_creature(self.games[id].brain_2, location_2, 20000, 1, gamemaster)
+    starting_gas = self.games[id].starting_gas
+
+    body_1 = creature_builder.build_creature(self.games[id].brain_1, location_1, starting_gas, 0, gamemaster)
+    body_2 = creature_builder.build_creature(self.games[id].brain_2, location_2, starting_gas, 1, gamemaster)
     gamemaster.set_creatures(body_1, body_2)
 
     self.games[id].gamemaster = gamemaster
