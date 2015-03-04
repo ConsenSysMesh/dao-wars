@@ -31,22 +31,22 @@ class TestBody:
         brain = self.state.abi_contract("mocks/brain/harvester.se")
 
         location = self.state.abi_contract("contracts/square.se")
-        location.set_gas(3000)
+        location.set_gas(15000)
         location.set_creature(self.contract.address)
 
         self.contract.set_location(location.address)
         self.contract.set_brain(brain.address)
 
-        assert_equal(location.get_gas(), 3000)
+        assert_equal(location.get_gas(), 15000)
         assert_equal(self.contract.get_gas(), 0)
 
         self.contract.notify_body_of_turn()
-        assert_equal(location.get_gas(), 1000)
-        assert_equal(self.contract.get_gas(), 2000)
+        assert_equal(location.get_gas(), 5000)
+        assert_equal(self.contract.get_gas(), 10000)
 
         self.contract.notify_body_of_turn()
         assert_equal(location.get_gas(), 0)
-        assert_equal(self.contract.get_gas(), 3000)
+        assert_equal(self.contract.get_gas(), 15000)
 
     def test_attack_left(self):
         brain = self.state.abi_contract("mocks/brain/attacker.se")
@@ -149,3 +149,10 @@ class TestBody:
         self.contract.deduct_gas(300, sender=t.k1)
 
         assert_equal(self.contract.get_gas(), 600)
+
+    def test_deducting_all_gas_kills(self):
+        self.contract.set_gas(1000)
+        self.contract.deduct_gas(1100)
+
+        assert_equal(self.contract.get_gas(), 0)
+        assert_equal(self.contract.get_dead(), 1)

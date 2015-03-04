@@ -103,6 +103,10 @@ def deduct_gas(amount):
     authenticate(self.gamemaster)
 
     self.gas -= amount
+    if self.gas <= 0:
+        self.dead = 1
+        self.location.leave()
+        self.gas = 0
     return(1)
 
 def notify_body_of_turn():

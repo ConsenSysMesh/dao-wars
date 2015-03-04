@@ -106,7 +106,7 @@ def _update_species_counts():
     while i < self.num_creatures:
         creature = self.creatures[i]
 
-        if creature.get_dead() == 0 and creature.get_gas() > 0:
+        if creature.get_dead() == 0:
             self.species_creature_counts[creature.get_species()] += 1
 
         i += 1
