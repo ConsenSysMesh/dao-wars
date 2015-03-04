@@ -18,4 +18,5 @@ class TestInitializer:
 
         game = self.contract.get_game(42)
         assert_not_equal(game[0], 0)
-        assert_equal(game[1], 1)
+        assert_equal(game[1], 2)
+        assert_not_equal(game[2], 0)

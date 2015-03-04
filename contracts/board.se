@@ -84,7 +84,7 @@ def _assign_gas():
         j = 0
         while j < self.y:
             square = self.board[i][j]
-            square.set_gas(10000)
+            square.set_gas(100000)
 
             j += 1
         i += 1

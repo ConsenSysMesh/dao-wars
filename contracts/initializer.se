@@ -19,7 +19,6 @@ def create_game(id, brain_1, brain_2, size):
         self.games[id].brain_1 = brain_1
         self.games[id].brain_2 = brain_2
 
-
 def take_single_action(id):
     authenticate(self.games[id].creator)
 
@@ -29,9 +28,15 @@ def take_single_action(id):
             self.games[id].current_phase = 1
         return(0)
 
-    else:
+    elif self.games[id].current_phase == 1:
         self._finish_game(id)
         return(1)
+
+def take_all_actions(id):
+    authenticate(self.games[id].creator)
+
+    self.games[id].board.create_board()
+    self._finish_game(id)
 
 def get_game(id):
     result = [self.games[id].gamemaster, self.games[id].current_phase, self.games[id].board]
@@ -41,14 +46,15 @@ def _finish_game(id):
     private()
 
     location_1 = self.games[id].board.get_square(0,0)
-    location_2 = self.games[id].board.get_square(size - 1,0)
+    location_2 = self.games[id].board.get_square(self.games[id].size - 1,0)
 
     creature_builder = create("creature_builder.se")
     gamemaster = create("gamemaster.se")
 
-    body_1 = creature_builder.build_creature(self.games[id].brain_1, location_1, 10000, 0, gamemaster)
-    body_2 = creature_builder.build_creature(self.games[id].brain_2, location_2, 10000, 1, gamemaster)
+    body_1 = creature_builder.build_creature(self.games[id].brain_1, location_1, 20000, 0, gamemaster)
+    body_2 = creature_builder.build_creature(self.games[id].brain_2, location_2, 20000, 1, gamemaster)
     gamemaster.set_creatures(body_1, body_2)
 
     self.games[id].gamemaster = gamemaster
+    self.games[id].current_phase = 2
     self.num_games += 1

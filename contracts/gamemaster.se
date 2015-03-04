@@ -47,6 +47,17 @@ def get_creatures():
 
     return(result:arr)
 
+def get_species_creature_counts():
+    size = self.num_species
+    result = array(size)
+
+    i = 0
+    while i < size:
+        result[i] = self.species_creature_counts[i]
+        i += 1
+
+    return(result:arr)
+
 def get_num_creatures():
     return(self.num_creatures)
 

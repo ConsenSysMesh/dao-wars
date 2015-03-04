@@ -63,11 +63,12 @@ def spawn(creature):
 
 def claim_harvest():
     authenticate(self.creature)
+    HARVEST_AMOUNT = 10000
 
     current_gas = self.gas
-    if current_gas > 2000:
-        self.gas = current_gas - 2000
-        return(2000)
+    if current_gas > HARVEST_AMOUNT:
+        self.gas = current_gas - HARVEST_AMOUNT
+        return(HARVEST_AMOUNT)
     else:
         self.gas = 0
         return(current_gas)
