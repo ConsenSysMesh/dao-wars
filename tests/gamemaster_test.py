@@ -30,11 +30,13 @@ class TestGamemaster:
         creature_1 = self.state.abi_contract("contracts/body.se")
         creature_1.set_gas(10000)
         creature_1.set_brain(brain_1.address)
+        creature_1.set_species(0)
         creature_1.set_gamemaster(self.contract.address)
 
         creature_2 = self.state.abi_contract("contracts/body.se")
-        creature_2.set_gas(20000)
+        creature_2.set_gas(10000)
         creature_2.set_brain(brain_2.address)
+        creature_2.set_species(1)
         creature_2.set_gamemaster(self.contract.address)
 
         self.contract.set_creatures(creature_1.address, creature_2.address)
@@ -71,10 +73,3 @@ class TestGamemaster:
         self.contract.run_turn()
 
         assert(body.get_amount() > 100)
-
-    def test_turn_only_takes_given_bodys_remaining_gas(self):
-        body = self.state.abi_contract("mocks/body/bankrupt.se")
-        self.contract.set_creatures(body.address, 0)
-        self.contract.set_turn_limit(3)
-
-        assert_raises(Exception, self.contract.run_game)

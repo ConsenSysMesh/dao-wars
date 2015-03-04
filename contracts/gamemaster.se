@@ -9,6 +9,7 @@ data num_species
 data species_creature_counts[2^80]
 data turn_limit
 data current_creature
+data finished
 
 def init():
     self.admin = msg.sender
@@ -64,6 +65,9 @@ def get_num_creatures():
 def get_turn_limit():
     return(self.turn_limit)
 
+def get_finished():
+    return(self.finished)
+
 def notify_of_spawn(new_creature):
     if msg.sender != self.current_creature:
         return(-1)
@@ -76,28 +80,32 @@ def run_game():
     while turn < self.turn_limit:
         self.run_turn()
         turn += 1
-        if self._num_surviving_species() == 1:
+        if self.finished == 1:
             return(1)
 
     return(1)
 
 def run_turn():
-    creature = 0
-    while creature < self.num_creatures:
-        current_creature = self.creatures[creature]
-        self.current_creature = current_creature
-        available_gas = current_creature.get_gas()
+    if self.finished == 0:
+        creature = 0
+        while creature < self.num_creatures:
+            current_creature = self.creatures[creature]
+            self.current_creature = current_creature
+            available_gas = current_creature.get_gas()
 
-        starting_gas = tx.gas
-        current_creature.notify_body_of_turn(gas=available_gas)
-        ending_gas = tx.gas
+            starting_gas = tx.gas
+            current_creature.notify_body_of_turn(gas=available_gas)
+            ending_gas = tx.gas
 
-        used_gas = starting_gas - ending_gas
-        current_creature.deduct_gas(used_gas)
+            used_gas = starting_gas - ending_gas
+            current_creature.deduct_gas(used_gas)
 
-        creature += 1
+            creature += 1
 
-    self._update_species_counts()
+        self._update_species_counts()
+
+        if self._num_surviving_species() <= 1:
+            self.finished = 1
 
 def _update_species_counts():
     private()
@@ -119,7 +127,7 @@ def _num_surviving_species():
     i = 0
     while i < self.num_species:
         if self.species_creature_counts[i] != 0:
-            result += 0
+            result += 1
 
         i += 1
 
