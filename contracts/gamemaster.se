@@ -95,9 +95,9 @@ def run_turn():
             self.current_creature = current_creature
             available_gas = current_creature.get_gas()
 
-            starting_gas = tx.gas
+            starting_gas = msg.gas
             current_creature.notify_body_of_turn(gas=available_gas)
-            ending_gas = tx.gas
+            ending_gas = msg.gas
 
             used_gas = starting_gas - ending_gas
             current_creature.deduct_gas(used_gas)

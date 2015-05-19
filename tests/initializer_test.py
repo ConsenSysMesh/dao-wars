@@ -4,7 +4,7 @@ from pyethereum import tester as t
 class TestInitializer:
     def setup(self):
         self.state = t.state()
-        self.contract = self.state.abi_contract("contracts/initializer.se")
+        self.contract = self.state.abi_contract("contracts/initializer.se", gas=1000000000)
 
     def test_it_does_not_blow_up(self):
         self.contract.create_game(42, 0, 0, 2, 40000, 200000)
