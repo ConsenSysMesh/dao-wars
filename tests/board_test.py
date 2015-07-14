@@ -8,7 +8,11 @@ class TestBoard:
 
     def test_it_does_not_blow_up(self):
         self.contract.set_dimensions(10,10)
-        self.contract.create_board()
+        phase = 0
+        while phase != 3:
+            phase = self.contract.take_single_action()
+            print phase
+
         assert_not_equal(self.contract.get_square(0,0), 0)
         assert_not_equal(self.contract.get_square(0,1), 0)
         assert_not_equal(self.contract.get_square(1,0), 0)
