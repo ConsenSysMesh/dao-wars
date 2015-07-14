@@ -386,3 +386,130 @@ squareAbi = [{
   "inputs": [{ "name": "creature", "type": "int256" }],
   "outputs": [{ "name": "out", "type": "int256" }]
 }]
+
+creatureAbi = [{
+    "name": "attack(int256)",
+    "type": "function",
+    "inputs": [{ "name": "direction", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "damage()",
+    "type": "function",
+    "inputs": [],
+    "outputs": []
+},
+{
+    "name": "deduct_gas(int256)",
+    "type": "function",
+    "inputs": [{ "name": "amount", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "get_brain()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "get_dead()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "get_gamemaster()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "get_gas()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "get_hp()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "get_location()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "get_species()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "harvest()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "move(int256)",
+    "type": "function",
+    "inputs": [{ "name": "direction", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "notify_body_of_turn()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "reproduce(int256,int256,int256)",
+    "type": "function",
+    "inputs": [{ "name": "direction", "type": "int256" }, { "name": "new_brain", "type": "int256" }, { "name": "endowment", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "set_brain(int256)",
+    "type": "function",
+    "inputs": [{ "name": "_brain", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "set_creature_builder(int256)",
+    "type": "function",
+    "inputs": [{ "name": "_creature_builder", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "set_gamemaster(int256)",
+    "type": "function",
+    "inputs": [{ "name": "_gamemaster", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "set_gas(int256)",
+    "type": "function",
+    "inputs": [{ "name": "_gas", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "set_hp(int256)",
+    "type": "function",
+    "inputs": [{ "name": "_hp", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "set_location(int256)",
+    "type": "function",
+    "inputs": [{ "name": "_location", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "set_species(int256)",
+    "type": "function",
+    "inputs": [{ "name": "_species", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
+}]
