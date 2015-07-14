@@ -1,4 +1,4 @@
-extern board.se: [_assign_gas:_:_, _assign_neighbors:_:_, _create_single_square:_:_, _create_squares:_:_, create_board:_:_, get_square:ii:i, set_dimensions:ii:_, set_gas_amount:i:_, take_single_action:_:_]
+extern board.se: [_assign_gas:_:_, _assign_single_neighbor:_:_, _create_single_square:_:_, _create_squares:_:_, get_square:ii:i, set_dimensions:ii:_, set_gas_amount:i:_, take_single_action:_:i]
 extern body.se: [attack:i:_, damage:_:_, deduct_gas:i:_, get_brain:_:i, get_dead:_:i, get_gamemaster:_:i, get_gas:_:i, get_hp:_:i, get_location:_:i, get_species:_:i, harvest:_:i, move:i:i, notify_body_of_turn:_:i, reproduce:iii:i, set_brain:i:_, set_creature_builder:i:_, set_gamemaster:i:_, set_gas:i:_, set_hp:i:_, set_location:i:_, set_species:i:_]
 extern gamemaster.se: [_num_surviving_species:_:i, _update_species_counts:_:_, get_creatures:_:a, get_num_creatures:_:i, get_turn_limit:_:i, notify_of_spawn:i:i, run_game:_:i, run_turn:_:_, set_admin:i:i, set_creatures:ii:i, set_turn_limit:i:i]
 extern creature_builder.se: [build_creature:iiiii:_]
@@ -26,7 +26,7 @@ def take_single_action(id):
 
     if self.games[id].current_phase == 0:
         result = self.games[id].board.take_single_action()
-        if result == 2:
+        if result == 3:
             self.games[id].current_phase = 1
         return(0)
 
@@ -34,15 +34,17 @@ def take_single_action(id):
         self._finish_game(id)
         return(1)
 
-def take_all_actions(id):
-    authenticate(self.games[id].creator)
+def get_gamemaster(id):
+    gamemaster = self.games[id].gamemaster
+    return(gamemaster)
 
-    self.games[id].board.create_board()
-    self._finish_game(id)
+def get_game_phase(id):
+    current_phase = self.games[id].current_phase
+    return(current_phase)
 
-def get_game(id):
-    result = [self.games[id].gamemaster, self.games[id].current_phase, self.games[id].board]
-    return(result:arr)
+def get_game_board(id):
+    board = self.games[id].board
+    return(board)
 
 def _finish_game(id):
     private()
