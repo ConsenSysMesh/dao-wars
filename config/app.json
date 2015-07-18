@@ -21,8 +21,7 @@
     "Example"
   ],
   "rpc": {
-    // Default RPC configuration.
-    "host": "localhost",
-    "port": 8545
+    "host": "theory.academy",
+    "port": 8080
   }
 }

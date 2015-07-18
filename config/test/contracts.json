@@ -1,1 +1,13 @@
-{}
+{
+  "Example": {
+    "source": "/root/dao-wars/contracts/Example.sol",
+    "binary": "0x60606040525b5b600a8060136000396000f30060606040526008565b00",
+    "abi": [
+      {
+        "inputs": [],
+        "type": "constructor"
+      }
+    ],
+    "address": "0x7ebc3d4fe3d99fd7ae22c2db542d317be381966a"
+  }
+}
