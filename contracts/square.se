@@ -8,17 +8,35 @@ inset("basic_macros.se")
 def init():
     self.gamemaster = msg.sender
 
+def validate():
+    return(42)
+
 def set_gamemaster(_gamemaster):
     authenticate(self.gamemaster)
 
     self.gamemaster = _gamemaster
 
-def set_neighbors(left,right,up,down):
+def set_left(left):
     authenticate(self.gamemaster)
 
     self.neighbors[0] = left
+    return(1)
+
+def set_right(right):
+    authenticate(self.gamemaster)
+
     self.neighbors[1] = right
+    return(1)
+
+def set_up(up):
+    authenticate(self.gamemaster)
+
     self.neighbors[2] = up
+    return(1)
+
+def set_down(down):
+    authenticate(self.gamemaster)
+
     self.neighbors[3] = down
     return(1)
 

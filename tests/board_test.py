@@ -8,6 +8,7 @@ class TestBoard:
 
     def test_it_does_not_blow_up(self):
         self.contract.set_dimensions(10,10)
+        self.contract.set_gas_amount(40000)
         phase = 0
         while phase != 3:
             phase = self.contract.take_single_action()
@@ -20,3 +21,7 @@ class TestBoard:
 
         assert_equal(self.contract.get_square(10,9), 0)
         assert_equal(self.contract.get_square(9,10), 0)
+
+        neighbor_validator = self.state.abi_contract("validators/neighbor_validator.se")
+        print self.contract.address
+        print neighbor_validator.validate(self.contract.address)

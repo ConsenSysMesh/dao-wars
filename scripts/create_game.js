@@ -1,17 +1,19 @@
-initializer.create_game.sendTransaction(1, 0, 0, 10, 40000, 100000, {from: eth.coinbase, gas: 3141592, gasPrice: 1000000000000});
-
-mineAtLeast(1);
+board.set_dimensions(3,3, boilerplate);
+board.set_gas_amount(40000, boilerplate);
+mineAtLeast(2);
 
 phase = 0;
 i = 0
 miner.start();
-while (phase != 2) {
-  initializer.take_single_action.sendTransaction(1, {from: eth.coinbase, gas: 3141592, gasPrice: 1000000000000});
-  phase = initializer.get_game_phase.call(1, {from: eth.coinbase});
-  i++
+while (phase != 3) {
+  transaction = board.take_single_action.sendTransaction(boilerplate);
+
+  admin.sleepBlocks(1)
+
+  phase = board.take_single_action.call();
+
   console.log(i)
   console.log(phase)
+  i++
 }
 miner.stop();
-
-gamemaster = initializer.get_gamemaster.call(1, {from: eth.coinbase});

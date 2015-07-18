@@ -1,4 +1,4 @@
-mineAtLeast(5); // For the reward
+mineAtLeast(3); // For the reward
 personal.unlockAccount(eth.coinbase, "");
 transaction = eth.sendTransaction({from: eth.coinbase, gas: 3141592, gasPrice: 1000000000000, data: initializer_data});
 

@@ -1,13 +1,13 @@
-extern square.se: [drop_gas:i:_, enter:_:_, get_creature:_:i, get_gamemaster:_:i, get_gas:_:i, get_neighbor:i:i, get_neighbors:_:_, harvest:_:i, leave:_:_, set_creature:i:_, set_gamemaster:i:_, set_gas:i:_, set_neighbors:iiii:_, spawn:i:i]
+extern contracts/square.se: [claim_harvest:[]:int256, drop_gas:[int256]:_, enter:[]:_, get_creature:[]:int256, get_gamemaster:[]:int256, get_gas:[]:int256, get_neighbor:[int256]:int256, get_neighbors:[]:_, leave:[]:_, set_creature:[int256]:int256, set_down:[int256]:int256, set_gamemaster:[int256]:_, set_gas:[int256]:int256, set_left:[int256]:int256, set_right:[int256]:int256, set_up:[int256]:int256, spawn:[int256]:int256, validate:[]:int256]
 
 data x
 data y
 data gas_amount
 data board[2^80][2^80]
 
-data _current_phase
-data _current_x
-data _current_y
+data current_phase
+data current_x
+data current_y
 
 inset("basic_macros.se")
 
@@ -18,80 +18,95 @@ def set_dimensions(x,y):
 def set_gas_amount(amount):
     self.gas_amount = amount
 
+def validate_square(x,y):
+    result = self.board[x][y].validate()
+    return(result)
+
+def get_x():
+    return(self.x)
+
+def get_y():
+    return(self.y)
+
 def get_square(x, y):
     return(self.board[x][y])
 
+def get_current_x():
+    return(self.current_x)
+
+def get_current_y():
+    return(self.current_y)
+
 def take_single_action():
-    if self._current_phase == 0:
+    if self.current_phase == 0:
         self._create_single_square()
-    elif self._current_phase == 1:
-        self._assign_single_neighbor()
-    elif self._current_phase == 2:
-        self._assign_gas()
-        self._current_phase = 3
+    elif self.current_phase == 1:
+        self._assign_single_neighbors()
+    elif self.current_phase == 2:
+        self._assign_single_gas()
 
-    return(self._current_phase)
-
-def _create_squares():
-    private()
-
-    while self._current_phase == 0:
-        self._create_single_square()
+    return(self.current_phase)
 
 def _create_single_square():
     private()
 
-    if self._current_y >= self.y:
-        self._current_y = 0
-        self._current_x += 1
+    if self.current_y >= self.y:
+        self.current_y = 0
+        self.current_x += 1
 
-    if self._current_x >= self.x:
-        self._current_x = 0
-        self._current_y = 0
-        self._current_phase = 1
+    if self.current_x >= self.x:
+        self.current_x = 0
+        self.current_y = 0
+        self.current_phase = 1
     else:
-        self.board[self._current_x][self._current_y] = create('square.se')
-        self._current_y += 1
+        self.board[self.current_x][self.current_y] = create('square.se')
+        self.current_y += 1
 
-def _assign_single_neighbor():
+def _assign_single_neighbors():
     private()
 
-    if self._current_y >= self.y:
-        self._current_y = 0
-        self._current_x += 1
+    if self.current_y >= self.y:
+        self.current_y = 0
+        self.current_x += 1
 
-    if self._current_x >= self.x:
-        self._current_x = 0
-        self._current_y = 0
-        self._current_phase = 2
+    if self.current_x >= self.x:
+        self.current_x = 0
+        self.current_y = 0
+        self.current_phase = 2
     else:
-        x = self._current_x
-        y = self._current_y
+        x = self.current_x
+        y = self.current_y
         square = self.board[i][j]
 
         if x > 0:
             left = self.board[i - 1][j]
+            square.set_left(left)
         if x < self.x:
             right = self.board[i + 1][j]
+            square.set_right(right)
         if y > 0:
             up = self.board[i][j - 1]
+            square.set_up(up)
         if y < self.y:
             down = self.board[i][j + 1]
+            square.set_down(down)
 
-        square.set_neighbors(left, right, up, down)
-        self._current_y += 1
+        self.current_y += 1
 
-def _assign_gas():
+def _assign_single_gas():
     private()
 
-    gas_amount = self.gas_amount
+    if self.current_y >= self.y:
+        self.current_y = 0
+        self.current_x += 1
 
-    i = 0
-    while i < self.x:
-        j = 0
-        while j < self.y:
-            square = self.board[i][j]
-            square.set_gas(gas_amount)
+    if self.current_x >= self.x:
+        self.current_x = 0
+        self.current_y = 0
+        self.current_phase = 3
+    else:
+        gas_amount = self.gas_amount
+        square = self.board[self.current_x][self.current_y]
+        square.set_gas(gas_amount)
 
-            j += 1
-        i += 1
+        self.current_y += 1

@@ -248,143 +248,167 @@ var creatureAbi = [{
 }]
 
 boardAbi = [{
-  "name": "_assign_gas()",
-  "type": "function",
-  "inputs": [],
-  "outputs": []
+    "name": "_assign_gas()",
+    "type": "function",
+    "inputs": [],
+    "outputs": []
 },
 {
-  "name": "_assign_neighbors()",
-  "type": "function",
-  "inputs": [],
-  "outputs": []
+    "name": "_assign_single_neighbor()",
+    "type": "function",
+    "inputs": [],
+    "outputs": []
 },
 {
-  "name": "_create_single_square()",
-  "type": "function",
-  "inputs": [],
-  "outputs": [{ "name": "unknown_out", "type": "int256[]" }]
+    "name": "_create_single_square()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "unknown_out", "type": "int256[]" }]
 },
 {
-  "name": "_create_squares()",
-  "type": "function",
-  "inputs": [],
-  "outputs": []
+    "name": "get_current_x()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
 },
 {
-  "name": "create_board()",
-  "type": "function",
-  "inputs": [],
-  "outputs": []
+    "name": "get_current_y()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
 },
 {
-  "name": "get_square(int256,int256)",
-  "type": "function",
-  "inputs": [{ "name": "x", "type": "int256" }, { "name": "y", "type": "int256" }],
-  "outputs": [{ "name": "out", "type": "int256" }]
+    "name": "get_square(int256,int256)",
+    "type": "function",
+    "inputs": [{ "name": "x", "type": "int256" }, { "name": "y", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
 },
 {
-  "name": "set_dimensions(int256,int256)",
-  "type": "function",
-  "inputs": [{ "name": "x", "type": "int256" }, { "name": "y", "type": "int256" }],
-  "outputs": []
+    "name": "get_x()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
 },
 {
-  "name": "set_gas_amount(int256)",
-  "type": "function",
-  "inputs": [{ "name": "amount", "type": "int256" }],
-  "outputs": []
+    "name": "get_y()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
 },
 {
-  "name": "take_single_action()",
-  "type": "function",
-  "inputs": [],
-  "outputs": [{ "name": "out", "type": "int256" }]
+    "name": "set_dimensions(int256,int256)",
+    "type": "function",
+    "inputs": [{ "name": "x", "type": "int256" }, { "name": "y", "type": "int256" }],
+    "outputs": []
+},
+{
+    "name": "set_gas_amount(int256)",
+    "type": "function",
+    "inputs": [{ "name": "amount", "type": "int256" }],
+    "outputs": []
+},
+{
+    "name": "take_single_action()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }],
+},
+{
+    "name": "validate_square(int256,int256)",
+    "type": "function",
+    "inputs": [{ "name": "x", "type": "int256" }, { "name": "y", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }],
 }]
 
 squareAbi = [{
-  "name": "claim_harvest()",
-  "type": "function",
-  "inputs": [],
-  "outputs": [{ "name": "out", "type": "int256" }]
+    "name": "claim_harvest()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
 },
 {
-  "name": "drop_gas(int256)",
-  "type": "function",
-  "inputs": [{ "name": "amount", "type": "int256" }],
-  "outputs": []
+    "name": "drop_gas(int256)",
+    "type": "function",
+    "inputs": [{ "name": "amount", "type": "int256" }],
+    "outputs": []
 },
 {
-  "name": "enter()",
-  "type": "function",
-  "inputs": [],
-  "outputs": []
+    "name": "enter()",
+    "type": "function",
+    "inputs": [],
+    "outputs": []
 },
 {
-  "name": "get_creature()",
-  "type": "function",
-  "inputs": [],
-  "outputs": [{ "name": "out", "type": "int256" }]
+    "name": "get_creature()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
 },
 {
-  "name": "get_gamemaster()",
-  "type": "function",
-  "inputs": [],
-  "outputs": [{ "name": "out", "type": "int256" }]
+    "name": "get_gamemaster()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
 },
 {
-  "name": "get_gas()",
-  "type": "function",
-  "inputs": [],
-  "outputs": [{ "name": "out", "type": "int256" }]
+    "name": "get_gas()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
 },
 {
-  "name": "get_neighbor(int256)",
-  "type": "function",
-  "inputs": [{ "name": "direction", "type": "int256" }],
-  "outputs": [{ "name": "out", "type": "int256" }]
+    "name": "get_neighbor(int256)",
+    "type": "function",
+    "inputs": [{ "name": "direction", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
 },
 {
-  "name": "get_neighbors()",
-  "type": "function",
-  "inputs": [],
-  "outputs": []
+    "name": "get_neighbors()",
+    "type": "function",
+    "inputs": [],
+    "outputs": []
 },
 {
-  "name": "leave()",
-  "type": "function",
-  "inputs": [],
-  "outputs": []
+    "name": "leave()",
+    "type": "function",
+    "inputs": [],
+    "outputs": []
 },
 {
-  "name": "set_creature(int256)",
-  "type": "function",
-  "inputs": [{ "name": "_creature", "type": "int256" }],
-  "outputs": [{ "name": "out", "type": "int256" }]
+    "name": "set_creature(int256)",
+    "type": "function",
+    "inputs": [{ "name": "_creature", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
 },
 {
-  "name": "set_gamemaster(int256)",
-  "type": "function",
-  "inputs": [{ "name": "_gamemaster", "type": "int256" }],
-  "outputs": []
+    "name": "set_gamemaster(int256)",
+    "type": "function",
+    "inputs": [{ "name": "_gamemaster", "type": "int256" }],
+    "outputs": []
 },
 {
-  "name": "set_gas(int256)",
-  "type": "function",
-  "inputs": [{ "name": "_gas", "type": "int256" }],
-  "outputs": [{ "name": "out", "type": "int256" }]
+    "name": "set_gas(int256)",
+    "type": "function",
+    "inputs": [{ "name": "_gas", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
 },
 {
-  "name": "set_neighbors(int256,int256,int256,int256)",
-  "type": "function",
-  "inputs": [{ "name": "left", "type": "int256" }, { "name": "right", "type": "int256" }, { "name": "up", "type": "int256" }, { "name": "down", "type": "int256" }],
-  "outputs": [{ "name": "out", "type": "int256" }]
+    "name": "set_neighbors(int256,int256,int256,int256)",
+    "type": "function",
+    "inputs": [{ "name": "left", "type": "int256" }, { "name": "right", "type": "int256" }, { "name": "up", "type": "int256" }, { "name": "down", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
 },
 {
-  "name": "spawn(int256)",
-  "type": "function",
-  "inputs": [{ "name": "creature", "type": "int256" }],
-  "outputs": [{ "name": "out", "type": "int256" }]
+    "name": "spawn(int256)",
+    "type": "function",
+    "inputs": [{ "name": "creature", "type": "int256" }],
+    "outputs": [{ "name": "out", "type": "int256" }]
+},
+{
+    "name": "validate()",
+    "type": "function",
+    "inputs": [],
+    "outputs": [{ "name": "out", "type": "int256" }]
 }]
 
 creatureAbi = [{
