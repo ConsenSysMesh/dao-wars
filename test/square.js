@@ -20,4 +20,18 @@ contract('Square', function(accounts) {
     }).catch(done)
   })
 
+  // Currently passes, but requires second account unlocked and with a balance.
+  xit("should limit changes to original creator", function(done) {
+    square = Square.at(Square.deployed_address);
+    square.set_gas(42).
+      then(function() {
+        return square.set_gas(43, {from: accounts[1]});
+      }).
+      then(square.gas.call).
+      then(function(result) {
+        assert.equal(result, 42);
+        done();
+    }).catch(done)
+  })
+
 })
