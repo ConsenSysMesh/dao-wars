@@ -1,81 +1,174 @@
 {
-  "Square": {
-    "source": "/root/dao-wars/contracts/Square.sol",
-    "binary": "0x60606040525b33600560006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908302179055505b610351806100406000396000f30060606040526000357c01000000000000000000000000000000000000000000000000000000009004806356383dc8146100655780636ca7c2161461008a578063c8ee7768146100ab578063c9f26fc6146100e8578063f851a440146100fb57610063565b005b610088600480359060200180359060200180359060200180359060200150610201565b005b610095600450610132565b6040518082815260200191505060405180910390f35b6100bc60048035906020015061013b565b604051808273ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6100f960048035906020015061019a565b005b610106600450610174565b604051808273ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b60006000505481565b60016000508160048110156100025790900160009150909054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600560009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600560009054906101000a900473ffffffffffffffffffffffffffffffffffffffff168073ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614156101fc57816000600050819055505b505b50565b600560009054906101000a900473ffffffffffffffffffffffffffffffffffffffff168073ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16141561034957846001600050600060048110156100025790900160006101000a81548173ffffffffffffffffffffffffffffffffffffffff02191690830217905550836001600050600160048110156100025790900160006101000a81548173ffffffffffffffffffffffffffffffffffffffff02191690830217905550826001600050600260048110156100025790900160006101000a81548173ffffffffffffffffffffffffffffffffffffffff02191690830217905550816001600050600360048110156100025790900160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908302179055505b505b5050505056",
+  "Creature": {
+    "source": "/root/dao-wars/contracts/Creature.sol",
+    "binary": "0x606060405261032c806100136000396000f30060606040526000357c0100000000000000000000000000000000000000000000000000000000900480633697acff1461004f57806387cb15f714610062578063d742cb01146100755761004d565b005b6100606004803590602001506100d2565b005b610073600480359060200150610101565b005b6100806004506100ac565b604051808273ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b80600060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908302179055505b50565b6000600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663c8ee776883604051827c0100000000000000000000000000000000000000000000000000000000028152600401808281526020019150506020604051808303816000876161da5a03f1156100025750505060405151905060008173ffffffffffffffffffffffffffffffffffffffff1663dac13f6d604051817c01000000000000000000000000000000000000000000000000000000000281526004018090506020604051808303816000876161da5a03f115610002575050506040515173ffffffffffffffffffffffffffffffffffffffff16141561032757600060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663d66d9e19604051817c01000000000000000000000000000000000000000000000000000000000281526004018090506000604051808303816000876161da5a03f115610002575050508073ffffffffffffffffffffffffffffffffffffffff1663e97dcb62604051817c01000000000000000000000000000000000000000000000000000000000281526004018090506000604051808303816000876161da5a03f1156100025750505080600060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908302179055505b5b505056",
     "abi": [
       {
-        "constant": false,
         "inputs": [
           {
-            "name": "_0",
-            "type": "address"
-          },
-          {
-            "name": "_1",
-            "type": "address"
-          },
-          {
-            "name": "_2",
-            "type": "address"
-          },
-          {
-            "name": "_3",
-            "type": "address"
+            "type": "address",
+            "name": "_square"
           }
         ],
+        "constant": false,
+        "name": "set_square",
+        "outputs": [],
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": "direction"
+          }
+        ],
+        "constant": false,
+        "name": "move",
+        "outputs": [],
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "constant": true,
+        "name": "square",
+        "outputs": [
+          {
+            "type": "address",
+            "name": ""
+          }
+        ],
+        "type": "function"
+      }
+    ],
+    "address": "0x0f587d061f2576d2f22ba337997a58c2236e41cd"
+  },
+  "Square": {
+    "source": "/root/dao-wars/contracts/Square.sol",
+    "binary": "0x60606040525b33600560006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908302179055505b61058b806100406000396000f300606060405236156100a0576000357c01000000000000000000000000000000000000000000000000000000009004806356383dc8146100a25780636901f668146100c75780636ca7c216146100e8578063a8413f6614610109578063c8ee77681461011c578063c9f26fc614610159578063d66d9e191461016c578063dac13f6d14610179578063e97dcb62146101b0578063f851a440146101bd576100a0565b005b6100c5600480359060200180359060200180359060200180359060200150610385565b005b6100d2600450610282565b6040518082815260200191505060405180910390f35b6100f36004506101f4565b6040518082815260200191505060405180910390f35b61011a6004803590602001506102fd565b005b61012d6004803590602001506101fd565b604051808273ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61016a600480359060200150610296565b005b6101776004506104d5565b005b61018460045061025c565b604051808273ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101bb60045061055d565b005b6101c8600450610236565b604051808273ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b60006000505481565b60016000508160048110156100025790900160009150909054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600560009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60006000602a9050809150610292565b5090565b600560009054906101000a900473ffffffffffffffffffffffffffffffffffffffff168073ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614156102f857816000600050819055505b505b50565b600560009054906101000a900473ffffffffffffffffffffffffffffffffffffffff168073ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614156103805781600660006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908302179055505b505b50565b600560009054906101000a900473ffffffffffffffffffffffffffffffffffffffff168073ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614156104cd57846001600050600060048110156100025790900160006101000a81548173ffffffffffffffffffffffffffffffffffffffff02191690830217905550836001600050600160048110156100025790900160006101000a81548173ffffffffffffffffffffffffffffffffffffffff02191690830217905550826001600050600260048110156100025790900160006101000a81548173ffffffffffffffffffffffffffffffffffffffff02191690830217905550816001600050600360048110156100025790900160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908302179055505b505b50505050565b600660009054906101000a900473ffffffffffffffffffffffffffffffffffffffff168073ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415610559576000600660006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908302179055505b505b565b33600660006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908302179055505b56",
+    "abi": [
+      {
+        "inputs": [
+          {
+            "type": "address",
+            "name": "_0"
+          },
+          {
+            "type": "address",
+            "name": "_1"
+          },
+          {
+            "type": "address",
+            "name": "_2"
+          },
+          {
+            "type": "address",
+            "name": "_3"
+          }
+        ],
+        "constant": false,
         "name": "set_neighbors",
         "outputs": [],
         "type": "function"
       },
       {
-        "constant": true,
         "inputs": [],
+        "constant": false,
+        "name": "validate",
+        "outputs": [
+          {
+            "type": "uint256",
+            "name": "result"
+          }
+        ],
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "constant": true,
         "name": "gas",
         "outputs": [
           {
-            "name": "",
-            "type": "uint256"
+            "type": "uint256",
+            "name": ""
           }
         ],
         "type": "function"
       },
       {
-        "constant": true,
         "inputs": [
           {
-            "name": "",
-            "type": "uint256"
+            "type": "address",
+            "name": "_creature"
           }
         ],
+        "constant": false,
+        "name": "set_creature",
+        "outputs": [],
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": ""
+          }
+        ],
+        "constant": true,
         "name": "neighbors",
         "outputs": [
           {
-            "name": "",
-            "type": "address"
+            "type": "address",
+            "name": ""
           }
         ],
         "type": "function"
       },
       {
-        "constant": false,
         "inputs": [
           {
-            "name": "_gas",
-            "type": "uint256"
+            "type": "uint256",
+            "name": "_gas"
           }
         ],
+        "constant": false,
         "name": "set_gas",
         "outputs": [],
         "type": "function"
       },
       {
-        "constant": true,
         "inputs": [],
+        "constant": false,
+        "name": "leave",
+        "outputs": [],
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "constant": true,
+        "name": "creature",
+        "outputs": [
+          {
+            "type": "address",
+            "name": ""
+          }
+        ],
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "constant": false,
+        "name": "enter",
+        "outputs": [],
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "constant": true,
         "name": "admin",
         "outputs": [
           {
-            "name": "",
-            "type": "address"
+            "type": "address",
+            "name": ""
           }
         ],
         "type": "function"
@@ -85,6 +178,6 @@
         "type": "constructor"
       }
     ],
-    "address": "0x6728d3eda0b8a0892e554d444f1b7cd8bed44028"
+    "address": "0x93f05e82bf079cfcc824cff538c67bea767917b9"
   }
 }

@@ -5,7 +5,7 @@
     "app.js": [
       // Paths relative to "app" directory that should be
       // concatenated and processed during build.
-      "javascripts/app.coffee" 
+      "javascripts/app.coffee"
     ],
     "app.css": [
       // Paths relative to "app" directory that should be
@@ -18,10 +18,11 @@
   },
   "deploy": [
     // Names of contracts that should be deployed to the network.
-    "Square"
+    "Square",
+    "Creature"
   ],
   "rpc": {
-    "host": "theory.academy",
-    "port": 8080
+    "host": "localhost",
+    "port": 8545
   }
 }
