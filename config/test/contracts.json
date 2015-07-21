@@ -1,30 +1,74 @@
 {
-  "Example": {
-    "source": "/root/dao-wars/contracts/Example.sol",
-    "binary": "0x60606040525b5b606d8060136000396000f30060606040526000357c0100000000000000000000000000000000000000000000000000000000900480637a0baaa8146037576035565b005b6046600480359060200150605c565b6040518082815260200191505060405180910390f35b60006002820290506068565b91905056",
+  "Square": {
+    "source": "/root/dao-wars/contracts/Square.sol",
+    "binary": "0x6060604052610237806100136000396000f30060606040526000357c01000000000000000000000000000000000000000000000000000000009004806356383dc81461005a5780636ca7c2161461007f578063c8ee7768146100a0578063c9f26fc6146100dd57610058565b005b61007d600480359060200180359060200180359060200180359060200150610140565b005b61008a6004506100f0565b6040518082815260200191505060405180910390f35b6100b16004803590602001506100f9565b604051808273ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6100ee600480359060200150610132565b005b60006000505481565b60016000508160048110156100025790900160009150909054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b806000600050819055505b50565b836001600050600060048110156100025790900160006101000a81548173ffffffffffffffffffffffffffffffffffffffff02191690830217905550826001600050600160048110156100025790900160006101000a81548173ffffffffffffffffffffffffffffffffffffffff02191690830217905550816001600050600260048110156100025790900160006101000a81548173ffffffffffffffffffffffffffffffffffffffff02191690830217905550806001600050600360048110156100025790900160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908302179055505b5050505056",
     "abi": [
       {
         "constant": false,
         "inputs": [
           {
-            "name": "n",
-            "type": "int256"
+            "name": "_0",
+            "type": "address"
+          },
+          {
+            "name": "_1",
+            "type": "address"
+          },
+          {
+            "name": "_2",
+            "type": "address"
+          },
+          {
+            "name": "_3",
+            "type": "address"
           }
         ],
-        "name": "mul2",
+        "name": "set_neighbors",
+        "outputs": [],
+        "type": "function"
+      },
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "gas",
         "outputs": [
           {
-            "name": "result",
-            "type": "int256"
+            "name": "",
+            "type": "uint256"
           }
         ],
         "type": "function"
       },
       {
-        "inputs": [],
-        "type": "constructor"
+        "constant": true,
+        "inputs": [
+          {
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "neighbors",
+        "outputs": [
+          {
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [
+          {
+            "name": "_gas",
+            "type": "uint256"
+          }
+        ],
+        "name": "set_gas",
+        "outputs": [],
+        "type": "function"
       }
     ],
-    "address": "0x4522524066c8c15bb292233d146a2d38ca151da5"
+    "address": "0xd51a8dedc16883a66f7019ba9bd555a309f65fe4"
   }
 }
