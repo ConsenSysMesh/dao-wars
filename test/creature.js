@@ -76,4 +76,30 @@ contract('Creature', function(accounts) {
     }).catch(done)
   });
 
+  it("should die if brought to 0 hp", function(done) {
+    square_1 = Square.at(Square.deployed_address);
+    creature_1 = Creature.at(Creature.deployed_address);
+
+    Square.new().
+      then(function(new_square) { square_2 = new_square }).
+      then(Creature.new).
+      then(function(new_creature) { creature_2 = new_creature }).
+      then(function() { return creature_2.set_hp(1) }).
+      then(function() { return creature_1.set_square(square_1.address) }).
+      then(function() { return creature_2.set_square(square_2.address) }).
+      then(function() { return square_1.set_creature(creature_1.address) }).
+      then(function() { return square_2.set_creature(creature_2.address) }).
+      then(function() { return square_1.set_neighbors(square_2.address, 0, 0, 0) }).
+
+      then(function() { return creature_1.attack(0) }).
+      then(function() { return creature_2.dead.call() }).
+      then(function(result) { assert.equal(result, true) }).
+      then(function() { return square_2.creature.call() }).
+      then(function(result) {
+        assert.equal(result, 0);
+        done()
+    }).catch(done)
+
+  });
+
 })

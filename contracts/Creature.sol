@@ -4,6 +4,11 @@ contract Creature {
   Square public square;
   uint public gas;
   uint8 public hp;
+  bool public dead;
+
+  function Creature() {
+    dead = false;
+  }
 
   function set_square(Square _square) {
     square = _square;
@@ -34,5 +39,9 @@ contract Creature {
 
   function damage() {
     hp -= 1;
+    if (hp == 0) {
+      dead = true;
+      square.leave();
+    }
   }
 }
