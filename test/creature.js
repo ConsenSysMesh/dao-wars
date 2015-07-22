@@ -85,6 +85,7 @@ contract('Creature', function(accounts) {
       then(Creature.new).
       then(function(new_creature) { creature_2 = new_creature }).
       then(function() { return creature_2.set_hp(1) }).
+      then(function() { return creature_2.set_gas(1000) }).
       then(function() { return creature_1.set_square(square_1.address) }).
       then(function() { return creature_2.set_square(square_2.address) }).
       then(function() { return square_1.set_creature(creature_1.address) }).
@@ -94,12 +95,36 @@ contract('Creature', function(accounts) {
       then(function() { return creature_1.attack(0) }).
       then(function() { return creature_2.dead.call() }).
       then(function(result) { assert.equal(result, true) }).
+      then(function() { return square_2.gas.call() }).
+      then(function(result) { assert.equal(result, 1000) }).
       then(function() { return square_2.creature.call() }).
       then(function(result) {
         assert.equal(result, 0);
         done()
     }).catch(done)
-
   });
+
+  it("should allow the brain to reproduce", function(done) {
+    square_1 = Square.at(Square.deployed_address);
+    creature_1 = Creature.at(Creature.deployed_address);
+
+    Square.new().
+    then(function(new_square) { square_2 = new_square }).
+    then(function() { return creature_1.set_square(square_1.address) }).
+    then(function() { return creature_1.set_species(1) }).
+    then(function() { return creature_1.set_creature_builder(CreatureBuilder.deployed_address) }).
+    then(function() { return square_1.set_creature(creature_1.address) }).
+    then(function() { return square_1.set_neighbors(square_2.address, 0, 0, 0) }).
+    then(function() { return creature_1.reproduce(0, accounts[0], 0) }).
+    then(function() { return square_2.creature.call() }).
+    then(function(result) { creature_2 = Creature.at(result) }).
+    then(function() { return creature_2.validate.call() }).
+    then(function(result) { assert.equal(result, 42) }).
+    then(function() { return creature_2.species.call() }).
+    then(function(result) {
+      assert.equal(result, 1);
+      done();
+    }).catch(done)
+  })
 
 })

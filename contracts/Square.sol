@@ -38,6 +38,15 @@ contract Square {
     creature = msg.sender;
   }
 
+  function report_death(uint gas_drop) {
+    gas += gas_drop;
+    creature = 0;
+  }
+
+  function spawn(address _creature) {
+    creature = _creature;
+  }
+
   function harvest() auth(creature) returns(uint harvested_amount) {
     if (gas > 10000) {
       gas -= 10000;
