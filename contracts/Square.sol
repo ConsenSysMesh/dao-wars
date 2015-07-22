@@ -37,4 +37,15 @@ contract Square {
   function enter() {
     creature = msg.sender;
   }
+
+  function harvest() auth(creature) returns(uint harvested_amount) {
+    if (gas > 10000) {
+      gas -= 10000;
+      return(10000);
+    } else {
+      uint amount = gas;
+      gas = 0;
+      return(amount);
+    }
+  }
 }

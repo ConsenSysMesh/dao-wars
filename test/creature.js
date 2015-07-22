@@ -1,7 +1,6 @@
 contract('Creature', function(accounts) {
 
   it("should let the brain move it", function(done) {
-    // var square_2 = {};
     square_1 = Square.at(Square.deployed_address);
     creature = Creature.at(Creature.deployed_address);
 
@@ -29,5 +28,29 @@ contract('Creature', function(accounts) {
         assert.equal(result, 0);
       }).
       catch(done)
-  })
+  });
+
+  it("should let the brain harvest gas", function(done) {
+    square = Square.at(Square.deployed_address);
+    creature = Creature.at(Creature.deployed_address);
+
+    square.set_gas(15000).
+      then(square.set_creature(creature.address)).
+      then(function() { return creature.set_square(square.address) }).
+      then(creature.harvest).
+      then(creature.gas.call).
+      then(function(result) { assert.equal(result, 10000) }).
+      then(square.gas.call).
+      then(function(result) { assert.equal(result, 5000) }).
+
+      then(creature.harvest).
+      then(creature.gas.call).
+      then(function(result) { assert.equal(result, 15000) }).
+      then(square.gas.call).
+      then(function(result) {
+      assert.equal(result, 0);
+      done()
+    }).catch(done)
+  });
+
 })

@@ -2,6 +2,7 @@ import "Square";
 
 contract Creature {
   Square public square;
+  uint public gas;
 
   function set_square(Square _square) {
     square = _square;
@@ -14,5 +15,9 @@ contract Creature {
       new_square.enter();
       square = new_square;
     }
+  }
+
+  function harvest() {
+    gas += square.harvest();
   }
 }
