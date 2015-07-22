@@ -13,16 +13,28 @@ contract Creature {
   uint8 public species;
   address public brain;
   ShadowedCreatureBuilder public creature_builder;
+  bool public turn_active;
 
   modifier auth(address authorized_user) { if (msg.sender == authorized_user) _ }
+  modifier requires_turn {
+    if (turn_active && (msg.sender == brain)) {
+      turn_active = false;
+      _
+    }
+  }
 
   function Creature() {
     dead = false;
+    turn_active = false;
     admin = msg.sender;
   }
 
   function validate() returns (uint8 result) {
     return 42;
+  }
+
+  function notify_of_turn() {
+    turn_active = true;
   }
 
   function set_square(Square _square) auth(admin) {
@@ -53,7 +65,7 @@ contract Creature {
     creature_builder = _creature_builder;
   }
 
-  function move(uint direction) {
+  function move(uint direction) requires_turn {
     Square new_square = square.neighbors(direction);
     if (new_square.creature() == 0) {
       square.leave();
@@ -62,17 +74,17 @@ contract Creature {
     }
   }
 
-  function harvest() {
+  function harvest() requires_turn {
     gas += square.harvest();
   }
 
-  function attack(uint direction) {
+  function attack(uint direction) requires_turn {
     Square target_square = square.neighbors(direction);
     Creature target = Creature(target_square.creature());
     target.damage();
   }
 
-  function reproduce(uint direction, address new_brain, uint endowment) {
+  function reproduce(uint direction, address new_brain, uint endowment) requires_turn {
     Square target_square = square.neighbors(direction);
     if ((target_square.creature() == 0) && (endowment <= gas)) {
       Creature new_creature = creature_builder.build_creature();
