@@ -3,9 +3,14 @@ import "Square";
 contract Creature {
   Square public square;
   uint public gas;
+  uint8 public hp;
 
   function set_square(Square _square) {
     square = _square;
+  }
+
+  function set_hp(uint8 _hp) {
+    hp = _hp;
   }
 
   function move(uint direction) {
@@ -19,5 +24,15 @@ contract Creature {
 
   function harvest() {
     gas += square.harvest();
+  }
+
+  function attack(uint direction) {
+    Square target_square = square.neighbors(direction);
+    Creature target = Creature(target_square.creature());
+    target.damage();
+  }
+
+  function damage() {
+    hp -= 1;
   }
 }
