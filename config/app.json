@@ -20,7 +20,8 @@
     // Names of contracts that should be deployed to the network.
     "Square",
     "Creature",
-    "CreatureBuilder"
+    "CreatureBuilder",
+    "Gamemaster"
   ],
   "rpc": {
     "host": "localhost",
