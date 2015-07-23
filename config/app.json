@@ -21,7 +21,8 @@
     "Square",
     "Creature",
     "CreatureBuilder",
-    "Gamemaster"
+    "Gamemaster",
+    "BrainMock"
   ],
   "rpc": {
     "host": "localhost",

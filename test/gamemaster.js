@@ -39,4 +39,19 @@ contract('Gamemaster', function(accounts) {
     }).catch(done)
   });
 
+  it("can run a turn that calls the creatures", function(done) {
+    gamemaster = Gamemaster.at(Gamemaster.deployed_address);
+    brain = BrainMock.at(BrainMock.deployed_address);
+    creature = Creature.at(Creature.deployed_address);
+
+    creature.set_brain(brain.address).
+    then(function() { return creature.set_gamemaster(gamemaster.address) }).
+    then(function() { return gamemaster.add_creature(creature.address) }).
+    then(function() { return gamemaster.run_turn() }).
+    then(function() { return brain.times_called.call() }).
+    then(function(result) {
+      assert.equal(result, 1);
+      done();
+    }).catch(done)
+  });
 })

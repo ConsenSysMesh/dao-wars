@@ -1,8 +1,11 @@
+import "Creature";
+
 contract Gamemaster {
-  address[] public creatures;
+  Creature[] public creatures;
   address[] public squares;
   uint[2] public dimensions;
   address public admin;
+  Creature public current_creature;
 
   modifier auth(address authorized_user) { if (msg.sender == authorized_user) _ }
 
@@ -14,11 +17,11 @@ contract Gamemaster {
     admin = _admin;
   }
 
-  function set_creatures(address[] _creatures) auth(admin) {
+  function set_creatures(Creature[] _creatures) auth(admin) {
     creatures = _creatures;
   }
 
-  function add_creature(address _new_creature) auth(admin) {
+  function add_creature(Creature _new_creature) auth(admin) {
     uint new_index = creatures.length;
     creatures.length++;
     creatures[new_index] = _new_creature;
@@ -35,5 +38,13 @@ contract Gamemaster {
 
   function set_squares(address[] _squares) auth(admin) {
     squares = _squares;
+  }
+
+  function run_turn() {
+    for (uint i; i < creatures.length; i++) {
+      current_creature = creatures[i];
+
+      current_creature.notify_of_turn();
+    }
   }
 }

@@ -1,7 +1,11 @@
 import "Square";
 
-contract ShadowedCreatureBuilder {
+contract StubCreatureBuilder {
   function build_creature() returns (Creature result) {}
+}
+
+contract StubBrain {
+  function notify_of_turn() {}
 }
 
 contract Creature {
@@ -12,8 +16,9 @@ contract Creature {
   bool public dead;
   uint8 public species;
   address public brain;
-  ShadowedCreatureBuilder public creature_builder;
+  StubCreatureBuilder public creature_builder;
   bool public turn_active;
+  address public gamemaster;
 
   modifier auth(address authorized_user) { if (msg.sender == authorized_user) _ }
   modifier requires_turn {
@@ -24,8 +29,6 @@ contract Creature {
   }
 
   function Creature() {
-    dead = false;
-    turn_active = false;
     admin = msg.sender;
   }
 
@@ -33,8 +36,9 @@ contract Creature {
     return 42;
   }
 
-  function notify_of_turn() {
+  function notify_of_turn() auth(gamemaster) {
     turn_active = true;
+    StubBrain(brain).notify_of_turn();
   }
 
   function set_square(Square _square) auth(admin) {
@@ -61,8 +65,12 @@ contract Creature {
     gas = _gas;
   }
 
-  function set_creature_builder(ShadowedCreatureBuilder _creature_builder) auth(admin) {
+  function set_creature_builder(StubCreatureBuilder _creature_builder) auth(admin) {
     creature_builder = _creature_builder;
+  }
+
+  function set_gamemaster(address _gamemaster) auth(admin) {
+    gamemaster = _gamemaster;
   }
 
   function move(uint direction) requires_turn {
@@ -109,4 +117,3 @@ contract Creature {
     }
   }
 }
-

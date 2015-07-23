@@ -39,6 +39,7 @@ contract('Square', function(accounts) {
     square.set_gas(20000).
     then(function() { return square.set_harvest_amount(8000) }).
     then(function() { return square.set_creature(creature.address) }).
+    then(function() { return creature.set_gamemaster(accounts[0]); }).
     then(function() { return creature.notify_of_turn() }).
     then(function() { return creature.set_square(square.address) }).
     then(function() { return creature.set_gas(0) }).
