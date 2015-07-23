@@ -33,4 +33,26 @@ contract('Square', function(accounts) {
     }).catch(done)
   })
 
+  it("should allow harvest amount to be configured", function(done) {
+    square = Square.at(Square.deployed_address);
+    creature = Creature.at(Creature.deployed_address);
+    square.set_gas(20000).
+    then(function() { return square.set_harvest_amount(8000) }).
+    then(function() { return square.set_creature(creature.address) }).
+    then(function() { return creature.notify_of_turn() }).
+    then(function() { return creature.set_square(square.address) }).
+    then(function() { return creature.set_gas(0) }).
+    then(function() { return creature.set_brain(accounts[0]) }).
+
+    then(function() { return square.harvest_amount.call() }).
+    then(function(result) { assert.equal(result, 8000) }).
+    then(function() { return creature.harvest() }).
+    then(function() { return creature.gas.call() }).
+    then(function(result) {
+      assert.equal(result, 8000);
+      done();
+    }).
+      catch(done)
+  })
+
 })

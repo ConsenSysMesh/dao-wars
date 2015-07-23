@@ -1,5 +1,6 @@
 contract Square {
   uint public gas;
+  uint public harvest_amount;
   Square[4] public neighbors;
   address public admin;
   address public creature;
@@ -17,6 +18,10 @@ contract Square {
 
   function set_gas(uint _gas) auth(admin) {
     gas = _gas;
+  }
+
+  function set_harvest_amount(uint _harvest_amount) auth(admin) {
+    harvest_amount = _harvest_amount;
   }
 
   function set_creature(address _creature) auth(admin) {
@@ -48,9 +53,9 @@ contract Square {
   }
 
   function harvest() auth(creature) returns(uint harvested_amount) {
-    if (gas > 10000) {
-      gas -= 10000;
-      return(10000);
+    if (gas > harvest_amount) {
+      gas -= harvest_amount;
+      return(harvest_amount);
     } else {
       uint amount = gas;
       gas = 0;

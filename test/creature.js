@@ -37,6 +37,7 @@ contract('Creature', function(accounts) {
     creature = Creature.at(Creature.deployed_address);
 
     square.set_gas(15000).
+      then(function() { return square.set_harvest_amount(10000) }).
       then(function() { return square.set_creature(creature.address) }).
       then(function() { return creature.set_square(square.address) }).
       then(function() { return creature.set_brain(accounts[0]); }).
@@ -144,6 +145,7 @@ contract('Creature', function(accounts) {
 
     square.set_gas(15000).
       then(function() { return square.set_creature(creature.address) }).
+      then(function() { return square.set_harvest_amount(10000) }).
       then(function() { return creature.set_square(square.address) }).
       then(function() { return creature.set_brain(accounts[0]); }).
       then(function() { return creature.set_gas(0); }).
