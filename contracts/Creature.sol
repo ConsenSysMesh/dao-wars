@@ -12,9 +12,9 @@ contract Creature {
   address public admin;
   Square public square;
   uint public gas;
-  uint8 public hp;
+  uint public hp;
   bool public dead;
-  uint8 public species;
+  uint public species;
   address public brain;
   StubCreatureBuilder public creature_builder;
   bool public turn_active;
@@ -45,11 +45,11 @@ contract Creature {
     square = _square;
   }
 
-  function set_hp(uint8 _hp) auth(admin) {
+  function set_hp(uint _hp) auth(admin) {
     hp = _hp;
   }
 
-  function set_species(uint8 _species) auth(admin) {
+  function set_species(uint _species) auth(admin) {
     species = _species;
   }
 
