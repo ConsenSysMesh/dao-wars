@@ -27,18 +27,6 @@ contract('Gamemaster', function(accounts) {
     }).catch(done)
   });
 
-  it("allows squares to be set", function(done) {
-    gamemaster = Gamemaster.at(Gamemaster.deployed_address);
-
-    gamemaster.set_dimensions(2,2).
-    then(function() { return gamemaster.set_squares([0, 0, accounts[1], 0]) }).
-    then(function() { return gamemaster.squares(2) }).
-    then(function(result) {
-      assert.equal(result, accounts[1]);
-      done();
-    }).catch(done)
-  });
-
   it("can run a turn that calls the creatures", function(done) {
     gamemaster = Gamemaster.at(Gamemaster.deployed_address);
     brain = BrainMock.at(BrainMock.deployed_address);

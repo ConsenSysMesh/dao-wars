@@ -1,4 +1,4 @@
-import "Square";
+import "Board";
 
 contract StubCreatureBuilder {
   function build_creature() returns (Creature result) {}
@@ -10,7 +10,6 @@ contract StubBrain {
 
 contract Creature {
   address public admin;
-  Square public square;
   uint public gas;
   uint public hp;
   bool public dead;
@@ -19,6 +18,8 @@ contract Creature {
   StubCreatureBuilder public creature_builder;
   bool public turn_active;
   address public gamemaster;
+  Board public board;
+  uint public location;
 
   modifier auth(address authorized_user) { if (msg.sender == authorized_user) _ }
   modifier requires_turn {
@@ -39,10 +40,6 @@ contract Creature {
   function notify_of_turn() auth(gamemaster) {
     turn_active = true;
     StubBrain(brain).notify_of_turn();
-  }
-
-  function set_square(Square _square) auth(admin) {
-    square = _square;
   }
 
   function set_hp(uint _hp) auth(admin) {
@@ -73,39 +70,46 @@ contract Creature {
     gamemaster = _gamemaster;
   }
 
-  function move(uint direction) requires_turn {
-    Square new_square = square.neighbors(direction);
-    if (new_square.creature() == 0) {
-      square.leave();
-      new_square.enter();
-      square = new_square;
+  function set_board(Board _board) auth(admin) {
+    board = _board;
+  }
+
+  function set_location(uint _location) auth(admin) {
+    location = _location;
+  }
+
+  function move(uint8 direction) requires_turn {
+    uint target = board.neighbor(location, direction);
+    if (board.creature_at_location(target) == 0) {
+      board.leave_square(location);
+      board.enter_square(target);
+      location = target;
     }
   }
 
   function harvest() requires_turn {
-    gas += square.harvest();
+    gas += board.harvest(location);
   }
 
-  function attack(uint direction) requires_turn {
-    Square target_square = square.neighbors(direction);
-    Creature target = Creature(target_square.creature());
-    target.damage();
+  function attack(uint8 direction) requires_turn {
+    uint target = board.neighbor(location, direction);
+    Creature target_creature = Creature(board.creature_at_location(target));
+    target_creature.damage();
   }
 
-  function reproduce(uint direction, address new_brain, uint endowment) requires_turn {
-    Square target_square = square.neighbors(direction);
-    if ((target_square.creature() == 0) && (endowment <= gas)) {
+  function reproduce(uint8 direction, address new_brain, uint endowment) requires_turn {
+    uint target = board.neighbor(location, direction);
+    if ((board.creature_at_location(target) == 0) && (endowment <= gas)) {
       Creature new_creature = creature_builder.build_creature();
 
-      new_creature.set_square(target_square);
+      new_creature.set_location(target);
       new_creature.set_hp(3);
       new_creature.set_species(species);
-      new_creature.set_gas(endowment);
-      new_creature.set_brain(new_brain);
+      new_creature.set_board(board);
 
       new_creature.set_admin(admin);
 
-      target_square.spawn(address(new_creature));
+      board.spawn(target, address(new_creature));
     }
   }
 
@@ -113,7 +117,7 @@ contract Creature {
     hp -= 1;
     if (hp == 0) {
       dead = true;
-      square.report_death(gas);
+      board.report_death(location, gas);
     }
   }
 }

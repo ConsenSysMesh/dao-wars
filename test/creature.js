@@ -1,31 +1,26 @@
 contract('Creature', function(accounts) {
 
   it("should let the brain move it", function(done) {
-    square_1 = Square.at(Square.deployed_address);
     creature = Creature.at(Creature.deployed_address);
+    board = Board.at(Board.deployed_address);
 
-    Square.new().
-      then(function (new_square) {
-        square_2 = new_square;
-        return square_1.set_neighbors(square_2.address, 0, 0, 0);
-      }).
-      then(function() {
-        return square_2.set_neighbors(0, square_1.address, 0, 0);
-      }).
-      then(function() { return creature.set_square(square_1.address); }).
+    board.set_dimensions(10,10).
+      then(function() { return board.spawn(15, creature.address); }).
+      then(function() { return creature.set_board(board.address); }).
+      then(function() { return creature.set_location(15); }).
       then(function() { return creature.set_gamemaster(accounts[0]); }).
       then(function() { return creature.notify_of_turn(); }).
       then(function() { return creature.set_brain(accounts[0]); }).
       then(function() { return creature.move(0) }).
-      then(creature.square.call).
+      then(function() { return creature.location.call() }).
       then(function(result) {
-        assert.equal(result, square_2.address);
+        assert.equal(result, 14);
       }).
-      then(function() { return square_2.creature.call() }).
+      then(function() { return board.creature_at_location.call(14) }).
       then(function(result) {
         assert.equal(result, creature.address);
       }).
-      then(square_1.creature.call).
+      then(function() { return board.creature_at_location.call(15) }).
       then(function(result) {
         assert.equal(result, 0);
         done();
@@ -34,27 +29,27 @@ contract('Creature', function(accounts) {
   });
 
   it("should let the brain harvest gas", function(done) {
-    square = Square.at(Square.deployed_address);
     creature = Creature.at(Creature.deployed_address);
+    board = Board.at(Board.deployed_address);
 
-    square.set_gas(15000).
-      then(function() { return square.set_harvest_amount(10000) }).
-      then(function() { return square.set_creature(creature.address) }).
-      then(function() { return creature.set_square(square.address) }).
+    board.replace_square(23, false, 15000, creature.address).
+      then(function() { return board.set_harvest_amount(10000) }).
+      then(function() { return creature.set_location(23) }).
       then(function() { return creature.set_brain(accounts[0]); }).
+      then(function() { return creature.set_board(board.address); }).
       then(function() { return creature.set_gamemaster(accounts[0]); }).
       then(function() { return creature.notify_of_turn(); }).
       then(creature.harvest).
       then(creature.gas.call).
       then(function(result) { assert.equal(result, 10000) }).
-      then(square.gas.call).
+      then(function() { return board.gas_at_location.call(23) }).
       then(function(result) { assert.equal(result, 5000) }).
 
       then(function() { return creature.notify_of_turn(); }).
       then(creature.harvest).
       then(creature.gas.call).
       then(function(result) { assert.equal(result, 15000) }).
-      then(square.gas.call).
+      then(function() { return board.gas_at_location.call(23) }).
       then(function(result) {
         assert.equal(result, 0);
         done()
@@ -62,24 +57,22 @@ contract('Creature', function(accounts) {
   });
 
   it("should let the brain attack neighbors", function(done) {
-    square_1 = Square.at(Square.deployed_address);
     creature_1 = Creature.at(Creature.deployed_address);
+    board = Board.at(Board.deployed_address);
 
-    Square.new().
-      then(function(new_square) { square_2 = new_square }).
-      then(Creature.new).
+    Creature.new().
       then(function(new_creature) { creature_2 = new_creature }).
       then(function() { return creature_1.set_brain(accounts[0]); }).
       then(function() { return creature_1.set_gamemaster(accounts[0]); }).
+      then(function() { return creature_1.set_board(board.address); }).
       then(function() { return creature_1.notify_of_turn(); }).
       then(function() { return creature_2.set_hp(3) }).
-      then(function() { return creature_1.set_square(square_1.address) }).
-      then(function() { return creature_2.set_square(square_2.address) }).
-      then(function() { return square_1.set_creature(creature_1.address) }).
-      then(function() { return square_2.set_creature(creature_2.address) }).
-      then(function() { return square_1.set_neighbors(square_2.address, 0, 0, 0) }).
+      then(function() { return creature_1.set_location(42) }).
+      then(function() { return creature_2.set_location(43) }).
+      then(function() { return board.spawn(42, creature_1.address) }).
+      then(function() { return board.spawn(43, creature_2.address) }).
 
-      then(function() { return creature_1.attack(0) }).
+      then(function() { return creature_1.attack(1) }).
       then(function() { return creature_2.hp.call() }).
       then(function(result) {
         assert.equal(result, 2);
@@ -88,30 +81,30 @@ contract('Creature', function(accounts) {
   });
 
   it("should die if brought to 0 hp", function(done) {
-    square_1 = Square.at(Square.deployed_address);
     creature_1 = Creature.at(Creature.deployed_address);
+    board = Board.at(Board.deployed_address);
 
-    Square.new().
-      then(function(new_square) { square_2 = new_square }).
-      then(Creature.new).
+    Creature.new().
       then(function(new_creature) { creature_2 = new_creature }).
       then(function() { return creature_1.set_brain(accounts[0]); }).
       then(function() { return creature_1.set_gamemaster(accounts[0]); }).
+      then(function() { return creature_1.set_board(board.address); }).
       then(function() { return creature_1.notify_of_turn(); }).
       then(function() { return creature_2.set_hp(1) }).
       then(function() { return creature_2.set_gas(1000) }).
-      then(function() { return creature_1.set_square(square_1.address) }).
-      then(function() { return creature_2.set_square(square_2.address) }).
-      then(function() { return square_1.set_creature(creature_1.address) }).
-      then(function() { return square_2.set_creature(creature_2.address) }).
-      then(function() { return square_1.set_neighbors(square_2.address, 0, 0, 0) }).
+      then(function() { return creature_2.set_board(board.address); }).
+      then(function() { return creature_1.set_location(42) }).
+      then(function() { return creature_2.set_location(52) }).
+      then(function() { return board.spawn(42, creature_1.address) }).
+      then(function() { return board.spawn(52, creature_2.address) }).
 
-      then(function() { return creature_1.attack(0) }).
+      then(function() { return creature_1.attack(3) }).
+      then(function() { return creature_2.hp.call() }).
       then(function() { return creature_2.dead.call() }).
       then(function(result) { assert.equal(result, true) }).
-      then(function() { return square_2.gas.call() }).
+      then(function() { return board.gas_at_location.call(52) }).
       then(function(result) { assert.equal(result, 1000) }).
-      then(function() { return square_2.creature.call() }).
+      then(function() { return board.creature_at_location.call(52) }).
       then(function(result) {
         assert.equal(result, 0);
         done()
@@ -119,21 +112,19 @@ contract('Creature', function(accounts) {
   });
 
   it("should allow the brain to reproduce", function(done) {
-    square_1 = Square.at(Square.deployed_address);
     creature_1 = Creature.at(Creature.deployed_address);
+    board = Board.at(Board.deployed_address);
 
-    Square.new().
-    then(function(new_square) { square_2 = new_square }).
-    then(function() { return creature_1.set_square(square_1.address) }).
+    creature.set_location(92).
     then(function() { return creature_1.set_species(1) }).
     then(function() { return creature_1.set_creature_builder(CreatureBuilder.deployed_address) }).
     then(function() { return creature_1.set_brain(accounts[0]); }).
     then(function() { return creature_1.set_gamemaster(accounts[0]); }).
+    then(function() { return creature_1.set_board(board.address); }).
     then(function() { return creature_1.notify_of_turn(); }).
-    then(function() { return square_1.set_creature(creature_1.address) }).
-    then(function() { return square_1.set_neighbors(square_2.address, 0, 0, 0) }).
-    then(function() { return creature_1.reproduce(0, accounts[0], 0) }).
-    then(function() { return square_2.creature.call() }).
+    then(function() { return board.spawn(92, creature_1.address) }).
+    then(function() { return creature_1.reproduce(2, accounts[0], 0) }).
+    then(function() { return board.creature_at_location.call(82) }).
     then(function(result) { creature_2 = Creature.at(result) }).
     then(function() { return creature_2.validate.call() }).
     then(function(result) { assert.equal(result, 42) }).
@@ -145,16 +136,15 @@ contract('Creature', function(accounts) {
   })
 
   it("should only allow actions on its turn", function(done) {
-    square = Square.at(Square.deployed_address);
     creature = Creature.at(Creature.deployed_address);
 
-    square.set_gas(15000).
-      then(function() { return square.set_creature(creature.address) }).
-      then(function() { return square.set_harvest_amount(10000) }).
-      then(function() { return creature.set_square(square.address) }).
+    board.replace_square(99, false, 15000, creature.address).
+      then(function() { return board.set_harvest_amount(10000) }).
+      then(function() { return creature.set_location(99) }).
       then(function() { return creature.set_brain(accounts[0]); }).
       then(function() { return creature.set_gas(0); }).
       then(function() { return creature.set_gamemaster(accounts[0]); }).
+      then(function() { return creature.set_board(board.address); }).
       then(function() { return creature.notify_of_turn(); }).
       then(creature.harvest).
       then(creature.gas.call).

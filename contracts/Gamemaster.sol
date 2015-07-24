@@ -2,7 +2,7 @@ import "Creature";
 
 contract Gamemaster {
   Creature[] public creatures;
-  address[] public squares;
+  address public board;
   uint[2] public dimensions;
   address public admin;
   Creature public current_creature;
@@ -36,8 +36,8 @@ contract Gamemaster {
     dimensions[1] = y;
   }
 
-  function set_squares(address[] _squares) auth(admin) {
-    squares = _squares;
+  function set_board(address _board) auth(admin) {
+    board = _board;
   }
 
   function run_turn() {

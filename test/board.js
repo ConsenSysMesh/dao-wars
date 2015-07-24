@@ -7,15 +7,13 @@ contract('Board', function(accounts) {
     then(function() { return board.deposit_gas(10, 10000) }).
     then(function() {
       complete = 0
-      for (i = 0; i < 3; i++) {
-        for (j = 0; j < 3; j++) {
-          board.coordinates.call(i,j).
+      for (i = 0; i < 9; i++) {
+        board.squares.call(i).
           then(function(result) {
-            console.log(result[1]);
-            complete++;
-            if (complete == 9) { done() }
-          }).catch(done)
-        }
+          console.log(result[1]);
+          complete++;
+          if (complete == 9) { done() }
+        }).catch(done)
       }
     }).catch(done)
   });

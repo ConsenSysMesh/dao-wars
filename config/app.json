@@ -18,7 +18,6 @@
   },
   "deploy": [
     // Names of contracts that should be deployed to the network.
-    "Square",
     "Creature",
     "CreatureBuilder",
     "Gamemaster",
