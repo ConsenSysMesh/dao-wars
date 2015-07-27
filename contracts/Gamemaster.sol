@@ -2,10 +2,9 @@ import "Creature";
 
 contract Gamemaster {
   Creature[] public creatures;
-  address public board;
-  uint[2] public dimensions;
-  address public admin;
   Creature public current_creature;
+  address public board;
+  address public admin;
 
   modifier auth(address authorized_user) { if (msg.sender == authorized_user) _ }
 
@@ -31,10 +30,6 @@ contract Gamemaster {
     return creatures.length;
   }
 
-  function set_dimensions(uint x, uint y) auth(admin) {
-    dimensions[0] = x;
-    dimensions[1] = y;
-  }
 
   function set_board(address _board) auth(admin) {
     board = _board;
