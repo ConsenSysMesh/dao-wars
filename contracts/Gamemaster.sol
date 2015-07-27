@@ -1,8 +1,10 @@
-import "Creature";
+contract CreatureStub {
+  function notify_of_turn() {}
+}
 
 contract Gamemaster {
-  Creature[] public creatures;
-  Creature public current_creature;
+  CreatureStub[] public creatures;
+  CreatureStub public current_creature;
   address public board;
   address public admin;
 
@@ -16,14 +18,10 @@ contract Gamemaster {
     admin = _admin;
   }
 
-  function set_creatures(Creature[] _creatures) auth(admin) {
-    creatures = _creatures;
-  }
-
-  function add_creature(Creature _new_creature) auth(admin) {
+  function add_creature(address _new_creature) auth(board) {
     uint new_index = creatures.length;
     creatures.length++;
-    creatures[new_index] = _new_creature;
+    creatures[new_index] = CreatureStub(_new_creature);
   }
 
   function num_creatures() returns (uint result) {

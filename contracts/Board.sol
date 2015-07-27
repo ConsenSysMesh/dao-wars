@@ -1,9 +1,12 @@
+import "Gamemaster";
+
 contract Board {
   struct Square { bool obstacle; uint gas; address creature; }
   Square[] public squares;
   uint[2] public dimensions;
   uint public harvest_amount;
   bool public in_loop;
+  Gamemaster public gamemaster;
 
   function set_dimensions(uint x, uint y) {
     dimensions[0] = x;
@@ -13,6 +16,10 @@ contract Board {
 
   function set_harvest_amount(uint _harvest_amount) {
     harvest_amount = _harvest_amount;
+  }
+
+  function set_gamemaster(Gamemaster _gamemaster) {
+    gamemaster = _gamemaster;
   }
 
   function replace_square(uint location, bool obstacle, uint gas, address creature) {
@@ -58,6 +65,7 @@ contract Board {
   }
 
   function spawn(uint location, address creature) {
+    gamemaster.add_creature(creature);
     squares[location].creature = creature;
   }
 

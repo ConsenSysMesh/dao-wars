@@ -1,10 +1,10 @@
 import "Board";
 
-contract StubCreatureBuilder {
+contract CreatureBuilderStub {
   function build_creature() returns (Creature result) {}
 }
 
-contract StubBrain {
+contract BrainStub {
   function notify_of_turn() {}
 }
 
@@ -15,7 +15,7 @@ contract Creature {
   bool public dead;
   uint public species;
   address public brain;
-  StubCreatureBuilder public creature_builder;
+  CreatureBuilderStub public creature_builder;
   bool public turn_active;
   address public gamemaster;
   Board public board;
@@ -39,7 +39,7 @@ contract Creature {
 
   function notify_of_turn() auth(gamemaster) {
     turn_active = true;
-    StubBrain(brain).notify_of_turn();
+    BrainStub(brain).notify_of_turn();
   }
 
   function set_hp(uint _hp) auth(admin) {
@@ -62,7 +62,7 @@ contract Creature {
     gas = _gas;
   }
 
-  function set_creature_builder(StubCreatureBuilder _creature_builder) auth(admin) {
+  function set_creature_builder(CreatureBuilderStub _creature_builder) auth(admin) {
     creature_builder = _creature_builder;
   }
 

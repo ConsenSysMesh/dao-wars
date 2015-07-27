@@ -114,6 +114,7 @@ contract('Creature', function(accounts) {
   it("should allow the brain to reproduce", function(done) {
     creature_1 = Creature.at(Creature.deployed_address);
     board = Board.at(Board.deployed_address);
+    gamemaster = Gamemaster.at(Gamemaster.deployed_address);
 
     creature.set_location(92).
     then(function() { return creature_1.set_species(1) }).
@@ -122,8 +123,12 @@ contract('Creature', function(accounts) {
     then(function() { return creature_1.set_gamemaster(accounts[0]); }).
     then(function() { return creature_1.set_board(board.address); }).
     then(function() { return creature_1.notify_of_turn(); }).
+    then(function() { return board.set_gamemaster(gamemaster.address); }).
+    then(function() { return gamemaster.set_board(board.address); }).
     then(function() { return board.spawn(92, creature_1.address) }).
     then(function() { return creature_1.reproduce(2, accounts[0], 0) }).
+    then(function() { return gamemaster.num_creatures.call() }).
+    then(function(result) { assert.equal(result, 2) }).
     then(function() { return board.creature_at_location.call(82) }).
     then(function(result) { creature_2 = Creature.at(result) }).
     then(function() { return creature_2.validate.call() }).
@@ -157,6 +162,4 @@ contract('Creature', function(accounts) {
       }).
         catch(done)
   })
-
-
 })
