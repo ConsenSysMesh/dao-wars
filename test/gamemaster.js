@@ -21,11 +21,48 @@ contract('Gamemaster', function(accounts) {
 
     creature.set_brain(brain.address).
     then(function() { return creature.set_gamemaster(gamemaster.address) }).
+    then(function() { return creature.set_gas(1000000) }).
     then(function() { return gamemaster.add_creature(creature.address) }).
     then(function() { return gamemaster.run_turn() }).
     then(function() { return brain.times_called.call() }).
     then(function(result) {
       assert.equal(result, 1);
+      done();
+    }).catch(done)
+  });
+
+  it("deducts gas from the creature", function(done) {
+    gamemaster = Gamemaster.at(Gamemaster.deployed_address);
+    brain = BrainMock.at(BrainMock.deployed_address);
+    creature = Creature.at(Creature.deployed_address);
+
+    creature.set_brain(brain.address).
+    then(function() { return creature.set_gamemaster(gamemaster.address) }).
+    then(function() { return creature.set_gas(100000) }).
+    then(function() { return gamemaster.add_creature(creature.address) }).
+    then(function() { return gamemaster.run_turn() }).
+    then(function() { return creature.gas.call() }).
+    then(function(result) {
+      assert.notEqual(result, 100000);
+      done();
+    }).catch(done)
+  });
+
+  // Testrpc blows up when subcall fails. Seems to work in geth.
+  xit("doesn't let creatures exceed gas limit", function(done) {
+    gamemaster = Gamemaster.at(Gamemaster.deployed_address);
+    brain = BrainMock.at(BrainMock.deployed_address);
+    creature = Creature.at(Creature.deployed_address);
+
+    creature.set_brain(brain.address).
+    then(function() { return creature.set_gamemaster(gamemaster.address) }).
+    then(function() { return creature.set_gas(1000) }).
+    then(function() { return gamemaster.add_creature(creature.address) }).
+    then(function() { return brain.reset() }).
+    then(function() { return gamemaster.run_turn() }).
+    then(function() { return brain.times_called.call() }).
+    then(function(result) {
+      assert.equal(result, 0);
       done();
     }).catch(done)
   });

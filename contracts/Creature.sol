@@ -78,6 +78,10 @@ contract Creature {
     location = _location;
   }
 
+  function deduct(uint amount) auth(gamemaster) {
+    gas -= amount;
+  }
+
   function move(uint8 direction) requires_turn {
     uint target = board.neighbor(location, direction);
     if (board.creature_at_location(target) == 0) {

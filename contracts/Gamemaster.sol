@@ -1,5 +1,8 @@
 contract CreatureStub {
   function notify_of_turn() {}
+  function dead() returns(bool result) {}
+  function gas() returns(uint gas) {}
+  function deduct(uint amount) {}
 }
 
 contract Gamemaster {
@@ -37,7 +40,15 @@ contract Gamemaster {
     for (uint i; i < creatures.length; i++) {
       current_creature = creatures[i];
 
-      current_creature.notify_of_turn();
+      if (!current_creature.dead()) {
+        uint max_gas = current_creature.gas();
+        uint starting_gas = msg.gas;
+
+        current_creature.notify_of_turn.gas(max_gas)();
+
+        uint used_gas = starting_gas - msg.gas;
+        current_creature.deduct(used_gas);
+      }
     }
   }
 }
