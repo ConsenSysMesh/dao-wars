@@ -1,3 +1,4 @@
+contracts =
 {
   "Board": {
     "source": "/root/dao-wars/contracts/Board.sol",
