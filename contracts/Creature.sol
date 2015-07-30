@@ -79,7 +79,12 @@ contract Creature {
   }
 
   function deduct(uint amount) auth(gamemaster) {
-    gas -= amount;
+    if (amount < gas) {
+      gas -= amount;
+    } else {
+      gas = 0;
+      dead = true;
+    }
   }
 
   function move(uint8 direction) requires_turn {
