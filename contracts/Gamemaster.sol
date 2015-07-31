@@ -44,7 +44,7 @@ contract Gamemaster {
         uint max_gas = current_creature.gas();
         uint starting_gas = msg.gas;
 
-        current_creature.notify_of_turn.gas(max_gas)();
+        current_creature.call.gas(max_gas)(0x36b6c8fb);
 
         uint used_gas = starting_gas - msg.gas;
         current_creature.deduct(used_gas);

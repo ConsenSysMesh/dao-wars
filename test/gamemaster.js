@@ -4,12 +4,12 @@ contract('Gamemaster', function(accounts) {
 
     gamemaster.set_board(accounts[0]).
     then(function() { return gamemaster.add_creature(accounts[0]) }).
-    then(function() { return gamemaster.add_creature(accounts[1]) }).
+    then(function() { return gamemaster.add_creature(accounts[0]) }).
     then(function() { return gamemaster.num_creatures.call() }).
     then(function(result) { assert.equal(result, 2) }).
     then(function() { return gamemaster.creatures.call(1) }).
     then(function(result) {
-      assert.equal(result, accounts[1]);
+      assert.equal(result, accounts[0]);
       done();
     }).catch(done)
   });
@@ -48,8 +48,7 @@ contract('Gamemaster', function(accounts) {
     }).catch(done)
   });
 
-  // Testrpc blows up when subcall fails. Seems to work in geth.
-  xit("doesn't let creatures exceed gas limit", function(done) {
+  it("doesn't let creatures exceed gas limit", function(done) {
     gamemaster = Gamemaster.at(Gamemaster.deployed_address);
     brain = BrainMock.at(BrainMock.deployed_address);
     creature = Creature.at(Creature.deployed_address);
@@ -60,6 +59,10 @@ contract('Gamemaster', function(accounts) {
     then(function() { return gamemaster.add_creature(creature.address) }).
     then(function() { return brain.reset() }).
     then(function() { return gamemaster.run_turn() }).
+    then(function() { return creature.gas.call() }).
+    then(function(result) { assert.equal(result, 0) }).
+    then(function() { return creature.dead.call() }).
+    then(function(result) { assert.equal(result, true) }).
     then(function() { return brain.times_called.call() }).
     then(function(result) {
       assert.equal(result, 0);

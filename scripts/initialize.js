@@ -5,7 +5,7 @@
 // loadScript('initialize.js')
 
 loadScript('contracts.js')
-boilerplate = {from: "0x53712916d942380eeb9f650db37dbcd0c78d4fcd", gas: 2000000}
+boilerplate = {from: "0xa1f4e5914033106a0f8bb4c2446c6cd050bec771", gas: 2000000}
 
 board = eth.contract(contracts.Board.abi).at(contracts.Board.address)
 gm = eth.contract(contracts.Gamemaster.abi).at(contracts.Gamemaster.address)
