@@ -1,6 +1,6 @@
 contract('Gamemaster', function(accounts) {
   it("allows board to add creatures", function(done) {
-    gamemaster = Gamemaster.at(Gamemaster.deployed_address);
+    var gamemaster = Gamemaster.at(Gamemaster.deployed_address);
 
     gamemaster.set_board(accounts[0]).
     then(function() { return gamemaster.add_creature(accounts[0]) }).
@@ -15,9 +15,9 @@ contract('Gamemaster', function(accounts) {
   });
 
   it("can run a turn that calls the creatures", function(done) {
-    gamemaster = Gamemaster.at(Gamemaster.deployed_address);
-    brain = BrainMock.at(BrainMock.deployed_address);
-    creature = Creature.at(Creature.deployed_address);
+    var gamemaster = Gamemaster.at(Gamemaster.deployed_address);
+    var brain = BrainMock.at(BrainMock.deployed_address);
+    var creature = Creature.at(Creature.deployed_address);
 
     creature.set_brain(brain.address).
     then(function() { return creature.set_gamemaster(gamemaster.address) }).
@@ -32,9 +32,9 @@ contract('Gamemaster', function(accounts) {
   });
 
   it("deducts gas from the creature", function(done) {
-    gamemaster = Gamemaster.at(Gamemaster.deployed_address);
-    brain = BrainMock.at(BrainMock.deployed_address);
-    creature = Creature.at(Creature.deployed_address);
+    var gamemaster = Gamemaster.at(Gamemaster.deployed_address);
+    var brain = BrainMock.at(BrainMock.deployed_address);
+    var creature = Creature.at(Creature.deployed_address);
 
     creature.set_brain(brain.address).
     then(function() { return creature.set_gamemaster(gamemaster.address) }).
@@ -49,9 +49,9 @@ contract('Gamemaster', function(accounts) {
   });
 
   it("doesn't let creatures exceed gas limit", function(done) {
-    gamemaster = Gamemaster.at(Gamemaster.deployed_address);
-    brain = BrainMock.at(BrainMock.deployed_address);
-    creature = Creature.at(Creature.deployed_address);
+    var gamemaster = Gamemaster.at(Gamemaster.deployed_address);
+    var brain = BrainMock.at(BrainMock.deployed_address);
+    var creature = Creature.at(Creature.deployed_address);
 
     creature.set_brain(brain.address).
     then(function() { return creature.set_gamemaster(gamemaster.address) }).

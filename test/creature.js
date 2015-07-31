@@ -1,8 +1,8 @@
 contract('Creature', function(accounts) {
 
   it("should let the brain move it", function(done) {
-    creature = Creature.at(Creature.deployed_address);
-    board = Board.at(Board.deployed_address);
+    var creature = Creature.at(Creature.deployed_address);
+    var board = Board.at(Board.deployed_address);
 
     board.set_dimensions(10,10).
       then(function() { return board.spawn(15, creature.address); }).
@@ -29,8 +29,8 @@ contract('Creature', function(accounts) {
   });
 
   it("should let the brain harvest gas", function(done) {
-    creature = Creature.at(Creature.deployed_address);
-    board = Board.at(Board.deployed_address);
+    var creature = Creature.at(Creature.deployed_address);
+    var board = Board.at(Board.deployed_address);
 
     board.replace_square(23, false, 15000, creature.address).
       then(function() { return board.set_harvest_amount(10000) }).
@@ -57,66 +57,70 @@ contract('Creature', function(accounts) {
   });
 
   it("should let the brain attack neighbors", function(done) {
-    creature_1 = Creature.at(Creature.deployed_address);
-    board = Board.at(Board.deployed_address);
+    var creature_1 = Creature.at(Creature.deployed_address);
+    var board = Board.at(Board.deployed_address);
 
     Creature.new().
-      then(function(new_creature) { creature_2 = new_creature }).
-      then(function() { return creature_1.set_brain(accounts[0]); }).
-      then(function() { return creature_1.set_gamemaster(accounts[0]); }).
-      then(function() { return creature_1.set_board(board.address); }).
-      then(function() { return creature_1.notify_of_turn(); }).
-      then(function() { return creature_2.set_hp(3) }).
-      then(function() { return creature_1.set_location(42) }).
-      then(function() { return creature_2.set_location(43) }).
-      then(function() { return board.spawn(42, creature_1.address) }).
-      then(function() { return board.spawn(43, creature_2.address) }).
+      then(function(new_creature) {
+        var creature_2 = new_creature;
+        creature_1.set_brain(accounts[0]).
+          then(function() { return creature_1.set_gamemaster(accounts[0]); }).
+          then(function() { return creature_1.set_board(board.address); }).
+          then(function() { return creature_1.notify_of_turn(); }).
+          then(function() { return creature_2.set_hp(3) }).
+          then(function() { return creature_1.set_location(42) }).
+          then(function() { return creature_2.set_location(43) }).
+          then(function() { return board.spawn(42, creature_1.address) }).
+          then(function() { return board.spawn(43, creature_2.address) }).
 
-      then(function() { return creature_1.attack(1) }).
-      then(function() { return creature_2.hp.call() }).
-      then(function(result) {
-        assert.equal(result, 2);
-        done()
+          then(function() { return creature_1.attack(1) }).
+          then(function() { return creature_2.hp.call() }).
+          then(function(result) {
+            assert.equal(result, 2);
+            done()
+        })
     }).catch(done)
   });
 
   it("should die if brought to 0 hp", function(done) {
-    creature_1 = Creature.at(Creature.deployed_address);
-    board = Board.at(Board.deployed_address);
+    var creature_1 = Creature.at(Creature.deployed_address);
+    var board = Board.at(Board.deployed_address);
 
     Creature.new().
-      then(function(new_creature) { creature_2 = new_creature }).
-      then(function() { return creature_1.set_brain(accounts[0]); }).
-      then(function() { return creature_1.set_gamemaster(accounts[0]); }).
-      then(function() { return creature_1.set_board(board.address); }).
-      then(function() { return creature_1.notify_of_turn(); }).
-      then(function() { return creature_2.set_hp(1) }).
-      then(function() { return creature_2.set_gas(1000) }).
-      then(function() { return creature_2.set_board(board.address); }).
-      then(function() { return creature_1.set_location(42) }).
-      then(function() { return creature_2.set_location(52) }).
-      then(function() { return board.spawn(42, creature_1.address) }).
-      then(function() { return board.spawn(52, creature_2.address) }).
+      then(function(new_creature) {
+        var creature_2 = new_creature;
+        creature_1.set_brain(accounts[0]).
+          then(function() { return creature_1.set_gamemaster(accounts[0]); }).
+          then(function() { return creature_1.set_board(board.address); }).
+          then(function() { return creature_1.notify_of_turn(); }).
+          then(function() { return creature_2.set_hp(1) }).
+          then(function() { return creature_2.set_gas(1000) }).
+          then(function() { return creature_2.set_board(board.address); }).
+          then(function() { return creature_1.set_location(42) }).
+          then(function() { return creature_2.set_location(52) }).
+          then(function() { return board.spawn(42, creature_1.address) }).
+          then(function() { return board.spawn(52, creature_2.address) }).
 
-      then(function() { return creature_1.attack(3) }).
-      then(function() { return creature_2.hp.call() }).
-      then(function() { return creature_2.dead.call() }).
-      then(function(result) { assert.equal(result, true) }).
-      then(function() { return board.gas_at_location.call(52) }).
-      then(function(result) { assert.equal(result, 1000) }).
-      then(function() { return board.creature_at_location.call(52) }).
-      then(function(result) {
-        assert.equal(result, 0);
-        done()
+          then(function() { return creature_1.attack(3) }).
+          then(function() { return creature_2.hp.call() }).
+          then(function() { return creature_2.dead.call() }).
+          then(function(result) { assert.equal(result, true) }).
+          then(function() { return board.gas_at_location.call(52) }).
+          then(function(result) { assert.equal(result, 1000) }).
+          then(function() { return board.creature_at_location.call(52) }).
+          then(function(result) {
+            assert.equal(result, 0);
+            done()
+        })
     }).catch(done)
   });
 
   it("should allow the brain to reproduce", function(done) {
-    creature_1 = Creature.at(Creature.deployed_address);
-    board = Board.at(Board.deployed_address);
-    gamemaster = Gamemaster.at(Gamemaster.deployed_address);
+    var creature_1 = Creature.at(Creature.deployed_address);
+    var board = Board.at(Board.deployed_address);
+    var gamemaster = Gamemaster.at(Gamemaster.deployed_address);
 
-    creature.set_location(92).
+    creature_1.set_location(92).
     then(function() { return creature_1.set_species(1) }).
     then(function() { return creature_1.set_creature_builder(CreatureBuilder.deployed_address) }).
     then(function() { return creature_1.set_brain(accounts[0]); }).
@@ -130,18 +134,21 @@ contract('Creature', function(accounts) {
     then(function() { return gamemaster.num_creatures.call() }).
     then(function(result) { assert.equal(result, 2) }).
     then(function() { return board.creature_at_location.call(82) }).
-    then(function(result) { creature_2 = Creature.at(result) }).
-    then(function() { return creature_2.validate.call() }).
-    then(function(result) { assert.equal(result, 42) }).
-    then(function() { return creature_2.species.call() }).
     then(function(result) {
-      assert.equal(result, 1);
-      done();
+      var creature_2 = Creature.at(result);
+      creature_2.validate.call().
+        then(function(result) { assert.equal(result, 42) }).
+        then(function() { return creature_2.species.call() }).
+        then(function(result) {
+          assert.equal(result, 1);
+          done();
+        })
     }).catch(done)
   })
 
   it("should only allow actions on its turn", function(done) {
-    creature = Creature.at(Creature.deployed_address);
+    var creature = Creature.at(Creature.deployed_address);
+    var board = Board.at(Board.deployed_address);
 
     board.replace_square(99, false, 15000, creature.address).
       then(function() { return board.set_harvest_amount(10000) }).

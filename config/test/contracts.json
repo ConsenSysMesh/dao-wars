@@ -290,7 +290,7 @@
         "type": "function"
       }
     ],
-    "address": "0xf677a9eb5c8718867889ba6fdf6424973887a361"
+    "address": "0xd28377393972df90079891fb6827fe8d040dd0a7"
   },
   "BrainMock": {
     "source": "/root/dao-wars/contracts/BrainMock.sol",
@@ -323,7 +323,7 @@
         "type": "function"
       }
     ],
-    "address": "0x42f819264524f8668e77a31028bf8b7ca6d778a6"
+    "address": "0x114f02b479d3af887a91469c6a29f9c09360b212"
   },
   "Creature": {
     "source": "/root/dao-wars/contracts/Creature.sol",
@@ -663,7 +663,7 @@
         "type": "constructor"
       }
     ],
-    "address": "0xc9e13fb804050cec7ad80e520c9c0d7fd4dca10c"
+    "address": "0xd123fdaf533c9b03bf9158d71c3176cd2ce810ec"
   },
   "CreatureBuilder": {
     "source": "/root/dao-wars/contracts/CreatureBuilder.sol",
@@ -682,7 +682,7 @@
         "type": "function"
       }
     ],
-    "address": "0xdbb26234d6bc80a7a957a8a7eb6cbeaabaf6bfc9"
+    "address": "0x371ff0fddcf35e11f799bc28715d9d9eacc75257"
   },
   "Gamemaster": {
     "source": "/root/dao-wars/contracts/Gamemaster.sol",
@@ -801,6 +801,6 @@
         "type": "constructor"
       }
     ],
-    "address": "0x80cffbc29b852ac45fecafb4394f6751a987b80e"
+    "address": "0x504452f102a28ed104b2b412be68ecb7077ecaa9"
   }
 }
