@@ -21,6 +21,11 @@ contract Gamemaster {
     admin = _admin;
   }
 
+  function set_current_creature(CreatureStub _current_creature) auth(admin){
+    // For testing only.
+    current_creature = _current_creature;
+  }
+
   function add_creature(address _new_creature) auth(board) {
     uint new_index = creatures.length;
     creatures.length++;
@@ -50,5 +55,7 @@ contract Gamemaster {
         current_creature.deduct(used_gas);
       }
     }
+
+    current_creature = CreatureStub(0);
   }
 }

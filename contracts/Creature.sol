@@ -28,6 +28,9 @@ contract Creature {
       _
     }
   }
+  modifier active_creature_only { 
+    if (Gamemaster(gamemaster).current_creature() == msg.sender) _ 
+  }
 
   function Creature() {
     admin = msg.sender;
@@ -122,7 +125,7 @@ contract Creature {
     }
   }
 
-  function damage() {
+  function damage() active_creature_only {
     hp -= 1;
     if (hp == 0) {
       dead = true;
