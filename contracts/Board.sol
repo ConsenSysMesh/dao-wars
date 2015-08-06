@@ -7,26 +7,41 @@ contract Board {
   uint public harvest_amount;
   bool public in_loop;
   Gamemaster public gamemaster;
+  address public admin;
 
-  function set_dimensions(uint x, uint y) {
+  modifier auth(address authorized_user) { if (msg.sender == authorized_user) _ }
+
+  modifier active_creature_only { 
+    if (gamemaster.current_creature() == msg.sender) _ 
+  }
+
+  function Board() {
+    admin = msg.sender;
+  }
+
+  function set_admin(address _admin) auth(admin) {
+    admin = _admin;
+  }
+
+  function set_dimensions(uint x, uint y) auth(admin) {
     dimensions[0] = x;
     dimensions[1] = y;
     squares.length = x * y;
   }
 
-  function set_harvest_amount(uint _harvest_amount) {
+  function set_harvest_amount(uint _harvest_amount) auth(admin) {
     harvest_amount = _harvest_amount;
   }
 
-  function set_gamemaster(Gamemaster _gamemaster) {
+  function set_gamemaster(Gamemaster _gamemaster) auth(admin) {
     gamemaster = _gamemaster;
   }
 
-  function replace_square(uint location, bool obstacle, uint gas, address creature) {
+  function replace_square(uint location, bool obstacle, uint gas, address creature) auth(admin) {
     squares[location] = Square(obstacle, gas, creature);
   }
 
-  function deposit_gas(uint8 num_deposits, uint amount_per_deposit) {
+  function deposit_gas(uint8 num_deposits, uint amount_per_deposit) auth(admin) {
     // Max num_deposits is 32. Does not produce an even distribution. Will come back to.
     uint randomness = uint(block.blockhash(block.number - 1));
     for (uint8 i = 0; i < num_deposits; i++) {
@@ -45,15 +60,15 @@ contract Board {
     return squares[location].gas;
   }
 
-  function leave_square(uint location) {
+  function leave_square(uint location) active_creature_only {
     squares[location].creature = 0;
   }
 
-  function enter_square(uint location) {
+  function enter_square(uint location) active_creature_only {
     squares[location].creature = msg.sender;
   }
 
-  function harvest(uint location) returns (uint result) {
+  function harvest(uint location) active_creature_only returns (uint result) {
     if (squares[location].gas > harvest_amount) {
       squares[location].gas -= harvest_amount;
       return(harvest_amount);
@@ -65,13 +80,17 @@ contract Board {
   }
 
   function spawn(uint location, address creature) {
-    gamemaster.add_creature(creature);
-    squares[location].creature = creature;
+    if (msg.sender == admin || gamemaster.current_creature() == msg.sender) {
+      gamemaster.add_creature(creature);
+      squares[location].creature = creature;
+    }
   }
 
   function report_death(uint location, uint gas) {
-    squares[location].creature = 0;
-    squares[location].gas += gas;
+    if (squares[location].creature == msg.sender) {
+      squares[location].creature = 0;
+      squares[location].gas += gas;
+    }
   }
 
   function neighbor(uint location, uint8 direction) returns(uint result){

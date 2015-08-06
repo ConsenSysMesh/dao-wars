@@ -3,14 +3,18 @@ contract('Creature', function(accounts) {
   it("should let the brain move it", function(done) {
     var creature = Creature.at(Creature.deployed_address);
     var board = Board.at(Board.deployed_address);
+    var gamemaster = Gamemaster.at(Gamemaster.deployed_address);
 
     board.set_dimensions(10,10).
       then(function() { return board.spawn(15, creature.address); }).
+      then(function() { return board.set_gamemaster(gamemaster.address); }).
       then(function() { return creature.set_board(board.address); }).
       then(function() { return creature.set_location(15); }).
       then(function() { return creature.set_gamemaster(accounts[0]); }).
       then(function() { return creature.notify_of_turn(); }).
+      then(function() { return gamemaster.set_current_creature(creature.address) }).
       then(function() { return creature.set_brain(accounts[0]); }).
+
       then(function() { return creature.move(0) }).
       then(function() { return creature.location.call() }).
       then(function(result) {
@@ -31,14 +35,17 @@ contract('Creature', function(accounts) {
   it("should let the brain harvest gas", function(done) {
     var creature = Creature.at(Creature.deployed_address);
     var board = Board.at(Board.deployed_address);
+    var gamemaster = Gamemaster.at(Gamemaster.deployed_address);
 
     board.replace_square(23, false, 15000, creature.address).
       then(function() { return board.set_harvest_amount(10000) }).
+      then(function() { return board.set_gamemaster(gamemaster.address); }).
       then(function() { return creature.set_location(23) }).
       then(function() { return creature.set_brain(accounts[0]); }).
       then(function() { return creature.set_board(board.address); }).
       then(function() { return creature.set_gamemaster(accounts[0]); }).
       then(function() { return creature.notify_of_turn(); }).
+      then(function() { return gamemaster.set_current_creature(creature.address) }).
       then(creature.harvest).
       then(creature.gas.call).
       then(function(result) { assert.equal(result, 10000) }).
@@ -133,6 +140,8 @@ contract('Creature', function(accounts) {
     then(function() { return creature_1.set_gamemaster(accounts[0]); }).
     then(function() { return creature_1.set_board(board.address); }).
     then(function() { return creature_1.notify_of_turn(); }).
+    then(function() { return creature_1.set_gamemaster(gamemaster.address); }).
+    then(function() { return gamemaster.set_current_creature(creature_1.address) }).
     then(function() { return board.set_gamemaster(gamemaster.address); }).
     then(function() { return gamemaster.set_board(board.address); }).
     then(function() { return board.spawn(92, creature_1.address) }).
