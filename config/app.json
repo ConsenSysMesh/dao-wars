@@ -22,7 +22,8 @@
     "CreatureBuilder",
     "Gamemaster",
     "BrainMock",
-    "Board"
+    "Board",
+    "Game"
   ],
   "rpc": {
     "host": "localhost",
