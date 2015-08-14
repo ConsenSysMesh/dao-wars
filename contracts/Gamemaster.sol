@@ -41,7 +41,7 @@ contract Gamemaster {
     board = _board;
   }
 
-  function run_turn() {
+  function run_turn() auth(admin) {
     for (uint i; i < creatures.length; i++) {
       current_creature = creatures[i];
 

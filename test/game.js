@@ -2,7 +2,7 @@ contract('Game', function(accounts) {
   it("generates a board", function(done) {
     var game = Game.at(Game.deployed_address)
 
-    game.initialize(10,10).
+    game.initialize(10,10, 30, 500000).
       then(function() { return game.board.call() }).
       then(function(result) {
         assert.notEqual(result, 0);
@@ -21,7 +21,7 @@ contract('Game', function(accounts) {
   it("generates a gamemaster", function(done) {
     var game = Game.at(Game.deployed_address)
 
-    game.initialize(10,10).
+    game.initialize(10,10, 30, 200000).
       then(function() { return game.gamemaster.call() }).
       then(function(result) {
         assert.notEqual(result, 0);
