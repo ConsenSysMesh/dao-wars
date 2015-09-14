@@ -20,6 +20,18 @@ contract Board {
     admin = msg.sender;
   }
 
+  function all_gas() returns(uint[]) {
+    return gas;
+  }
+
+  function all_creatures() returns(address[]) {
+    return creatures;
+  }
+
+  function all_obstacles() returns(bool[]) {
+    return obstacles;
+  }
+
   function set_admin(address _admin) auth(admin) {
     admin = _admin;
   }
