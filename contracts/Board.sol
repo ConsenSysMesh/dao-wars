@@ -1,8 +1,9 @@
 import "Gamemaster";
 
 contract Board {
-  struct Square { bool obstacle; uint gas; address creature; }
-  Square[] public squares;
+  bool[] public obstacles;
+  uint[] public gas;
+  address[] public creatures;
   uint[2] public dimensions;
   uint public harvest_amount;
   bool public in_loop;
@@ -26,7 +27,9 @@ contract Board {
   function set_dimensions(uint x, uint y) auth(admin) {
     dimensions[0] = x;
     dimensions[1] = y;
-    squares.length = x * y;
+    gas.length = x * y;
+    creatures.length = x * y;
+    obstacles.length = x * y;
   }
 
   function set_harvest_amount(uint _harvest_amount) auth(admin) {
@@ -37,8 +40,10 @@ contract Board {
     gamemaster = _gamemaster;
   }
 
-  function replace_square(uint location, bool obstacle, uint gas, address creature) auth(admin) {
-    squares[location] = Square(obstacle, gas, creature);
+  function replace_square(uint location, bool obstacle, uint _gas, address creature) auth(admin) {
+    obstacles[location] = obstacle;
+    gas[location] = _gas;
+    creatures[location] = creature;
   }
 
   function deposit_gas(uint8 num_deposits, uint amount_per_deposit) auth(admin) {
@@ -47,34 +52,26 @@ contract Board {
     for (uint8 i = 0; i < num_deposits; i++) {
       uint random_num = randomness % 255;
       randomness = randomness / (2**8);
-      uint location = (random_num * squares.length) / 255;
-      squares[location].gas += amount_per_deposit;
+      uint location = (random_num * gas.length) / 255;
+      gas[location] += amount_per_deposit;
     }
   }
 
-  function creature_at_location(uint location) returns (address result) {
-    return squares[location].creature;
-  }
-
-  function gas_at_location(uint location) returns (uint result) {
-    return squares[location].gas;
-  }
-
   function leave_square(uint location) active_creature_only {
-    squares[location].creature = 0;
+    creatures[location] = 0;
   }
 
   function enter_square(uint location) active_creature_only {
-    squares[location].creature = msg.sender;
+    creatures[location] = msg.sender;
   }
 
   function harvest(uint location) active_creature_only returns (uint result) {
-    if (squares[location].gas > harvest_amount) {
-      squares[location].gas -= harvest_amount;
+    if (gas[location] > harvest_amount) {
+      gas[location] -= harvest_amount;
       return(harvest_amount);
     } else {
-      result = squares[location].gas;
-      squares[location].gas = 0;
+      result = gas[location];
+      gas[location] = 0;
       return result;
     }
   }
@@ -82,14 +79,14 @@ contract Board {
   function spawn(uint location, address creature) {
     if (msg.sender == admin || gamemaster.current_creature() == msg.sender) {
       gamemaster.add_creature(creature);
-      squares[location].creature = creature;
+      creatures[location] = creature;
     }
   }
 
-  function report_death(uint location, uint gas) {
-    if (squares[location].creature == msg.sender) {
-      squares[location].creature = 0;
-      squares[location].gas += gas;
+  function report_death(uint location, uint _gas) {
+    if (creatures[location] == msg.sender) {
+      creatures[location] = 0;
+      gas[location] += _gas;
     }
   }
 

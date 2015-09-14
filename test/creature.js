@@ -20,11 +20,11 @@ contract('Creature', function(accounts) {
       then(function(result) {
         assert.equal(result, 14);
       }).
-      then(function() { return board.creature_at_location.call(14) }).
+      then(function() { return board.creatures.call(14) }).
       then(function(result) {
         assert.equal(result, creature.address);
       }).
-      then(function() { return board.creature_at_location.call(15) }).
+      then(function() { return board.creatures.call(15) }).
       then(function(result) {
         assert.equal(result, 0);
         done();
@@ -49,14 +49,14 @@ contract('Creature', function(accounts) {
       then(creature.harvest).
       then(creature.gas.call).
       then(function(result) { assert.equal(result, 10000) }).
-      then(function() { return board.gas_at_location.call(23) }).
+      then(function() { return board.gas.call(23) }).
       then(function(result) { assert.equal(result, 5000) }).
 
       then(function() { return creature.notify_of_turn(); }).
       then(creature.harvest).
       then(creature.gas.call).
       then(function(result) { assert.equal(result, 15000) }).
-      then(function() { return board.gas_at_location.call(23) }).
+      then(function() { return board.gas.call(23) }).
       then(function(result) {
         assert.equal(result, 0);
         done()
@@ -118,9 +118,9 @@ contract('Creature', function(accounts) {
           then(function() { return creature_2.hp.call() }).
           then(function() { return creature_2.dead.call() }).
           then(function(result) { assert.equal(result, true) }).
-          then(function() { return board.gas_at_location.call(52) }).
+          then(function() { return board.gas.call(52) }).
           then(function(result) { assert.equal(result, 1000) }).
-          then(function() { return board.creature_at_location.call(52) }).
+          then(function() { return board.creatures.call(52) }).
           then(function(result) {
             assert.equal(result, 0);
             done()
@@ -148,7 +148,7 @@ contract('Creature', function(accounts) {
     then(function() { return creature_1.reproduce(2, accounts[0], 0) }).
     then(function() { return gamemaster.num_creatures.call() }).
     then(function(result) { assert.equal(result, 2) }).
-    then(function() { return board.creature_at_location.call(82) }).
+    then(function() { return board.creatures.call(82) }).
     then(function(result) {
       var creature_2 = Creature.at(result);
       creature_2.validate.call().

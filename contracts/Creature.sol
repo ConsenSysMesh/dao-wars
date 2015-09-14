@@ -92,7 +92,7 @@ contract Creature {
 
   function move(uint8 direction) requires_turn {
     uint target = board.neighbor(location, direction);
-    if (board.creature_at_location(target) == 0) {
+    if (board.creatures(target) == 0) {
       board.leave_square(location);
       board.enter_square(target);
       location = target;
@@ -105,13 +105,13 @@ contract Creature {
 
   function attack(uint8 direction) requires_turn {
     uint target = board.neighbor(location, direction);
-    Creature target_creature = Creature(board.creature_at_location(target));
+    Creature target_creature = Creature(board.creatures(target));
     target_creature.damage();
   }
 
   function reproduce(uint8 direction, address new_brain, uint endowment) requires_turn {
     uint target = board.neighbor(location, direction);
-    if ((board.creature_at_location(target) == 0) && (endowment <= gas)) {
+    if ((board.creatures(target) == 0) && (endowment <= gas)) {
       Creature new_creature = creature_builder.build_creature();
 
       new_creature.set_location(target);
