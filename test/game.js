@@ -34,4 +34,25 @@ contract('Game', function(accounts) {
         }).catch(done)
     }).catch(done)
   })
+
+  it("allows creatures to be added", function(done) {
+    var game = Game.at(Game.deployed_address)
+
+    game.initialize(1, 1, 3, 20000).
+      then(function() { return game.board.call() }).
+      then(function(result) {
+        var board = Board.at(result);
+
+        game.add_creature(Creature.deployed_address).
+        then(function() { return board.creatures.call(0) }).
+        then(function(result) {
+          assert.equal(result, Creature.deployed_address);
+        }).
+        then(function() { return board.gas.call(0) }).
+        then(function(result) {
+          assert.equal(result, 60000);
+          done();
+        }).catch(done)
+    }).catch(done)
+  })
 })

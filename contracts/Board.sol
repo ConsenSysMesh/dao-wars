@@ -57,6 +57,21 @@ contract Board {
     }
   }
 
+  function add_creature(address creature) {
+    uint randomness = uint(block.blockhash(block.number - 1));
+
+    uint random_num = randomness % gas.length;
+
+    for (uint i = 0; i < creatures.length; i++) {
+      uint location = random_num + i;
+
+      if (obstacles[location] == false && creatures[location] == 0) {
+        creatures[location] = creature;
+        return;
+      }
+    }
+  }
+
   function leave_square(uint location) active_creature_only {
     creatures[location] = 0;
   }
