@@ -2,7 +2,7 @@ contract('Game', function(accounts) {
   it("generates a board", function(done) {
     var game = Game.at(Game.deployed_address)
 
-    game.initialize(10,10, 30, 500000).
+    game.initialize(10,10, 30, 500000, 100000, CreatureBuilder.deployed_address).
       then(function() { return game.board.call() }).
       then(function(result) {
         assert.notEqual(result, 0);
@@ -21,7 +21,7 @@ contract('Game', function(accounts) {
   it("generates a gamemaster", function(done) {
     var game = Game.at(Game.deployed_address)
 
-    game.initialize(10,10, 30, 200000).
+    game.initialize(10,10, 30, 200000, 100000, CreatureBuilder.deployed_address).
       then(function() { return game.gamemaster.call() }).
       then(function(result) {
         assert.notEqual(result, 0);
@@ -38,7 +38,7 @@ contract('Game', function(accounts) {
   it("allows creatures to be added", function(done) {
     var game = Game.at(Game.deployed_address)
 
-    game.initialize(1, 1, 3, 20000).
+    game.initialize(1, 1, 3, 20000, 1000000, CreatureBuilder.deployed_address).
       then(function() { return game.board.call() }).
       then(function(result) {
         var board = Board.at(result);
@@ -46,7 +46,7 @@ contract('Game', function(accounts) {
         game.add_creature(Creature.deployed_address).
         then(function() { return board.creatures.call(0) }).
         then(function(result) {
-          assert.equal(result, Creature.deployed_address);
+          assert.notEqual(result, 0);
         }).
         then(function() { return board.gas.call(0) }).
         then(function(result) {

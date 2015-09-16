@@ -20,6 +20,10 @@ contract Board {
     admin = msg.sender;
   }
 
+  function num_squares() returns(uint) {
+    return creatures.length;
+  }
+
   function all_gas() returns(uint[]) {
     return gas;
   }
@@ -69,19 +73,8 @@ contract Board {
     }
   }
 
-  function add_creature(address creature) {
-    uint randomness = uint(block.blockhash(block.number - 1));
-
-    uint random_num = randomness % gas.length;
-
-    for (uint i = 0; i < creatures.length; i++) {
-      uint location = random_num + i;
-
-      if (obstacles[location] == false && creatures[location] == 0) {
-        creatures[location] = creature;
-        return;
-      }
-    }
+  function add_creature(uint location, address creature) {
+    creatures[location] = creature;
   }
 
   function leave_square(uint location) active_creature_only {

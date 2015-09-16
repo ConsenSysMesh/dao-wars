@@ -65,8 +65,8 @@ contract Creature {
     gas = _gas;
   }
 
-  function set_creature_builder(CreatureBuilderStub _creature_builder) auth(admin) {
-    creature_builder = _creature_builder;
+  function set_creature_builder(address _creature_builder) auth(admin) {
+    creature_builder = CreatureBuilderStub(_creature_builder);
   }
 
   function set_gamemaster(address _gamemaster) auth(admin) {
@@ -118,6 +118,7 @@ contract Creature {
       new_creature.set_hp(3);
       new_creature.set_species(species);
       new_creature.set_board(board);
+      new_creature.set_creature_builder(creature_builder);
 
       new_creature.set_admin(admin);
 
