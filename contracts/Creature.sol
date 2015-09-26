@@ -17,7 +17,6 @@ contract Creature {
   address public brain;
   CreatureBuilderStub public creature_builder;
   bool public turn_active;
-  address public gamemaster;
   Board public board;
   uint public location;
 
@@ -29,7 +28,8 @@ contract Creature {
     }
   }
   modifier active_creature_only { 
-    if (Gamemaster(gamemaster).current_creature() == msg.sender) _ 
+    /* if (Gamemaster(gamemaster).current_creature() == msg.sender) _  */
+    _
   }
 
   function Creature() {
@@ -40,7 +40,7 @@ contract Creature {
     return 42;
   }
 
-  function notify_of_turn() auth(gamemaster) {
+  function notify_of_turn() {
     turn_active = true;
     BrainStub(brain).notify_of_turn();
   }
@@ -69,25 +69,12 @@ contract Creature {
     creature_builder = CreatureBuilderStub(_creature_builder);
   }
 
-  function set_gamemaster(address _gamemaster) auth(admin) {
-    gamemaster = _gamemaster;
-  }
-
   function set_board(Board _board) auth(admin) {
     board = _board;
   }
 
   function set_location(uint _location) auth(admin) {
     location = _location;
-  }
-
-  function deduct(uint amount) auth(gamemaster) {
-    if (amount < gas) {
-      gas -= amount;
-    } else {
-      gas = 0;
-      dead = true;
-    }
   }
 
   function move(uint8 direction) requires_turn {

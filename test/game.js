@@ -18,23 +18,6 @@ contract('Game', function(accounts) {
       }).catch(done)
   })
 
-  it("generates a gamemaster", function(done) {
-    var game = Game.at(Game.deployed_address)
-
-    game.initialize(10,10, 30, 200000, 100000, CreatureBuilder.deployed_address).
-      then(function() { return game.gamemaster.call() }).
-      then(function(result) {
-        assert.notEqual(result, 0);
-        var gamemaster = Gamemaster.at(result);
-
-        gamemaster.board.call().
-        then(function(result) {
-          assert.notEqual(result, 0);
-          done();
-        }).catch(done)
-    }).catch(done)
-  })
-
   it("allows creatures to be added", function(done) {
     var game = Game.at(Game.deployed_address)
 

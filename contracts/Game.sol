@@ -1,10 +1,8 @@
 import "Board";
-import "Gamemaster";
 import "CreatureBuilder";
 
 contract Game {
   Board public board;
-  Gamemaster public gamemaster;
   CreatureBuilder public creature_builder;
   address public admin;
   uint8 public gas_deposits;
@@ -24,17 +22,9 @@ contract Game {
     board = new Board();
     board.set_dimensions(x, y);
 
-    gamemaster = new Gamemaster();
-    gamemaster.set_board(board);
-    board.set_gamemaster(gamemaster);
-
     gas_deposits = _gas_deposits;
     gas_amount = _gas_amount;
     starting_gas = _starting_gas;
-  }
-
-  function run_turn() auth(admin) {
-    gamemaster.run_turn();
   }
 
   function add_creature(address brain) {
@@ -51,7 +41,6 @@ contract Game {
     creature.set_creature_builder(creature_builder);
     creature.set_admin(admin);
 
-    gamemaster.add_creature(creature);
     board.deposit_gas(gas_deposits, gas_amount);  
   }
 

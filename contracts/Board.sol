@@ -1,5 +1,3 @@
-import "Gamemaster";
-
 contract Board {
   bool[] public obstacles;
   uint[] public gas;
@@ -7,13 +5,13 @@ contract Board {
   uint[2] public dimensions;
   uint public harvest_amount;
   bool public in_loop;
-  Gamemaster public gamemaster;
   address public admin;
 
   modifier auth(address authorized_user) { if (msg.sender == authorized_user) _ }
 
   modifier active_creature_only { 
-    if (gamemaster.current_creature() == msg.sender) _ 
+    /* if (gamemaster.current_creature() == msg.sender) _  */
+    _
   }
 
   function Board() {
@@ -50,10 +48,6 @@ contract Board {
 
   function set_harvest_amount(uint _harvest_amount) auth(admin) {
     harvest_amount = _harvest_amount;
-  }
-
-  function set_gamemaster(Gamemaster _gamemaster) auth(admin) {
-    gamemaster = _gamemaster;
   }
 
   function replace_square(uint location, bool obstacle, uint _gas, address creature) auth(admin) {
@@ -97,10 +91,9 @@ contract Board {
   }
 
   function spawn(uint location, address creature) {
-    if (msg.sender == admin || gamemaster.current_creature() == msg.sender) {
-      gamemaster.add_creature(creature);
+    /* if (msg.sender == admin || gamemaster.current_creature() == msg.sender) { */
       creatures[location] = creature;
-    }
+    /* } */
   }
 
   function report_death(uint location, uint _gas) {

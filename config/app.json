@@ -20,7 +20,6 @@
     // Names of contracts that should be deployed to the network.
     "Creature",
     "CreatureBuilder",
-    "Gamemaster",
     "BrainMock",
     "Board",
     "Game"
