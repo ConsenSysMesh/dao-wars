@@ -9,6 +9,7 @@ contract Game {
   uint public gas_amount;
   uint public starting_gas;
   uint public num_species;
+  mapping (address => bool) public valid_creature;
 
   modifier auth(address authorized_user) { if (msg.sender == authorized_user) _ }
 
@@ -34,14 +35,23 @@ contract Game {
     
     board.add_creature(location, creature);
 
+    this.register_creature(creature);
+
     creature.set_location(location);
     creature.set_hp(3);
     creature.set_board(board);
     creature.set_species(num_species);
     creature.set_creature_builder(creature_builder);
+    creature.set_game(this);
     creature.set_admin(admin);
 
     board.deposit_gas(gas_deposits, gas_amount);  
+  }
+
+  function register_creature(address _creature) {
+    if (msg.sender == address(this) || msg.sender == admin || valid_creature[msg.sender] == true) {
+      valid_creature[_creature] = true;
+    }
   }
 
   function _random_empty_location() returns(uint) {

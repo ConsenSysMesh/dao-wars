@@ -18,6 +18,7 @@ contract Creature {
   CreatureBuilderStub public creature_builder;
   bool public turn_active;
   Board public board;
+  GameStub public game;
   uint public location;
 
   modifier auth(address authorized_user) { if (msg.sender == authorized_user) _ }
@@ -26,10 +27,6 @@ contract Creature {
       turn_active = false;
       _
     }
-  }
-  modifier active_creature_only { 
-    /* if (Gamemaster(gamemaster).current_creature() == msg.sender) _  */
-    _
   }
 
   function Creature() {
@@ -73,6 +70,10 @@ contract Creature {
     board = _board;
   }
 
+  function set_game(address _game) auth(admin) {
+    game = GameStub(_game);
+  }
+
   function set_location(uint _location) auth(admin) {
     location = _location;
   }
@@ -105,6 +106,7 @@ contract Creature {
       new_creature.set_hp(3);
       new_creature.set_species(species);
       new_creature.set_board(board);
+      new_creature.set_game(game);
       new_creature.set_creature_builder(creature_builder);
 
       new_creature.set_admin(admin);
@@ -113,11 +115,13 @@ contract Creature {
     }
   }
 
-  function damage() active_creature_only {
-    hp -= 1;
-    if (hp == 0) {
-      dead = true;
-      board.report_death(location, gas);
+  function damage() {
+    if (game.valid_creature(msg.sender) == true) {
+      hp -= 1;
+      if (hp == 0) {
+        dead = true;
+        board.report_death(location, gas);
+      }
     }
   }
 }

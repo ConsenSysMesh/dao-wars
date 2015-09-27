@@ -1,3 +1,7 @@
+contract GameStub {
+  function valid_creature(address _creature) returns(bool) {}
+}
+
 contract Board {
   bool[] public obstacles;
   uint[] public gas;
@@ -5,17 +9,14 @@ contract Board {
   uint[2] public dimensions;
   uint public harvest_amount;
   bool public in_loop;
+  GameStub public game;
   address public admin;
 
   modifier auth(address authorized_user) { if (msg.sender == authorized_user) _ }
 
-  modifier active_creature_only { 
-    /* if (gamemaster.current_creature() == msg.sender) _  */
-    _
-  }
-
   function Board() {
     admin = msg.sender;
+    game = GameStub(msg.sender);
   }
 
   function num_squares() returns(uint) {
@@ -50,6 +51,10 @@ contract Board {
     harvest_amount = _harvest_amount;
   }
 
+  function set_game(address _game) auth(admin) { 
+    game = GameStub(_game);
+  }
+
   function replace_square(uint location, bool obstacle, uint _gas, address creature) auth(admin) {
     obstacles[location] = obstacle;
     gas[location] = _gas;
@@ -71,29 +76,35 @@ contract Board {
     creatures[location] = creature;
   }
 
-  function leave_square(uint location) active_creature_only {
-    creatures[location] = 0;
+  function leave_square(uint location) {
+    if (game.valid_creature(msg.sender) == true) {
+      creatures[location] = 0;
+    }
   }
 
-  function enter_square(uint location) active_creature_only {
-    creatures[location] = msg.sender;
+  function enter_square(uint location) {
+    if (game.valid_creature(msg.sender) == true) {
+      creatures[location] = msg.sender;
+    }
   }
 
-  function harvest(uint location) active_creature_only returns (uint result) {
-    if (gas[location] > harvest_amount) {
-      gas[location] -= harvest_amount;
-      return(harvest_amount);
-    } else {
-      result = gas[location];
-      gas[location] = 0;
-      return result;
+  function harvest(uint location) returns (uint result) {
+    if (game.valid_creature(msg.sender) == true) {
+      if (gas[location] > harvest_amount) {
+        gas[location] -= harvest_amount;
+        return(harvest_amount);
+      } else {
+        result = gas[location];
+        gas[location] = 0;
+        return result;
+      }
     }
   }
 
   function spawn(uint location, address creature) {
-    /* if (msg.sender == admin || gamemaster.current_creature() == msg.sender) { */
+    if (game.valid_creature(msg.sender) == true || msg.sender == admin) {
       creatures[location] = creature;
-    /* } */
+    }
   }
 
   function report_death(uint location, uint _gas) {
