@@ -44,15 +44,15 @@ contract('Creature', function(accounts) {
       then(function() { return creature.set_brain(accounts[0]); }).
       then(function() { return creature.set_board(board.address); }).
       then(function() { return creature.notify_of_turn(); }).
-      then(creature.harvest).
-      then(creature.gas.call).
+      then(function() { return creature.harvest() }).
+      then(function() { return creature.gas.call() }).
       then(function(result) { assert.equal(result, 10000) }).
       then(function() { return board.gas.call(23) }).
       then(function(result) { assert.equal(result, 5000) }).
 
       then(function() { return creature.notify_of_turn(); }).
-      then(creature.harvest).
-      then(creature.gas.call).
+      then(function() { return creature.harvest() }).
+      then(function() { return creature.gas.call() }).
       then(function(result) { assert.equal(result, 15000) }).
       then(function() { return board.gas.call(23) }).
       then(function(result) {
@@ -172,11 +172,11 @@ contract('Creature', function(accounts) {
       then(function() { return creature.set_gas(0); }).
       then(function() { return creature.set_board(board.address); }).
       then(function() { return creature.notify_of_turn(); }).
-      then(creature.harvest).
-      then(creature.gas.call).
+      then(function() { return creature.harvest() }).
+      then(function() { return creature.gas.call() }).
       then(function(result) { assert.equal(result, 10000) }).
-      then(creature.harvest).
-      then(creature.gas.call).
+      then(function() { return creature.harvest() }).
+      then(function() { return creature.gas.call() }).
       then(function(result) {
         assert.equal(result, 10000);
         done();
