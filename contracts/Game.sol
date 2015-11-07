@@ -5,9 +5,9 @@ contract Game {
   Board public board;
   CreatureBuilder public creature_builder;
   address public admin;
-  uint8 public gas_deposits;
-  uint public gas_amount;
-  uint public starting_gas;
+  uint8 public eth_deposits;
+  uint public eth_amount;
+  uint public starting_eth;
   uint public num_species;
   mapping (address => bool) public valid_creature;
 
@@ -17,15 +17,15 @@ contract Game {
     admin = msg.sender;
   }
 
-  function initialize(uint x, uint y, uint8 _gas_deposits, uint _gas_amount, uint _starting_gas, CreatureBuilder _creature_builder) auth(admin) {
+  function initialize(uint x, uint y, uint8 _eth_deposits, uint _eth_amount, uint _starting_eth, CreatureBuilder _creature_builder) auth(admin) {
     creature_builder = _creature_builder;
 
     board = new Board();
     board.set_dimensions(x, y);
 
-    gas_deposits = _gas_deposits;
-    gas_amount = _gas_amount;
-    starting_gas = _starting_gas;
+    eth_deposits = _eth_deposits;
+    eth_amount = _eth_amount;
+    starting_eth = _starting_eth;
   }
 
   function add_creature(address brain) {
@@ -45,7 +45,7 @@ contract Game {
     creature.set_game(this);
     creature.set_admin(admin);
 
-    board.deposit_gas(gas_deposits, gas_amount);  
+    board.deposit_eth(eth_deposits, eth_amount);  
   }
 
   function register_creature(address _creature) {

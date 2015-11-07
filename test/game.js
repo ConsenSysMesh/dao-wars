@@ -31,7 +31,7 @@ contract('Game', function(accounts) {
         then(function(result) {
           assert.notEqual(result, 0);
         }).
-        then(function() { return board.gas.call(0) }).
+        then(function() { return board.eth.call(0) }).
         then(function(result) {
           assert.equal(result, 60000);
           done();

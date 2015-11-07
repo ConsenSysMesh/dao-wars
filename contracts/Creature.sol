@@ -10,7 +10,7 @@ contract BrainStub {
 
 contract Creature {
   address public admin;
-  uint public gas;
+  uint public eth;
   uint public hp;
   bool public dead;
   uint public species;
@@ -58,8 +58,8 @@ contract Creature {
     admin = _admin;
   }
 
-  function set_gas(uint _gas) auth(admin) {
-    gas = _gas;
+  function set_eth(uint _eth) auth(admin) {
+    eth = _eth;
   }
 
   function set_creature_builder(address _creature_builder) auth(admin) {
@@ -88,7 +88,7 @@ contract Creature {
   }
 
   function harvest() requires_turn {
-    gas += board.harvest(location);
+    eth += board.harvest(location);
   }
 
   function attack(uint8 direction) requires_turn {
@@ -99,7 +99,7 @@ contract Creature {
 
   function reproduce(uint8 direction, address new_brain, uint endowment) requires_turn {
     uint target = board.neighbor(location, direction);
-    if ((board.creatures(target) == 0) && (endowment <= gas)) {
+    if ((board.creatures(target) == 0) && (endowment <= eth)) {
       Creature new_creature = creature_builder.build_creature();
 
       new_creature.set_location(target);
@@ -120,7 +120,7 @@ contract Creature {
       hp -= 1;
       if (hp == 0) {
         dead = true;
-        board.report_death(location, gas);
+        board.report_death(location, eth);
       }
     }
   }

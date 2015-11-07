@@ -29,11 +29,11 @@ var factory = function factory(Pudding) {
   BrainMock.abi = [{ "constant": false, "inputs": [], "name": "notify_of_turn", "outputs": [], "type": "function" }, { "constant": true, "inputs": [], "name": "times_called", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }, { "constant": false, "inputs": [], "name": "reset", "outputs": [], "type": "function" }];
   BrainMock.binary = "606060405260558060106000396000f3606060405260e060020a600035046336b6c8fb8114602e578063af8473a814603b578063d826f88f146043575b005b602c600080546001019055565b604b60005481565b602c60008055565b6060908152602090f3";
 
-  if ("0x3168d265ac2f3323ad2af009e31c73db8cf68ab2" != "") {
-    BrainMock.address = "0x3168d265ac2f3323ad2af009e31c73db8cf68ab2";
+  if ("0x599392d9cf6e18eae30edd92485feb442f0c225e" != "") {
+    BrainMock.address = "0x599392d9cf6e18eae30edd92485feb442f0c225e";
 
     // Backward compatibility; Deprecated.
-    BrainMock.deployed_address = "0x3168d265ac2f3323ad2af009e31c73db8cf68ab2";
+    BrainMock.deployed_address = "0x599392d9cf6e18eae30edd92485feb442f0c225e";
   }
 
   BrainMock.generated_with = "1.0.2";
