@@ -4,7 +4,7 @@ contract GameStub {
 
 contract Board {
   bool[] public obstacles;
-  uint[] public eth;
+  uint[] public gas;
   address[] public creatures;
   uint[2] public dimensions;
   uint public harvest_amount;
@@ -23,8 +23,8 @@ contract Board {
     return creatures.length;
   }
 
-  function all_eth() returns(uint[]) {
-    return eth;
+  function all_gas() returns(uint[]) {
+    return gas;
   }
 
   function all_creatures() returns(address[]) {
@@ -42,7 +42,7 @@ contract Board {
   function set_dimensions(uint x, uint y) auth(admin) {
     dimensions[0] = x;
     dimensions[1] = y;
-    eth.length = x * y;
+    gas.length = x * y;
     creatures.length = x * y;
     obstacles.length = x * y;
   }
@@ -55,20 +55,20 @@ contract Board {
     game = GameStub(_game);
   }
 
-  function replace_square(uint location, bool obstacle, uint _eth, address creature) auth(admin) {
+  function replace_square(uint location, bool obstacle, uint _gas, address creature) auth(admin) {
     obstacles[location] = obstacle;
-    eth[location] = _eth;
+    gas[location] = _gas;
     creatures[location] = creature;
   }
 
-  function deposit_eth(uint8 num_deposits, uint amount_per_deposit) auth(admin) {
+  function deposit_gas(uint8 num_deposits, uint amount_per_deposit) auth(admin) {
     // Max num_deposits is 32. Does not produce an even distribution. Will come back to.
     uint randomness = uint(block.blockhash(block.number - 1));
     for (uint8 i = 0; i < num_deposits; i++) {
       uint random_num = randomness % 255;
       randomness = randomness / (2**8);
-      uint location = (random_num * eth.length) / 255;
-      eth[location] += amount_per_deposit;
+      uint location = (random_num * gas.length) / 255;
+      gas[location] += amount_per_deposit;
     }
   }
 
@@ -90,13 +90,13 @@ contract Board {
 
   function harvest(uint location) returns (uint result) {
     if (game.valid_creature(msg.sender) == true) {
-      if (eth[location] > harvest_amount) {
-        eth[location] -= harvest_amount;
+      if (gas[location] > harvest_amount) {
+        gas[location] -= harvest_amount;
         msg.sender.send(harvest_amount);
         return(harvest_amount);
       } else {
-        result = eth[location];
-        eth[location] = 0;
+        result = gas[location];
+        gas[location] = 0;
         msg.sender.send(result);
         return result;
       }
@@ -109,10 +109,10 @@ contract Board {
     }
   }
 
-  function report_death(uint location, uint _eth) {
+  function report_death(uint location, uint _gas) {
     if (creatures[location] == msg.sender) {
       creatures[location] = 0;
-      eth[location] += _eth;
+      gas[location] += _gas;
     }
   }
 
