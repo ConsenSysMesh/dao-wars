@@ -5,7 +5,7 @@ contract CreatureBuilderStub {
 }
 
 contract BrainStub {
-  function notify_of_turn() {}
+  function ping();
 }
 
 contract Creature {
@@ -40,18 +40,18 @@ contract Creature {
     return 42;
   }
 
-  function notify_of_turn() {
-
+  function ping() {
     if (last_turn < block.number && tx.gasprice <= max_gasprice) {
       turn_active = true;
       uint max_gas = gas / (tx.gasprice * 11/10);
 
       uint starting_gas = msg.gas;
-      BrainStub(brain).notify_of_turn.gas(max_gas)();
-      
+      BrainStub brain_contract = BrainStub(brain);
+      brain_contract.ping();
+
       uint total_gas = starting_gas - msg.gas;
       uint spent_gas = (total_gas * (tx.gasprice * 11/10));
-      
+
       gas -= spent_gas;
       msg.sender.send(spent_gas);
     }

@@ -40,6 +40,8 @@ contract Game {
 
       this.register_creature(creature);
 
+      creature.set_gas(starting_gas);
+      creature.set_brain(brain);
       creature.set_location(location);
       creature.set_hp(3);
       creature.set_board(board);
@@ -48,7 +50,8 @@ contract Game {
       creature.set_game(this);
       creature.set_admin(admin);
 
-      board.send(msg.value);
+      creature.send(starting_gas);
+      board.send(msg.value - starting_gas);
       board.deposit_gas(gas_deposits, gas_amount);  
     }
   }

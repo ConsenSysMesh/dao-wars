@@ -18,14 +18,15 @@
   },
   "deploy": [
     // Names of contracts that should be deployed to the network.
-    "Creature",
-    "CreatureBuilder",
+    "Game",
     "BrainMock",
-    "Board",
-    "Game"
+    "CreatureBuilder"
   ],
   "rpc": {
     "host": "localhost",
     "port": 8545
-  }
+  },
+  "after_deploy": [      
+    "scripts/initialize.js"
+  ]
 }

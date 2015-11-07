@@ -26,14 +26,14 @@ var factory = function factory(Pudding) {
   ;
 
   // Set up specific data for this class.
-  BrainMock.abi = [{ "constant": false, "inputs": [], "name": "notify_of_turn", "outputs": [], "type": "function" }, { "constant": true, "inputs": [], "name": "times_called", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }, { "constant": false, "inputs": [], "name": "reset", "outputs": [], "type": "function" }];
-  BrainMock.binary = "606060405260558060106000396000f3606060405260e060020a600035046336b6c8fb8114602e578063af8473a814603b578063d826f88f146043575b005b602c600080546001019055565b604b60005481565b602c60008055565b6060908152602090f3";
+  BrainMock.abi = [{ "constant": false, "inputs": [], "name": "ping", "outputs": [], "type": "function" }, { "constant": true, "inputs": [], "name": "times_called", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }, { "constant": false, "inputs": [], "name": "reset", "outputs": [], "type": "function" }];
+  BrainMock.binary = "606060405260be8060106000396000f3606060405260e060020a60003504635c36b1868114602e578063af8473a81460a4578063d826f88f1460ac575b005b600080547f70e87aaf000000000000000000000000000000000000000000000000000000006060908152600490910660ff16606452602c913373ffffffffffffffffffffffffffffffffffffffff16916370e87aaf9160849160248183876161da5a03f115600257505060008054600101905550565b60b460005481565b602c60008055565b6060908152602090f3";
 
-  if ("0x17c745374cfe0ca803e46af74e33f00e6d3cbb98" != "") {
-    BrainMock.address = "0x17c745374cfe0ca803e46af74e33f00e6d3cbb98";
+  if ("0xe77dfa4726bd532d9842f9d17a2c3c754a6f0a40" != "") {
+    BrainMock.address = "0xe77dfa4726bd532d9842f9d17a2c3c754a6f0a40";
 
     // Backward compatibility; Deprecated.
-    BrainMock.deployed_address = "0x17c745374cfe0ca803e46af74e33f00e6d3cbb98";
+    BrainMock.deployed_address = "0xe77dfa4726bd532d9842f9d17a2c3c754a6f0a40";
   }
 
   BrainMock.generated_with = "1.0.2";
