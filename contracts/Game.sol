@@ -29,23 +29,28 @@ contract Game {
   }
 
   function add_creature(address brain) {
-    num_species++;
-    Creature creature = creature_builder.build_creature();
-    uint location = _random_empty_location();
-    
-    board.add_creature(location, creature);
+    uint eth_cost = (eth_deposits * eth_amount) + starting_eth;
 
-    this.register_creature(creature);
+    if (msg.value >= eth_cost) {
+      num_species++;
+      Creature creature = creature_builder.build_creature();
+      uint location = _random_empty_location();
+      
+      board.add_creature(location, creature);
 
-    creature.set_location(location);
-    creature.set_hp(3);
-    creature.set_board(board);
-    creature.set_species(num_species);
-    creature.set_creature_builder(creature_builder);
-    creature.set_game(this);
-    creature.set_admin(admin);
+      this.register_creature(creature);
 
-    board.deposit_eth(eth_deposits, eth_amount);  
+      creature.set_location(location);
+      creature.set_hp(3);
+      creature.set_board(board);
+      creature.set_species(num_species);
+      creature.set_creature_builder(creature_builder);
+      creature.set_game(this);
+      creature.set_admin(admin);
+
+      board.send(msg.value);
+      board.deposit_eth(eth_deposits, eth_amount);  
+    }
   }
 
   function register_creature(address _creature) {

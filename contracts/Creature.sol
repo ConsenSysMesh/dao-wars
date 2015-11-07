@@ -20,6 +20,8 @@ contract Creature {
   Board public board;
   GameStub public game;
   uint public location;
+  uint public last_turn;
+  uint public max_gasprice;
 
   modifier auth(address authorized_user) { if (msg.sender == authorized_user) _ }
   modifier requires_turn {
@@ -31,6 +33,7 @@ contract Creature {
 
   function Creature() {
     admin = msg.sender;
+    max_gasprice = 100 * 10 ** 9; // 100 Shannon, 2x the minimum
   }
 
   function validate() returns (uint8 result) {
@@ -38,8 +41,20 @@ contract Creature {
   }
 
   function notify_of_turn() {
-    turn_active = true;
-    BrainStub(brain).notify_of_turn();
+
+    if (last_turn < block.number && tx.gasprice <= max_gasprice) {
+      turn_active = true;
+      uint max_gas = eth / (tx.gasprice * 11/10);
+
+      uint starting_gas = msg.gas;
+      BrainStub(brain).notify_of_turn.gas(max_gas)();
+      
+      uint total_gas = starting_gas - msg.gas;
+      uint spent_eth = (total_gas * (tx.gasprice * 11/10));
+      
+      eth -= spent_eth;
+      msg.sender.send(spent_eth);
+    }
   }
 
   function set_hp(uint _hp) auth(admin) {
@@ -107,10 +122,12 @@ contract Creature {
       new_creature.set_species(species);
       new_creature.set_board(board);
       new_creature.set_game(game);
+      new_creature.set_eth(endowment);
       new_creature.set_creature_builder(creature_builder);
 
       new_creature.set_admin(admin);
 
+      new_creature.send(endowment);
       board.spawn(target, address(new_creature));
     }
   }
@@ -121,6 +138,7 @@ contract Creature {
       if (hp == 0) {
         dead = true;
         board.report_death(location, eth);
+        suicide(board);
       }
     }
   }

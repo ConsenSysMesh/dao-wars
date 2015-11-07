@@ -92,10 +92,12 @@ contract Board {
     if (game.valid_creature(msg.sender) == true) {
       if (eth[location] > harvest_amount) {
         eth[location] -= harvest_amount;
+        msg.sender.send(harvest_amount);
         return(harvest_amount);
       } else {
         result = eth[location];
         eth[location] = 0;
+        msg.sender.send(result);
         return result;
       }
     }
