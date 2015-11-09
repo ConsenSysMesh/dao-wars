@@ -1,4 +1,4 @@
 game = Game.deployed();
-game.initialize(10,10,5, 1000000000000000000, 500000000000000000000, CreatureBuilder.address).
-  then(function() { return game.add_creature(BrainMock.address, "test_species", {value: 1000000000000000000000}) }).
+game.initialize(15, 15, 5, 500000000000000000, 1000000000000000000, CreatureBuilder.address).
+  then(function() { game.set_devcon_map() }).
   then(function() { process.exit(); });

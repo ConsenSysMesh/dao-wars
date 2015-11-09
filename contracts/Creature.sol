@@ -43,12 +43,12 @@ contract Creature {
   function ping() {
     if (last_turn < block.number && tx.gasprice <= max_gasprice) {
       turn_active = true;
-      uint max_gas = eth  / (tx.gasprice * 11/10) - 1000;
+      uint max_gas = (eth  / (tx.gasprice * 11/10)) - 2000;
 
       uint starting_gas = msg.gas;
       BrainStub(brain).ping();
 
-      uint total_gas = starting_gas - msg.gas + 1000;
+      uint total_gas = (starting_gas - msg.gas) + 2000;
       uint spent_eth = (total_gas * (tx.gasprice * 11/10));
 
       if (eth > spent_eth) {
