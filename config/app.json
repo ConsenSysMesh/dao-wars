@@ -26,7 +26,6 @@
     "host": "localhost",
     "port": 8545
   },
-  "after_deploy": [      
-    "scripts/initialize.js"
+  "after_deploy": [
   ]
 }

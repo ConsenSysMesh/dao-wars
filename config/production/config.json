@@ -1,3 +1,7 @@
 {
+  "rpc": {
+    "host": "theory.academy",
+    "port": 8545
+  },
   "after_deploy": []
 }

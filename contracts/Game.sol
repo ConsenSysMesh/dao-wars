@@ -5,9 +5,9 @@ contract Game {
   Board public board;
   CreatureBuilder public creature_builder;
   address public admin;
-  uint8 public gas_deposits;
-  uint public gas_amount;
-  uint public starting_gas;
+  uint8 public eth_deposits;
+  uint public eth_amount;
+  uint public starting_eth;
   uint public num_species;
   mapping (address => bool) public valid_creature;
   struct Species { string name; address[] creatures; }
@@ -21,21 +21,47 @@ contract Game {
     admin = msg.sender;
   }
 
-  function initialize(uint x, uint y, uint8 _gas_deposits, uint _gas_amount, uint _starting_gas, CreatureBuilder _creature_builder) auth(admin) {
+  function clear() auth(admin) {
+    species.length = 0;
+    num_species = 0;
+  }
+
+  function initialize(uint x, uint y, uint8 _eth_deposits, uint _eth_amount, uint _starting_eth, CreatureBuilder _creature_builder) auth(admin) {
     creature_builder = _creature_builder;
 
     board = new Board();
     board.set_dimensions(x, y);
 
-    gas_deposits = _gas_deposits;
-    gas_amount = _gas_amount;
-    starting_gas = _starting_gas;
+    eth_deposits = _eth_deposits;
+    eth_amount = _eth_amount;
+    starting_eth = _starting_eth;
+  }
+
+  function set_devcon_map() auth(admin){
+    board.replace_square(47, true, 0, 0);
+    board.replace_square(49, true, 0, 0);
+    board.replace_square(65, true, 0, 0);
+    board.replace_square(80, true, 0, 0);
+    board.replace_square(121, true, 0, 0);
+    board.replace_square(122, true, 0, 0);
+    board.replace_square(97, true, 0, 0);
+    board.replace_square(69, true, 0, 0);
+    board.replace_square(84, true, 0, 0);
+    board.replace_square(100, true, 0, 0);
+    board.replace_square(115, true, 0, 0);
+    board.replace_square(172, true, 0, 0);
+    board.replace_square(173, true, 0, 0);
+    board.replace_square(174, true, 0, 0);
+    board.replace_square(175, true, 0, 0);
+    board.replace_square(190, true, 0, 0);
+    board.replace_square(203, true, 0, 0);
+    board.replace_square(138, true, 0, 0);
   }
 
   function add_creature(address brain, string species_name) {
-    uint gas_cost = (gas_deposits * gas_amount) + starting_gas;
+    uint eth_cost = (eth_deposits * eth_amount) + starting_eth;
 
-    if (msg.value >= gas_cost) {
+    if (msg.value >= eth_cost) {
       Creature creature = creature_builder.build_creature();
       uint location = _random_empty_location();
       uint species_id = num_species++;
@@ -47,7 +73,7 @@ contract Game {
       species[species_id].name = species_name;
       species[species_id].creatures.push(creature);
 
-      creature.set_gas(starting_gas);
+      creature.set_eth(starting_eth);
       creature.set_brain(brain);
       creature.set_location(location);
       creature.set_hp(3);
@@ -57,9 +83,9 @@ contract Game {
       creature.set_game(this);
       creature.set_admin(admin);
 
-      creature.send(starting_gas);
-      board.send(msg.value - starting_gas);
-      board.deposit_gas(gas_deposits, gas_amount);  
+      creature.send(starting_eth);
+      board.send(msg.value - starting_eth);
+      board.deposit_eth(eth_deposits, eth_amount);  
     }
   }
 

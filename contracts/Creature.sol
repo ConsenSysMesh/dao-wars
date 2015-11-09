@@ -10,7 +10,7 @@ contract BrainStub {
 
 contract Creature {
   address public admin;
-  uint public gas;
+  uint public eth;
   uint public hp;
   bool public dead;
   uint public species;
@@ -43,17 +43,30 @@ contract Creature {
   function ping() {
     if (last_turn < block.number && tx.gasprice <= max_gasprice) {
       turn_active = true;
-      uint max_gas = gas / (tx.gasprice * 11/10);
+      uint max_gas = eth  / (tx.gasprice * 11/10) - 1000;
 
       uint starting_gas = msg.gas;
-      BrainStub brain_contract = BrainStub(brain);
-      brain_contract.ping();
+      BrainStub(brain).ping();
 
-      uint total_gas = starting_gas - msg.gas;
-      uint spent_gas = (total_gas * (tx.gasprice * 11/10));
+      uint total_gas = starting_gas - msg.gas + 1000;
+      uint spent_eth = (total_gas * (tx.gasprice * 11/10));
 
-      gas -= spent_gas;
-      msg.sender.send(spent_gas);
+      if (eth > spent_eth) {
+        eth -= spent_eth;
+      } else {
+        eth = 0;
+      }
+      msg.sender.send(spent_eth);
+    }
+  }
+
+  function set_maxgasprice(uint _max) auth(brain) {
+    max_gasprice = _max;
+  }
+
+  function withdraw_eth(uint amount) auth(brain) {
+    if (amount < eth) {
+      brain.send(amount);
     }
   }
 
@@ -73,8 +86,8 @@ contract Creature {
     admin = _admin;
   }
 
-  function set_gas(uint _gas) auth(admin) {
-    gas = _gas;
+  function set_eth(uint _eth) auth(admin) {
+    eth = _eth;
   }
 
   function set_creature_builder(address _creature_builder) auth(admin) {
@@ -103,7 +116,7 @@ contract Creature {
   }
 
   function harvest() requires_turn {
-    gas += board.harvest(location);
+    eth += board.harvest(location);
   }
 
   function attack(uint8 direction) requires_turn {
@@ -114,7 +127,7 @@ contract Creature {
 
   function reproduce(uint8 direction, address new_brain, uint endowment) requires_turn {
     uint target = board.neighbor(location, direction);
-    if ((board.creatures(target) == 0) && (endowment <= gas)) {
+    if ((board.creatures(target) == 0) && (endowment <= eth)) {
       Creature new_creature = creature_builder.build_creature();
 
       new_creature.set_location(target);
@@ -122,7 +135,7 @@ contract Creature {
       new_creature.set_species(species);
       new_creature.set_board(board);
       new_creature.set_game(game);
-      new_creature.set_gas(endowment);
+      new_creature.set_eth(endowment);
       new_creature.set_creature_builder(creature_builder);
 
       new_creature.set_admin(admin);
@@ -137,7 +150,7 @@ contract Creature {
       hp -= 1;
       if (hp == 0) {
         dead = true;
-        board.report_death(location, gas);
+        board.report_death(location, eth);
         suicide(board);
       }
     }
