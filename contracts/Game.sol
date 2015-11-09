@@ -31,6 +31,7 @@ contract Game {
 
     board = new Board();
     board.set_dimensions(x, y);
+    board.set_harvest_amount(100000000000000000);
 
     eth_deposits = _eth_deposits;
     eth_amount = _eth_amount;
