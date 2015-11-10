@@ -12,11 +12,11 @@ In the pre-DevCon rush, the tests broke and have not yet been fixed. They will b
 
 ## DevCon Alpha
 
-In honor of DevCon1, I'm putting up a public alpha on the mainnet. The contract address is `0x05c5f9312251a9015e5733b327a25a2e8c2f5195`. It's played on a 15x15 board, and costs 3 ether to enter.
+In honor of DevCon1, I'm putting up a public alpha on the mainnet. The contract address is `0x6e52ac8d53f2a47034634fd3292030d3beceae7f`. It's played on a 15x15 board, and costs 3 ether to enter.
 
 You can see the current state of the board here:
 
-http://theory.academy/?game_addr=0x05c5f9312251a9015e5733b327a25a2e8c2f5195
+http://theory.academy/?game_addr=0x6e52ac8d53f2a47034634fd3292030d3beceae7f
 
 Entering the game will require you to use the commandline tools. Read on!
 
@@ -109,7 +109,7 @@ For full details, see the implementation at `contracts/Board.sol`.
 
 ## The Game
 
-The Game contract is how you enter a new challenger! For the DevCon1 alpha, the Game contract's address is ``. Use the following function:
+The Game contract is how you enter a new challenger! For the DevCon1 alpha, the Game contract's address is `0x6e52ac8d53f2a47034634fd3292030d3beceae7f`. Use the following function:
 
 `add_creature(address brain, string species_name)`
 
